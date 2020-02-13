@@ -11,19 +11,16 @@ public class PlayerMovement : MonoBehaviour
 	private float _attackDelay;
 	private float _attackDelayTimer = 0f;
 	private Animator _animator;
-
+	Rigidbody2D _rigidBody;
 	
-
 	private void Start()
-	{
-		
+	{	
 		_animator = GetComponent<Animator>();
+		_rigidBody = GetComponent<Rigidbody2D>();
 	}
 
 	private void Update()
 	{
-
-
 		var moveOffset = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
 		if (moveOffset.magnitude > 1f)
 		{
@@ -42,12 +39,11 @@ public class PlayerMovement : MonoBehaviour
 		_attackDelayTimer = _attackDelay;
 		RegisterMovementToAnimator(moveOffset);
 
-		transform.Translate(_speed * Time.deltaTime * moveOffset);
+		_rigidBody.MovePosition(transform.position + _speed * Time.deltaTime * moveOffset);
 	}
 
 	private void RegisterMovementToAnimator(Vector3 moveOffset)
 	{
-		
 		_animator.SetFloat("x", moveOffset.x);
 		_animator.SetFloat("y", moveOffset.y);
 	}

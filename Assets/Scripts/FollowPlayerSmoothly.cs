@@ -10,14 +10,16 @@ public class FollowPlayerSmoothly : MonoBehaviour
 	[SerializeField]
 	Vector3 _offset;
 	GameObject _toFollow;
+	private BindCameraToTileMap _cameraBinder;
 
 	void Start()
 	{
 		_toFollow = GameObject.FindGameObjectWithTag("Player");
+		_cameraBinder = GetComponent<BindCameraToTileMap>();
 	}
 
 	void Update()
     {
-		transform.position = Vector3.Lerp(transform.position, _toFollow.transform.position + _offset, _smoothing);
+		_cameraBinder.Target = Vector3.Lerp(transform.position, _toFollow.transform.position + _offset, _smoothing);
     }
 }
