@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ public class TestWindow : EditorWindow
 	private Vector2 _testListScroll;
 	private int _testExamples = 20;
 	private int _rowSize = 5;
+	private HashSet<StringGrammarRule> _grammarSet = new HashSet<StringGrammarRule>();
 
 	[MenuItem("Custom/TestWindow")]
 	public static void ShowWindow()
@@ -48,6 +50,7 @@ public class TestWindow : EditorWindow
 				RightHand = _rightHandString,
 				Chance = _chance
 			});
+			_grammars.OrderBy(x => x.Chance);
 		}
 		EditorGUILayout.EndHorizontal();
 
@@ -85,7 +88,7 @@ public class TestWindow : EditorWindow
 
 		for (int i = 0; i < _testExamples; i++)
 		{
-			var testResult = TestGrammar(ref _grammars, _testString, i);
+			var testResult = GrammarUtils.TestGrammar(ref _grammars, _testString, i);
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(testResult);
 			EditorGUILayout.LabelField($"seed : {i}", GUILayout.Width(_textBoxSize));
@@ -102,47 +105,4 @@ public class TestWindow : EditorWindow
 		#endregion
 	}
 
-	static string ReplaceFirst(string text, string search, string replace)
-	{
-		int pos = text.IndexOf(search);
-		if (pos < 0)
-		{
-			return text;
-		}
-		return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
-	}
-
-	public static string TestGrammar(ref List<StringGrammarRule> grammars, string testString, int seed)
-	{
-		int cycleLimit = 999;
-		var state = Random.state;
-		Random.InitState(seed);
-
-	start:
-		cycleLimit--;
-		if (cycleLimit == 0)
-		{
-			goto end;
-		}
-
-		bool hit = false;
-		foreach (var grammar in grammars)
-		{
-			if (testString.Contains(grammar.LeftHand))
-			{
-				hit = true;
-				testString = ReplaceFirst(testString, grammar.LeftHand, grammar.RightHand);
-			}
-		}
-		if (hit)
-		{
-			goto start;
-		}
-
-	end:
-		Random.state = state;
-		return testString;
-	}
 }
-
-
