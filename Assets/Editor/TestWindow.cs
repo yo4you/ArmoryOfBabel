@@ -13,7 +13,7 @@ public class TestWindow : EditorWindow
 	private float _buttonWidth = 40;
 	private float _textBoxSize = 80;
 	private int _bottomPaddingLines = 10;
-	private string _testString;
+	private string _testString = "";
 	private Vector2 _testListScroll;
 	private int _testExamples = 20;
 	private int _rowSize = 5;
@@ -102,16 +102,46 @@ public class TestWindow : EditorWindow
 		#endregion
 	}
 
-	public static string TestGrammar(ref List<StringGrammarRule> grammars, string test, int seed)
+	static string ReplaceFirst(string text, string search, string replace)
 	{
-		string outp = "";
+		int pos = text.IndexOf(search);
+		if (pos < 0)
+		{
+			return text;
+		}
+		return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+	}
+
+	public static string TestGrammar(ref List<StringGrammarRule> grammars, string testString, int seed)
+	{
+		int cycleLimit = 999;
 		var state = Random.state;
 		Random.InitState(seed);
 
-		//TODO grammar implementation
+	start:
+		cycleLimit--;
+		if (cycleLimit == 0)
+		{
+			goto end;
+		}
 
+		bool hit = false;
+		foreach (var grammar in grammars)
+		{
+			if (testString.Contains(grammar.LeftHand))
+			{
+				hit = true;
+				testString = ReplaceFirst(testString, grammar.LeftHand, grammar.RightHand);
+			}
+		}
+		if (hit)
+		{
+			goto start;
+		}
+
+	end:
 		Random.state = state;
-		return outp;
+		return testString;
 	}
 }
 
