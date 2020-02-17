@@ -17,10 +17,11 @@ public class DungeonGenerator : MonoBehaviour
 			var go = Instantiate(_prefabs[Random.Range(0,_prefabs.Length)], transform);
 			var roomData = go.GetComponent<RoomDataIdentifier>();
 			Vector3 size = roomData.GetWallSize();
-			int xAxis = Random.Range(0, 1);
+			int xAxis = Random.Range(0, 2);
 			size.x *= cellSize.x * xAxis;
-			size.y *= cellSize.y * 1-xAxis;
-			size *= Random.Range(0,1) == 0 ?
-		}
+			size.y *= cellSize.y * 1 - xAxis;
+			size *= ((Random.Range(0, 2) - 0.5f) * 2f);
+			
+	}
     }
 }

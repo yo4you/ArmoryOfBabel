@@ -7,30 +7,31 @@ public class BindCameraToTileMap : MonoBehaviour
 	private Camera _camera;
 	private Vector3 _cameraSize;
 	private float _cameraOrthoSize;
+	private Vector3 _cameraMinBound;
+	private Vector3 _cameraMaxBound;
+	private bool _tileMapsDirty;
+	private List<Tilemap> _tileMaps = new List<Tilemap>();
+
 	public Vector3 Target { get; internal set; }
-	public List<Tilemap> TileMaps { get; set; } = new List<Tilemap>();
+	public List<Tilemap> TileMaps
+	{
+		get => _tileMaps;
+		set
+		{
+			_tileMaps = value;
+			_tileMapsDirty = true;
+		}
+	}
+
 	private void Start()
 	{
 		_camera = Camera.main;
 	}
 
-	private void CombinedBounds(out Vector3 min, out Vector3 max)
+	private void RecalculateBounds()
 	{
 		List<Vector3> minimums = new List<Vector3>();
 		List<Vector3> maximum = new List<Vector3>();
-
-		foreach (var tilemap in TileMaps)
-		{
-			minimums.Add(tilemap.CellToWorld(tilemap.cellBounds.min));
-			maximum.Add(tilemap.CellToWorld(tilemap.cellBounds.max));
-		}
-
-		min = MathUtils.MinBound(minimums.ToArray());
-		max = MathUtils.MaxBound(maximum.ToArray());
-	}
-
-	private void LateUpdate()
-	{
 
 		TileMaps = new List<Tilemap>();
 		TileMaps.AddRange(FindObjectsOfType<Tilemap>());
@@ -40,31 +41,41 @@ public class BindCameraToTileMap : MonoBehaviour
 			tilemap.CompressBounds();
 		}
 
+		foreach (var tilemap in TileMaps)
+		{
+			minimums.Add(tilemap.CellToWorld(tilemap.cellBounds.min));
+			maximum.Add(tilemap.CellToWorld(tilemap.cellBounds.max));
+		}
 
-		transform.position = Target;
+		_cameraMinBound = MathUtils.MinBound(minimums.ToArray());
+		_cameraMaxBound = MathUtils.MaxBound(maximum.ToArray());
+	}
+
+	private void LateUpdate()
+	{
 		if (_cameraOrthoSize != _camera.orthographicSize)
 		{
 			CalculateCamSize();
 		}
-		CombinedBounds(out Vector3 cameraMinBound, out Vector3 cameraMaxBound);
-		foreach (var tilemap in TileMaps)
+		if (_tileMapsDirty)
 		{
-
+			RecalculateBounds();
+			_tileMapsDirty = false;
 		}
 
-		var cameraMin = transform.position - _cameraSize;
-		var cameraMax = transform.position + _cameraSize;
+		var cameraMin = Target - _cameraSize;
+		var cameraMax = Target + _cameraSize;
 
-		var offsetTransform = transform.position;
+		var offsetTransform = Target;
 		for (int i = 0; i < 2; i++)
 		{
-			if (cameraMin[i] < cameraMinBound[i])
+			if (cameraMin[i] < _cameraMinBound[i])
 			{
-				offsetTransform[i] = cameraMinBound[i] + _cameraSize[i];
+				offsetTransform[i] = _cameraMinBound[i] + _cameraSize[i];
 			}
-			if (cameraMax[i] > cameraMaxBound[i])
+			if (cameraMax[i] > _cameraMaxBound[i])
 			{
-				offsetTransform[i] = cameraMaxBound[i] - _cameraSize[i];
+				offsetTransform[i] = _cameraMaxBound[i] - _cameraSize[i];
 			}
 		}
 		transform.position = offsetTransform;
