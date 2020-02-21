@@ -10,10 +10,10 @@ public class BindCameraToTileMap : MonoBehaviour
 	private Vector3 _cameraMinBound;
 	private Vector3 _cameraMaxBound;
 	private bool _tileMapsDirty;
-	private List<Tilemap> _tileMaps = new List<Tilemap>();
+	private IReadOnlyList<Tilemap> _tileMaps = new List<Tilemap>();
 
 	public Vector3 Target { get; internal set; }
-	public List<Tilemap> TileMaps
+	public IReadOnlyList<Tilemap> TileMaps
 	{
 		get => _tileMaps;
 		set
@@ -26,16 +26,14 @@ public class BindCameraToTileMap : MonoBehaviour
 	private void Start()
 	{
 		_camera = Camera.main;
+		TileMaps = new List<Tilemap>(FindObjectsOfType<Tilemap>());
 	}
 
 	private void RecalculateBounds()
 	{
 		List<Vector3> minimums = new List<Vector3>();
 		List<Vector3> maximum = new List<Vector3>();
-
-		TileMaps = new List<Tilemap>();
-		TileMaps.AddRange(FindObjectsOfType<Tilemap>());
-		TileMaps.RemoveAll((Tilemap map) => !map.enabled);
+		
 		foreach (var tilemap in TileMaps)
 		{
 			tilemap.CompressBounds();

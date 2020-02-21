@@ -7,7 +7,7 @@ public static class GrammarUtils
 	public static string TestGrammar(ref List<StringGrammarRule> grammars, string testString, int seed)
 	{
 		int cycle_count = 999;
-		var state = Random.state;
+		var random_state = Random.state;
 		Random.InitState(seed);
 
 		var total_weight = grammars.Sum(i => i.Chance);
@@ -46,7 +46,7 @@ public static class GrammarUtils
 			}
 		}
 	end:
-		Random.state = state;
+		Random.state = random_state;
 		return testString;
 	}
 }

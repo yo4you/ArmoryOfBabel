@@ -15,9 +15,12 @@ public class RoomDataIdentifier : MonoBehaviour
 	[SerializeField]
 	GameObject _walls;
 
+	public GameObject[] Doorways { get => _doorways;  }
+
 	public Vector3Int GetWallSize()
 	{
 		var tilemap = _walls.GetComponent<Tilemap>();
+		tilemap.CompressBounds();
 		return tilemap.size;
 	}
 

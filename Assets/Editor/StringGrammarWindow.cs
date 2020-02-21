@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-public class TestWindow : EditorWindow
+public class StringGrammarWindow : EditorWindow
 {
 	private string _leftHandString = "";
 	private string _rightHandString = "";
@@ -18,16 +19,21 @@ public class TestWindow : EditorWindow
 	private Vector2 _testListScroll;
 	private int _testExamples = 20;
 	private int _rowSize = 5;
-	private HashSet<StringGrammarRule> _grammarSet = new HashSet<StringGrammarRule>();
+	private string _directory = "";
+	private string _exportName = "";
 
-	[MenuItem("Custom/TestWindow")]
+	[MenuItem("Custom/StringGrammarWindow")]
 	public static void ShowWindow()
 	{
-		GetWindow<TestWindow>(false, "Test", true);
+		GetWindow<StringGrammarWindow>(false, "String Grammars", true);
 	}
-
+	
 	private void OnGUI()
 	{
+		if (_directory == "")
+		{
+			_directory = Application.streamingAssetsPath + "/Grammar/";
+		}
 		#region AddGrammars
 		EditorGUILayout.LabelField("Add string grammar");
 		if (_removedEntryIndex != -1)
@@ -103,6 +109,28 @@ public class TestWindow : EditorWindow
 			EditorGUILayout.Separator();
 		}
 		#endregion
-	}
 
+		#region Save and Load
+
+		_exportName= EditorGUILayout.TextField("Grammar Name : ", _exportName);
+		EditorGUILayout.BeginHorizontal();
+		if (GUILayout.Button("import"))
+		{
+			StreamReader reader = new StreamReader(_directory + _exportName + ".json");
+			var jsonString = reader.ReadToEnd();
+			_grammars = JsonUtility.FromJson<SerializableGrammars>(jsonString).Values;
+			reader.Close();
+			reader.Dispose();
+		}
+		if (GUILayout.Button("export"))
+		{
+			StreamWriter writer = new StreamWriter(_directory + _exportName + ".json");
+			var jsonString = JsonUtility.ToJson(new SerializableGrammars() { Values = _grammars });
+			writer.Write(jsonString);
+			writer.Close();
+			writer.Dispose();
+		}
+		EditorGUILayout.EndHorizontal();
+		#endregion
+	}
 }
