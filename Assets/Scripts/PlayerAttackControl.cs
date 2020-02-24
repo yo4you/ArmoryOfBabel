@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// this class provides the player with the ability to execute certain attacks when corresponding keys are pressed
+/// </summary>
 public class PlayerAttackControl : MonoBehaviour
 {
 	private Animator _animator;

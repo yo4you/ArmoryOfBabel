@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
-
+/// <summary>
+/// this class provides the player with the ability to move
+/// </summary>
 [RequireComponent(typeof(Animator))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 	private void Update()
 	{
 		var moveOffset = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+		// ensure that diagonal movement isn't faster than non-diagonal
 		if (moveOffset.magnitude > 1f)
 		{
 			moveOffset.Normalize();
@@ -29,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
 		{
+			// we apply a short delay to the attack input so that the player can press a direction and an attack simultaniously 
 			if (_attackDelayTimer > 0f)
 			{
 				_attackDelayTimer -= Time.deltaTime;

@@ -20,6 +20,6 @@ public class FollowPlayerSmoothly : MonoBehaviour
 
 	void Update()
     {
-		_cameraBinder.Target = Vector3.Lerp(transform.position, _toFollow.transform.position + _offset, _smoothing);
+		_cameraBinder.Target_Position = Vector3.Lerp(transform.position, _toFollow.transform.position + _offset, _smoothing);
     }
 }

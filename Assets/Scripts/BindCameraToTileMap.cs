@@ -2,17 +2,24 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// this class is used to ensure the camera stays in the bounds of the generated tilemap dungeon
+/// </summary>
 public class BindCameraToTileMap : MonoBehaviour
 {
 	private Camera _camera;
 	private Vector3 _cameraSize;
 	private float _cameraOrthoSize;
+	// these two bounds represent the rectangle the camera should stay in in world space
 	private Vector3 _cameraMinBound;
 	private Vector3 _cameraMaxBound;
 	private bool _tileMapsDirty;
-	private IReadOnlyList<Tilemap> _tileMaps = new List<Tilemap>();
 
-	public Vector3 Target { get; internal set; }
+	// the subject the camera is following (the player)
+	public Vector3 Target_Position { get; internal set; }
+
+	// the tilemaps that are currendly being viewed, our camera will be stuck in their bounds
+	private IReadOnlyList<Tilemap> _tileMaps = new List<Tilemap>();
 	public IReadOnlyList<Tilemap> TileMaps
 	{
 		get => _tileMaps;
@@ -26,16 +33,23 @@ public class BindCameraToTileMap : MonoBehaviour
 	private void Start()
 	{
 		_camera = Camera.main;
+		// TODO make this dynamic
 		TileMaps = new List<Tilemap>(FindObjectsOfType<Tilemap>());
 	}
 
+	/// <summary>
+	/// calculate the bounds, a rectangle that's drawn tightly around the loaded tilemaps 
+	/// </summary>
 	private void RecalculateBounds()
 	{
+		// lower left corners of the tilemaps
 		List<Vector3> minimums = new List<Vector3>();
+		// upper right corners of the tilemaps
 		List<Vector3> maximum = new List<Vector3>();
 		
 		foreach (var tilemap in TileMaps)
 		{
+			// tilemaps come with a bunch of empty space, this will ensure the bounds we get are wrapped tightly
 			tilemap.CompressBounds();
 		}
 
@@ -44,15 +58,17 @@ public class BindCameraToTileMap : MonoBehaviour
 			minimums.Add(tilemap.CellToWorld(tilemap.cellBounds.min));
 			maximum.Add(tilemap.CellToWorld(tilemap.cellBounds.max));
 		}
-
+		// we only store the smallest values of minbound and the highest of maxbound
 		_cameraMinBound = MathUtils.MinBound(minimums.ToArray());
 		_cameraMaxBound = MathUtils.MaxBound(maximum.ToArray());
 	}
 
 	private void LateUpdate()
 	{
+		// recalculate the camera corners in world space if the camera's size changes
 		if (_cameraOrthoSize != _camera.orthographicSize)
 		{
+			_cameraOrthoSize = _camera.orthographicSize;
 			CalculateCamSize();
 		}
 		if (_tileMapsDirty)
@@ -60,28 +76,30 @@ public class BindCameraToTileMap : MonoBehaviour
 			RecalculateBounds();
 			_tileMapsDirty = false;
 		}
-
-		var cameraMin = Target - _cameraSize;
-		var cameraMax = Target + _cameraSize;
-
-		var offsetTransform = Target;
+		// we assign two corners relative to our target position
+		var cameraMin = Target_Position - _cameraSize;
+		var cameraMax = Target_Position + _cameraSize;
+		// set the future position to the target position then correct if it it's out of bound
+		var future_position = Target_Position;
 		for (int i = 0; i < 2; i++)
 		{
 			if (cameraMin[i] < _cameraMinBound[i])
 			{
-				offsetTransform[i] = _cameraMinBound[i] + _cameraSize[i];
+				future_position[i] = _cameraMinBound[i] + _cameraSize[i];
 			}
 			if (cameraMax[i] > _cameraMaxBound[i])
 			{
-				offsetTransform[i] = _cameraMaxBound[i] - _cameraSize[i];
+				future_position[i] = _cameraMaxBound[i] - _cameraSize[i];
 			}
 		}
-		transform.position = offsetTransform;
+		transform.position = future_position;
 	}
 
+	/// <summary>
+	/// stores the corners of the camera view in world space 
+	/// </summary>
 	private void CalculateCamSize()
 	{
-		_cameraOrthoSize = _camera.orthographicSize;
 		var cameraBound = _camera.ViewportToWorldPoint(new Vector3(1, 1, _camera.nearClipPlane));
 		_cameraSize = new Vector3(
 				cameraBound.x - _camera.transform.position.x,

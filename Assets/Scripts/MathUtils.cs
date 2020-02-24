@@ -1,10 +1,18 @@
 ﻿using UnityEngine;
-
+/// <summary>
+/// this class is for privind missing math utitilies 
+/// </summary>
 static class MathUtils
 {
+	/// <summary>
+	/// calculates the minimum x y and z values for all provided vectors 
+	/// </summary>
+	/// <param name="vectors"></param>
+	/// <returns></returns>
 	public static Vector3 MinBound(Vector3[] vectors)
 	{
 		var outp = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+		// iterate over dimentions
 		for (int i = 0; i < 3; i++)
 		{
 			foreach (var vec in vectors)
@@ -14,10 +22,15 @@ static class MathUtils
 		}
 		return outp;
 	}
-
+	/// <summary>
+	/// provides the maximum x y and z values for all provided vectors
+	/// </summary>
+	/// <param name="vectors"></param>
+	/// <returns></returns>
 	public static Vector3 MaxBound(Vector3[] vectors)
 	{
 		var outp = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+		// iterate over dimensions
 		for (int i = 0; i < 3; i++)
 		{
 			foreach (var vec in vectors)

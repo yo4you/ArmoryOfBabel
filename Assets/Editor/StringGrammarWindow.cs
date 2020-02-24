@@ -94,7 +94,7 @@ public class StringGrammarWindow : EditorWindow
 
 		for (int i = 0; i < _testExamples; i++)
 		{
-			var testResult = GrammarUtils.TestGrammar(ref _grammars, _testString, i);
+			var testResult = GrammarUtils.ApplyGrammars(ref _grammars, _testString, i);
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(testResult);
 			EditorGUILayout.LabelField($"seed : {i}", GUILayout.Width(_textBoxSize));
