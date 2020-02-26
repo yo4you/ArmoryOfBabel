@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 
 /// <summary>
@@ -9,14 +7,23 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class NodeEditorWindow : EditorWindow
 {
-	private NodeGraph _nodegraph;
-	private int _nodeCount = 20;
 	private WindowState _currentState = WindowState.SELECTED;
 	/// <summary>
 	/// the object we last clicked
 	/// </summary>
 	private Node _selectedObject;
-	
+	private bool _repaint;
+	private NodeGraph _nodegraph;
+
+	public NodeGraph Nodegraph
+	{
+		get => _nodegraph; set
+		{
+			_repaint = true;
+			_nodegraph = value;
+		}
+	}
+
 	private enum WindowState
 	{
 		UNSELECTED,
@@ -25,39 +32,24 @@ public class NodeEditorWindow : EditorWindow
 		RIGHT_CLICKED
 	}
 
-	[MenuItem("Custom/Node Based Editor")]
-	private static void OpenWindow()
-	{
-		var window = GetWindow<NodeEditorWindow>(false, "Node Editor", true);
-		// this ensures we can get notified when the user clicks away from the editor window
-		window.wantsMouseEnterLeaveWindow = true;
-	}
-
-	public void OnEnable()
-	{
-		_nodegraph = new NodeGraph();
-		List<int> nodeIDs = new List<int>();
-		// just generated some random nodes for now
-		for (int i = 0; i < _nodeCount; i++)
-		{
-			var pos = Random.insideUnitCircle;
-			pos *= Random.Range(0, 1000);
-			nodeIDs.Add(_nodegraph.CreateNode(new Node(pos, "A")));
-		}
-	}
-
 	private void OnGUI()
 	{
-		_nodegraph.Draw();
+		if (Nodegraph == null)
+		{
+			return;
+		}
+
+		Nodegraph.Draw();
 		ProcessEvents(Event.current);
 
-		if (GUI.changed)
+		if (GUI.changed || _repaint)
 		{
+			_repaint = true;
 			Repaint();
 		}
 	}
 
-	
+
 	private void ProcessEvents(Event e)
 	{
 		// check if the player clicks away from the window and when they click back
@@ -81,6 +73,10 @@ public class NodeEditorWindow : EditorWindow
 				if (e.type == EventType.MouseDown)
 				{
 					Click(e.mousePosition, e.button);
+					if (e.clickCount == 2)
+					{
+						DoubleClick();
+					}
 				}
 				break;
 			case WindowState.CLICKED:
@@ -103,6 +99,19 @@ public class NodeEditorWindow : EditorWindow
 		}
 	}
 
+	private void DoubleClick()
+	{
+		if (_selectedObject != null)
+		{
+			var windowContent = CreateInstance<RenameWindow>();
+			windowContent.Node = _selectedObject;
+			var pos = _selectedObject.Pos + position.position;
+			windowContent.position = new Rect(pos.x, pos.y, 300, 50);
+			windowContent.ShowPopup();
+		}
+
+	}
+
 	/// <summary>
 	/// moves the selected object or the screen if the background is selected
 	/// </summary>
@@ -115,7 +124,7 @@ public class NodeEditorWindow : EditorWindow
 		}
 		else
 		{
-			_nodegraph.Offset(delta);
+			Nodegraph.Offset(delta);
 		}
 	}
 
@@ -127,7 +136,7 @@ public class NodeEditorWindow : EditorWindow
 	/// <param name="button"></param>
 	private void Click(Vector2 mousePosition, int button)
 	{
-		var clicked_object = _nodegraph.GetNodeUnderPosition(mousePosition);
+		var clicked_object = Nodegraph.GetNodeUnderPosition(mousePosition);
 		switch (button)
 		{
 			case 0:
@@ -137,7 +146,7 @@ public class NodeEditorWindow : EditorWindow
 			case 1:
 				if (_selectedObject != null && _currentState == WindowState.RIGHT_CLICKED)
 				{
-					_nodegraph.Connect(_selectedObject, clicked_object);
+					Nodegraph.Connect(_selectedObject, clicked_object);
 					_currentState = WindowState.SELECTED;
 					_selectedObject = null;
 					GUI.changed = true;
@@ -146,10 +155,21 @@ public class NodeEditorWindow : EditorWindow
 				{
 					_currentState = WindowState.RIGHT_CLICKED;
 					_selectedObject = clicked_object;
+					if (_selectedObject == null)
+					{
+						GenericMenu emptyClickMenu = new GenericMenu();
+						emptyClickMenu.AddItem(new GUIContent("Add node"), false, () => OnClickAddNode(mousePosition));
+						emptyClickMenu.ShowAsContext();
+					}
 				}
 				break;
 			default:
 				break;
 		}
+	}
+
+	private void OnClickAddNode(Vector2 mousePosition)
+	{
+		Nodegraph.CreateNode(new Node(mousePosition, "B"));
 	}
 }

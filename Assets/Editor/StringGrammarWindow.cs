@@ -27,7 +27,7 @@ public class StringGrammarWindow : EditorWindow
 	{
 		GetWindow<StringGrammarWindow>(false, "String Grammars", true);
 	}
-	
+
 	private void OnGUI()
 	{
 		if (_directory == "")
@@ -112,7 +112,7 @@ public class StringGrammarWindow : EditorWindow
 
 		#region Save and Load
 
-		_exportName= EditorGUILayout.TextField("Grammar Name : ", _exportName);
+		_exportName = EditorGUILayout.TextField("Grammar Name : ", _exportName);
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("import"))
 		{

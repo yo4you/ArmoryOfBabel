@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 /// <summary>
 /// a class used storing nodes and their relations as well as providing all neccesairy methods for controlling them from the editor window
 /// </summary>
-internal class NodeGraph
+public class NodeGraph
 {
 	// the width of the connection lines
 	private const float _lineWidth = 2f;
@@ -40,7 +39,10 @@ internal class NodeGraph
 	/// <param name="nodeId1"></param>
 	public void Connect(int nodeId0, int nodeId1)
 	{
-		_nodeDict[nodeId0].ConnectedNodes.Add(nodeId1);
+		if (nodeId0 != nodeId1)
+		{
+			_nodeDict[nodeId0].ConnectedNodes.Add(nodeId1);
+		}
 	}
 
 	/// <summary>
@@ -80,7 +82,7 @@ internal class NodeGraph
 			{
 				continue;
 			}
-			item.Value.Draw();
+			item.Value.Draw(item.Key);
 		}
 	}
 
@@ -139,7 +141,21 @@ internal class NodeGraph
 	/// <param name="node1"></param>
 	internal void Connect(Node node0, Node node1)
 	{
-		var id = _nodeDict.FirstOrDefault(kv => kv.Value == node1).Key;
-		node0.ConnectedNodes.Add(id);
+		if (node0 == null || node1 == null)
+		{
+			return;
+		}
+
+		var id0 = _nodeDict.FirstOrDefault(kv => kv.Value == node0).Key;
+		var id1 = _nodeDict.FirstOrDefault(kv => kv.Value == node1).Key;
+		Connect(id0, id1);
+	}
+
+	internal void Modify(int nodeID, string newName)
+	{
+		if (_nodeDict.TryGetValue(nodeID, out Node node))
+		{
+			node.Node_text = newName;
+		}
 	}
 }

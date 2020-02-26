@@ -38,10 +38,13 @@ public class Node
 		_rect = new Rect(Pos.x, Pos.y, _nodeSize, _nodeSize);
 	}
 
-	internal void Draw()
+	/// <summary>
+	/// draws the node upon the editorwindow
+	/// </summary>
+	internal void Draw(int id)
 	{
 		_rect.position = Pos;
-		GUI.Box(_rect, Node_text, _nodeStyle);
+		GUI.Box(_rect, $"{Node_text}:{id}" , _nodeStyle);
 	}
 
 	/// <summary>
