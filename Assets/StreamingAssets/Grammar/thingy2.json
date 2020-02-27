@@ -1,0 +1,103 @@
+{
+    "Values": [
+        {
+            "Name": "New Grammar1",
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 75.0,
+                            "y": 286.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 287.0,
+                            "y": 147.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 2
+            },
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 78.0,
+                            "y": 316.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    },
+                    {
+                        "_pos": {
+                            "x": 273.0,
+                            "y": 201.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 2
+            }
+        },
+        {
+            "Name": "New Grammar2",
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 67.0,
+                            "y": 268.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    },
+                    {
+                        "_pos": {
+                            "x": 277.0,
+                            "y": 164.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 2
+            },
+            "RightHand": {
+                "Keys": [
+                    0
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 141.0,
+                            "y": 239.0
+                        },
+                        "_node_text": "c",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 1
+            }
+        }
+    ]
+}

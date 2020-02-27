@@ -1,0 +1,172 @@
+{
+    "Values": [
+        {
+            "Name": "grm1",
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 74.0,
+                            "y": 259.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 285.0,
+                            "y": 161.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 2
+            },
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 98.0,
+                            "y": 145.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": [
+                            2
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 83.0,
+                            "y": 339.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": [
+                            2
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 256.0,
+                            "y": 210.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": [
+                            3,
+                            4
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 311.0,
+                            "y": 361.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    },
+                    {
+                        "_pos": {
+                            "x": 370.0,
+                            "y": 46.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 5
+            }
+        },
+        {
+            "Name": "grm2",
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 119.0,
+                            "y": 170.0
+                        },
+                        "_node_text": "a",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 273.0,
+                            "y": 199.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    },
+                    {
+                        "_pos": {
+                            "x": 266.0,
+                            "y": 390.0
+                        },
+                        "_node_text": "c",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    }
+                ],
+                "lastID": 3
+            },
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 23.0,
+                            "y": 278.0
+                        },
+                        "_node_text": "a",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 221.0,
+                            "y": 254.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": [
+                            2
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 356.0,
+                            "y": 318.0
+                        },
+                        "_node_text": "c",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 3
+            }
+        }
+    ]
+}

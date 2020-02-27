@@ -9,17 +9,33 @@ public class NodeGraph
 {
 	// the width of the connection lines
 	private const float _lineWidth = 2f;
+
+	public static explicit operator NodeGraph(Serializable_NodeGraph v)
+	{
+		var dict = new Dictionary<int, Node>();
+		for (int i = 0; i < v.Keys.Count; i++)
+		{
+			dict.Add(v.Keys[i], v.Values[i]);
+		}
+
+		return new NodeGraph()
+		{
+			_nodeDict = dict,
+			_lastId = v.lastID
+		};
+	}
+
 	// size of the nodes
 	// TODO don't hardcode this
 	private const int _nodeSize = 100;
 	// size of the indication at the end of a connection
-	private float _ballSize = 10;
+	private const float _ballSize = 10;
 	// margin around the nodes 
-	private int _nodeMargin = 6;
+	private const int _nodeMargin = 6;
 	// last ID dispatched to a node
-	private int _lastId;
+	public int _lastId;
 	// dictionary storing all nodes by their IDs
-	private Dictionary<int, Node> _nodeDict = new Dictionary<int, Node>();
+	public Dictionary<int, Node> _nodeDict = new Dictionary<int, Node>();
 
 	/// <summary>
 	/// adds the node to the nodegraph and returns it's assigned ID

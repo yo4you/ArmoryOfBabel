@@ -32,7 +32,7 @@ public class StringGrammarWindow : EditorWindow
 	{
 		if (_directory == "")
 		{
-			_directory = Application.streamingAssetsPath + "/Grammar/";
+			_directory = Application.streamingAssetsPath + "/Grammar/String/";
 		}
 		#region AddGrammars
 		EditorGUILayout.LabelField("Add string grammar");

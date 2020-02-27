@@ -1,0 +1,106 @@
+{
+    "Values": [
+        {
+            "Name": "New Grammar0",
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 80.0,
+                            "y": 276.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 269.0,
+                            "y": 180.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 2
+            },
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 60.0,
+                            "y": 301.0
+                        },
+                        "_node_text": "C",
+                        "_connectedNodes": [
+                            2,
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 169.0,
+                            "y": 136.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    },
+                    {
+                        "_pos": {
+                            "x": 244.0,
+                            "y": 294.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 3
+            }
+        },
+        {
+            "Name": "New Grammar1",
+            "LeftHand": {
+                "Keys": [
+                    0
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 162.0,
+                            "y": 205.0
+                        },
+                        "_node_text": "B",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 1
+            },
+            "RightHand": {
+                "Keys": [
+                    0
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 118.0,
+                            "y": 226.0
+                        },
+                        "_node_text": "F",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 1
+            }
+        }
+    ]
+}

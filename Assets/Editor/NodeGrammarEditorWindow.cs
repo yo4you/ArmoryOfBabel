@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,10 +13,13 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private NodeEditorWindow[] _nodeEditorWindows;
 	private float _editorHeightRatio = 0.75f;
 	private bool _selected = true;
+	private bool _enabledLastFrame;
 	private List<NodeGrammar> _grammars;
 	private int _grammarSelectedIndex;
 	private float _buttonWidth = 20;
 	private Vector2 _scrollPos;
+	private string _exportName;
+	private string _directory ="";
 
 	private enum HandSide { LEFT, RIGHT }
 
@@ -23,20 +27,28 @@ public class NodeGrammarEditorWindow : EditorWindow
 	[MenuItem("Custom/Node Grammar Editor")]
 	private static void OpenWindow()
 	{
-		var window = GetWindow<NodeGrammarEditorWindow>(utility: false, "Node Grammar Editor", focus: false);
+		var window = GetWindow<NodeGrammarEditorWindow>(utility: false, "Node Grammar Editor", focus: true);
 		// this ensures we can get notified when the user clicks away from the editor window
 		window.wantsMouseEnterLeaveWindow = true;
 	}
 
 	private void OnEnable()
 	{
-		_grammars = new List<NodeGrammar>();
-		_grammars.Add(new NodeGrammar
+		// for some reason OnEnable is called when starting play mode but OnGui isn't called so we get weird floating windows
+		_enabledLastFrame = true;
+	}
+
+	private void EnableProperly()
+	{
+		_grammars = new List<NodeGrammar>
 		{
-			Name = "New Grammar",
-			LeftHand = new NodeGraph(),
-			RightHand = new NodeGraph()
-		});
+			new NodeGrammar
+			{
+				Name = "New Grammar",
+				LeftHand = new NodeGraph(),
+				RightHand = new NodeGraph()
+			}
+		};
 		GenerateEditorWindows();
 		_selected = true;
 	}
@@ -110,7 +122,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 	{
 		foreach (var item in _nodeEditorWindows)
 		{
-			if (item)
+			if (item != null)
 			{
 				item.Close();
 			}
@@ -118,6 +130,25 @@ public class NodeGrammarEditorWindow : EditorWindow
 	}
 	private void OnGUI()
 	{
+		if (_directory == "")
+		{
+			_directory = Application.streamingAssetsPath + "/Grammar/Node/";
+		}
+		if (_enabledLastFrame)
+		{
+			_enabledLastFrame = false;
+			EnableProperly();
+			return;
+		}
+		if (GUILayout.Button("Reset the Windows"))
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				GetWindow<NodeEditorWindow>()?.Close();
+			}
+			GenerateEditorWindows();
+		}
+
 		#region Grammar selection
 		int current_grammarIndex = _grammarSelectedIndex;
 		var grammar_labels = new string[_grammars.Count];
@@ -154,6 +185,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 		{
 			_grammars.RemoveAt(_grammarSelectedIndex);
 			_grammarSelectedIndex = 0;
+			LoadGrammar(_grammarSelectedIndex);
 			return;
 		}
 		#region Grammar name change
@@ -164,6 +196,33 @@ public class NodeGrammarEditorWindow : EditorWindow
 		_grammars[_grammarSelectedIndex] = current_grammar;
 		GUILayout.EndHorizontal();
 		#endregion
+
+		#region Save and Load
+
+		_exportName = EditorGUILayout.TextField("Grammar Name : ", _exportName);
+		EditorGUILayout.BeginHorizontal();
+		if (GUILayout.Button("import"))
+		{
+			StreamReader reader = new StreamReader(_directory + _exportName + ".json");
+			var jsonString = reader.ReadToEnd();
+			_grammars = SerializableNodeGrammars_Converter.FromJson(jsonString);
+			reader.Close();
+			reader.Dispose();
+			LoadGrammar(_grammarSelectedIndex);
+		}
+		if (GUILayout.Button("export"))
+		{
+			SaveGrammar(_grammarSelectedIndex);
+			StreamWriter writer = new StreamWriter(_directory + _exportName + ".json");
+			var jsonString =  SerializableNodeGrammars_Converter.ToJson(_grammars);
+			writer.Write(jsonString);
+			writer.Close();
+			writer.Dispose();
+		}
+		EditorGUILayout.EndHorizontal();
+		#endregion
+
+
 
 		if (_selected)
 		{
@@ -198,11 +257,4 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private void ProcessEvents(Event e)
 	{
 	}
-}
-
-internal struct NodeGrammar
-{
-	public string Name;
-	public NodeGraph LeftHand;
-	public NodeGraph RightHand;
 }
