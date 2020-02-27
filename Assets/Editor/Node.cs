@@ -39,6 +39,16 @@ public class Node
 		_nodeStyle.wordWrap = true;
 		_rect = new Rect(Pos.x, Pos.y, _nodeSize, _nodeSize);
 	}
+
+	internal void DoubleClick()
+	{
+		var windowContent = EditorWindow.CreateInstance<RenameWindow>();
+		windowContent.Node = this;
+		var pos = Pos + EditorWindow.focusedWindow.position.position;
+		windowContent.position = new Rect(pos.x, pos.y, 300, 50);
+		windowContent.ShowPopup();
+	}
+
 	/// <summary>
 	/// draws the node upon the editorwindow
 	/// </summary>

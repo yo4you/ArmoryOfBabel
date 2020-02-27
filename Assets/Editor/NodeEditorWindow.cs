@@ -75,7 +75,7 @@ public class NodeEditorWindow : EditorWindow
 					Click(e.mousePosition, e.button);
 					if (e.clickCount == 2)
 					{
-						DoubleClick();
+						_selectedObject?.DoubleClick();
 					}
 				}
 				break;
@@ -99,18 +99,7 @@ public class NodeEditorWindow : EditorWindow
 		}
 	}
 
-	private void DoubleClick()
-	{
-		if (_selectedObject != null)
-		{
-			var windowContent = CreateInstance<RenameWindow>();
-			windowContent.Node = _selectedObject;
-			var pos = _selectedObject.Pos + position.position;
-			windowContent.position = new Rect(pos.x, pos.y, 300, 50);
-			windowContent.ShowPopup();
-		}
-
-	}
+	
 
 	/// <summary>
 	/// moves the selected object or the screen if the background is selected
@@ -153,14 +142,26 @@ public class NodeEditorWindow : EditorWindow
 				}
 				else
 				{
-					_currentState = WindowState.RIGHT_CLICKED;
-					_selectedObject = clicked_object;
-					if (_selectedObject == null)
+					GenericMenu emptyClickMenu = new GenericMenu();
+
+					if (clicked_object != null)
 					{
-						GenericMenu emptyClickMenu = new GenericMenu();
-						emptyClickMenu.AddItem(new GUIContent("Add node"), false, () => OnClickAddNode(mousePosition));
-						emptyClickMenu.ShowAsContext();
+						emptyClickMenu.AddItem(new GUIContent("Remove node"), false, () =>{
+							_nodegraph.Delete(clicked_object);
+							clicked_object = null; });
+
+						emptyClickMenu.AddItem(new GUIContent("Connect"), false, () =>
+						{
+							_selectedObject = clicked_object;
+							_currentState = WindowState.RIGHT_CLICKED;
+						});
 					}
+					else
+					{
+						emptyClickMenu.AddItem(new GUIContent("Add node"), false, () => OnClickAddNode(mousePosition));
+					}
+					emptyClickMenu.ShowAsContext();
+
 				}
 				break;
 			default:

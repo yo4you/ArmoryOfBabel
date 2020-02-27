@@ -19,7 +19,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private float _buttonWidth = 20;
 	private Vector2 _scrollPos;
 	private string _exportName;
-	private string _directory ="";
+	private string _directory = "";
 
 	private enum HandSide { LEFT, RIGHT }
 
@@ -120,12 +120,14 @@ public class NodeGrammarEditorWindow : EditorWindow
 	}
 	private void OnDisable()
 	{
+		if (this == null)
+		{
+			return;
+		}
+
 		foreach (var item in _nodeEditorWindows)
 		{
-			if (item != null)
-			{
-				item.Close();
-			}
+			item?.Close();
 		}
 	}
 	private void OnGUI()
@@ -214,7 +216,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 		{
 			SaveGrammar(_grammarSelectedIndex);
 			StreamWriter writer = new StreamWriter(_directory + _exportName + ".json");
-			var jsonString =  SerializableNodeGrammars_Converter.ToJson(_grammars);
+			var jsonString = SerializableNodeGrammars_Converter.ToJson(_grammars);
 			writer.Write(jsonString);
 			writer.Close();
 			writer.Dispose();

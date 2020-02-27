@@ -55,7 +55,7 @@ public class NodeGraph
 	/// <param name="nodeId1"></param>
 	public void Connect(int nodeId0, int nodeId1)
 	{
-		if (nodeId0 != nodeId1)
+		if (nodeId0 != nodeId1 && !_nodeDict[nodeId0].ConnectedNodes.Contains(nodeId1))
 		{
 			_nodeDict[nodeId0].ConnectedNodes.Add(nodeId1);
 		}
@@ -102,6 +102,24 @@ public class NodeGraph
 		}
 	}
 
+	public void Disconnect(Node disconnect_node)
+	{
+		var id = GetId(disconnect_node);
+		foreach (var node in _nodeDict)
+		{
+			if (node.Value.ConnectedNodes.Contains(id))
+			{
+				node.Value.ConnectedNodes.Remove(id);
+			}
+		}
+	}
+
+	public void Delete(Node node)
+	{
+		Disconnect(node);
+		_nodeDict.Remove(GetId(node));
+		
+	}
 
 	/// <summary>
 	/// draws the bezier curve starting from the right side of this node to all the connected nodes and places a little circle at the end
@@ -162,9 +180,14 @@ public class NodeGraph
 			return;
 		}
 
-		var id0 = _nodeDict.FirstOrDefault(kv => kv.Value == node0).Key;
-		var id1 = _nodeDict.FirstOrDefault(kv => kv.Value == node1).Key;
+		var id0 = GetId(node0);
+		var id1 = GetId(node1);
 		Connect(id0, id1);
+	}
+
+	private int GetId(Node node0)
+	{
+		return _nodeDict.FirstOrDefault(kv => kv.Value == node0).Key;
 	}
 
 	internal void Modify(int nodeID, string newName)
