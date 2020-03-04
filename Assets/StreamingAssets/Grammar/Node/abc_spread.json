@@ -1,0 +1,142 @@
+{
+    "Values": [
+        {
+            "Name": "a",
+            "LeftHand": {
+                "Keys": [
+                    0
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 107.0,
+                            "y": 163.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 2
+            },
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 84.0,
+                            "y": 204.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 152.0,
+                            "y": 43.0
+                        },
+                        "_node_text": "a",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 2
+            }
+        },
+        {
+            "Name": "b",
+            "LeftHand": {
+                "Keys": [
+                    0
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 95.0,
+                            "y": 197.0
+                        },
+                        "_node_text": "a",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 1
+            },
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 67.0,
+                            "y": 199.0
+                        },
+                        "_node_text": "a",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 154.0,
+                            "y": 72.0
+                        },
+                        "_node_text": "c",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 2
+            }
+        },
+        {
+            "Name": "c",
+            "LeftHand": {
+                "Keys": [
+                    0
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 107.0,
+                            "y": 187.0
+                        },
+                        "_node_text": "c",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 1
+            },
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 87.0,
+                            "y": 214.0
+                        },
+                        "_node_text": "c",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 156.0,
+                            "y": 56.0
+                        },
+                        "_node_text": "d",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 2
+            }
+        }
+    ]
+}

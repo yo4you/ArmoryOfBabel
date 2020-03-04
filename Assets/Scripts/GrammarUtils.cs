@@ -69,4 +69,11 @@ public static class GrammarUtils
 		Random.state = random_state;
 		return start_string;
 	}
+
+	public static NodeGraph ApplyNodeGrammars(string outputString, List<NodeGrammar> nodeGrammars, NodeGraph nodeGraph)
+	{
+		NodeGraph output = (NodeGraph)nodeGraph.Clone();
+
+		return output;
+	}
 }

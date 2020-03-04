@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 /// <summary>
 /// a class used storing nodes and their relations as well as providing all neccesairy methods for controlling them from the editor window
 /// </summary>
-public class NodeGraph
+public class NodeGraph : ICloneable
 {
 	// the width of the connection lines
 	private const float _lineWidth = 2f;
@@ -153,7 +154,7 @@ public class NodeGraph
 	/// </summary>
 	/// <param name="mousePosition">position to check</param>
 	/// <returns></returns>
-	internal Node GetNodeUnderPosition(Vector2 mousePosition)
+	public Node GetNodeUnderPosition(Vector2 mousePosition)
 	{
 		foreach (var item in _nodeDict)
 		{
@@ -173,7 +174,7 @@ public class NodeGraph
 	/// </summary>
 	/// <param name="node0"></param>
 	/// <param name="node1"></param>
-	internal void Connect(Node node0, Node node1)
+	public void Connect(Node node0, Node node1)
 	{
 		if (node0 == null || node1 == null)
 		{
@@ -184,6 +185,8 @@ public class NodeGraph
 		var id1 = GetId(node1);
 		Connect(id0, id1);
 	}
+
+	
 
 	private int GetId(Node node0)
 	{
@@ -196,5 +199,11 @@ public class NodeGraph
 		{
 			node.Node_text = newName;
 		}
+	}
+
+	public object Clone()
+	{
+		var json = JsonUtility.ToJson((Serializable_NodeGraph)this);
+		return (NodeGraph)JsonUtility.FromJson<Serializable_NodeGraph>(json);
 	}
 }

@@ -32,30 +32,27 @@ public class Node
 	public List<int> ConnectedNodes { get => _connectedNodes; set => _connectedNodes = value; }
 	public Node()
 	{
-		_nodeStyle = new GUIStyle();
-		_nodeStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
-		_nodeStyle.border = new RectOffset(_boxMargin, _boxMargin, _boxMargin, _boxMargin);
-		_nodeStyle.padding = new RectOffset(_boxMargin, _boxMargin, _boxMargin, _boxMargin);
-		_nodeStyle.wordWrap = true;
+		
 		_rect = new Rect(Pos.x, Pos.y, _nodeSize, _nodeSize);
 	}
-
-	internal void DoubleClick()
-	{
-		var windowContent = EditorWindow.CreateInstance<RenameWindow>();
-		windowContent.Node = this;
-		var pos = Pos + EditorWindow.focusedWindow.position.position;
-		windowContent.position = new Rect(pos.x, pos.y, 300, 50);
-		windowContent.ShowPopup();
-	}
-
 	/// <summary>
 	/// draws the node upon the editorwindow
 	/// </summary>
 	internal void Draw(int id)
 	{
+		_nodeStyle = _nodeStyle ?? GenerateNodeStyle();
 		_rect.position = Pos;
 		GUI.Box(_rect, $"{Node_text}:{id}", _nodeStyle);
+	}
+
+	private GUIStyle GenerateNodeStyle()
+	{
+		var nodeStyle = new GUIStyle();
+		nodeStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node1.png") as Texture2D;
+		nodeStyle.border = new RectOffset(_boxMargin, _boxMargin, _boxMargin, _boxMargin);
+		nodeStyle.padding = new RectOffset(_boxMargin, _boxMargin, _boxMargin, _boxMargin);
+		nodeStyle.wordWrap = true;
+		return nodeStyle;
 	}
 
 	/// <summary>

@@ -22,7 +22,7 @@ public struct NodeGrammar
 
 public static class SerializableNodeGrammars_Converter
 {
-	internal static string ToJson(List<NodeGrammar> grammars)
+	public static string ToJson(List<NodeGrammar> grammars)
 	{
 		var serializable_grams = new Serializable_Grammars();
 		foreach (var grammar in grammars)
@@ -32,7 +32,7 @@ public static class SerializableNodeGrammars_Converter
 		return JsonUtility.ToJson(serializable_grams,true);
 	}
 
-	internal static List<NodeGrammar> FromJson(string json)
+	public static List<NodeGrammar> FromJson(string json)
 	{
 		var outp = new List<NodeGrammar>();
 

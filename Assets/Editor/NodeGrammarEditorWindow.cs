@@ -9,12 +9,13 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private const float _marginRatio = 0.02f;
 	// ratio * w = h
 	private const float _editorWHRatio = 0.75f;
+	private float _editorHeightRatio = 0.5f;
+
 	private NodeGrammarEditorWindow _window;
-	private NodeEditorWindow[] _nodeEditorWindows;
-	private float _editorHeightRatio = 0.75f;
+	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null,null};
 	private bool _selected = true;
 	private bool _enabledLastFrame;
-	private List<NodeGrammar> _grammars;
+	private List<NodeGrammar> _grammars = new List<NodeGrammar>();
 	private int _grammarSelectedIndex;
 	private float _buttonWidth = 20;
 	private Vector2 _scrollPos;
@@ -22,7 +23,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private string _directory = "";
 
 	private enum HandSide { LEFT, RIGHT }
-
 
 	[MenuItem("Custom/Node Grammar Editor")]
 	private static void OpenWindow()
@@ -64,7 +64,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 			}
 			_selected = false;
 			SaveGrammar(_grammarSelectedIndex);
-
+			_grammarSelectedIndex = 0;
 			for (int i = 0; i < 2; i++)
 			{
 				_nodeEditorWindows[i].Close();
@@ -98,6 +98,11 @@ public class NodeGrammarEditorWindow : EditorWindow
 
 	private void GenerateEditorWindows()
 	{
+		foreach (var window in _nodeEditorWindows)
+		{
+			window?.Close();
+		}
+
 		_nodeEditorWindows = new NodeEditorWindow[2];
 		for (int i = 0; i < 2; i++)
 		{
@@ -105,7 +110,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 			_nodeEditorWindows[i].ShowPopup();
 		}
 		LoadGrammar(_grammarSelectedIndex);
-
 	}
 
 	private void LoadGrammar(int grammarIndex)
@@ -118,16 +122,22 @@ public class NodeGrammarEditorWindow : EditorWindow
 		_nodeEditorWindows[(int)HandSide.LEFT].Nodegraph = _grammars[grammarIndex].LeftHand;
 		_nodeEditorWindows[(int)HandSide.RIGHT].Nodegraph = _grammars[grammarIndex].RightHand;
 	}
+
+	internal static List<NodeGrammar> ImportGrammars(string directory)
+	{
+		StreamReader reader = new StreamReader(directory);
+		var jsonString = reader.ReadToEnd();
+		var outp = SerializableNodeGrammars_Converter.FromJson(jsonString);
+		reader.Close();
+		reader.Dispose();
+		return outp;
+	}
+
 	private void OnDisable()
 	{
-		if (this == null)
-		{
-			return;
-		}
-
 		foreach (var item in _nodeEditorWindows)
 		{
-			item?.Close();
+			item.CloseNextFrame = true;
 		}
 	}
 	private void OnGUI()
@@ -159,7 +169,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 			grammar_labels[i] = _grammars[i].Name;
 		}
 
-		GUILayout.BeginHorizontal();
+		EditorGUILayout.BeginHorizontal();
 		_grammarSelectedIndex = GUILayout.Toolbar(_grammarSelectedIndex, grammar_labels);
 		if (GUILayout.Button("+", GUILayout.Width(_buttonWidth)))
 		{
@@ -170,7 +180,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 				RightHand = new NodeGraph()
 			});
 		}
-		GUILayout.EndHorizontal();
+		EditorGUILayout.EndHorizontal();
 		if (current_grammarIndex != _grammarSelectedIndex)
 		{
 			SaveGrammar(current_grammarIndex);
@@ -205,11 +215,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("import"))
 		{
-			StreamReader reader = new StreamReader(_directory + _exportName + ".json");
-			var jsonString = reader.ReadToEnd();
-			_grammars = SerializableNodeGrammars_Converter.FromJson(jsonString);
-			reader.Close();
-			reader.Dispose();
+			_grammars = ImportGrammars(_directory + _exportName + ".json");
 			LoadGrammar(_grammarSelectedIndex);
 		}
 		if (GUILayout.Button("export"))
@@ -224,16 +230,10 @@ public class NodeGrammarEditorWindow : EditorWindow
 		EditorGUILayout.EndHorizontal();
 		#endregion
 
-
-
 		if (_selected)
 		{
 			DrawEditorWindows();
 		}
-
-		ProcessEvents(Event.current);
-
-		GUIContent content = new GUIContent();
 		if (GUI.changed)
 		{
 			Repaint();
@@ -254,9 +254,5 @@ public class NodeGrammarEditorWindow : EditorWindow
 			editorWidth,
 			editorHeight);
 		}
-	}
-
-	private void ProcessEvents(Event e)
-	{
 	}
 }

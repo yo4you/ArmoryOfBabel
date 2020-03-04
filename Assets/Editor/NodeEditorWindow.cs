@@ -24,6 +24,10 @@ public class NodeEditorWindow : EditorWindow
 		}
 	}
 
+	public bool Editable { get; internal set; } = true;
+	public bool Changed { get; internal set; }
+	public bool CloseNextFrame { get; internal set; }
+
 	private enum WindowState
 	{
 		UNSELECTED,
@@ -34,6 +38,12 @@ public class NodeEditorWindow : EditorWindow
 
 	private void OnGUI()
 	{
+		if (CloseNextFrame)
+		{
+			GUIUtility.ExitGUI();
+			return;
+		}
+
 		if (Nodegraph == null)
 		{
 			return;
@@ -75,7 +85,7 @@ public class NodeEditorWindow : EditorWindow
 					Click(e.mousePosition, e.button);
 					if (e.clickCount == 2)
 					{
-						_selectedObject?.DoubleClick();
+						DoubleClick();
 					}
 				}
 				break;
@@ -99,7 +109,21 @@ public class NodeEditorWindow : EditorWindow
 		}
 	}
 
-	
+	private void DoubleClick()
+	{
+		if (_selectedObject == null)
+		{
+			return;
+		}
+
+		var windowContent = CreateInstance<RenameWindow>();
+		windowContent.Node = _selectedObject;
+		var pos = _selectedObject.Pos + focusedWindow.position.position;
+		windowContent.position = new Rect(pos.x, pos.y, 300, 50);
+		windowContent.ShowPopup();
+	}
+
+
 
 	/// <summary>
 	/// moves the selected object or the screen if the background is selected
@@ -129,12 +153,21 @@ public class NodeEditorWindow : EditorWindow
 		switch (button)
 		{
 			case 0:
-				_selectedObject = clicked_object;
+				if (Editable)
+				{
+					_selectedObject = clicked_object;
+				}
 				_currentState = WindowState.CLICKED;
 				break;
 			case 1:
+				if (!Editable)
+				{
+					break;
+				}
+
 				if (_selectedObject != null && _currentState == WindowState.RIGHT_CLICKED)
 				{
+					Changed = true;
 					Nodegraph.Connect(_selectedObject, clicked_object);
 					_currentState = WindowState.SELECTED;
 					_selectedObject = null;
@@ -146,9 +179,12 @@ public class NodeEditorWindow : EditorWindow
 
 					if (clicked_object != null)
 					{
-						emptyClickMenu.AddItem(new GUIContent("Remove node"), false, () =>{
+						emptyClickMenu.AddItem(new GUIContent("Remove node"), false, () =>
+						{
+							Changed = true;
 							_nodegraph.Delete(clicked_object);
-							clicked_object = null; });
+							clicked_object = null;
+						});
 
 						emptyClickMenu.AddItem(new GUIContent("Connect"), false, () =>
 						{
@@ -171,6 +207,7 @@ public class NodeEditorWindow : EditorWindow
 
 	private void OnClickAddNode(Vector2 mousePosition)
 	{
+		Changed = true;
 		Nodegraph.CreateNode(new Node()
 		{
 			Pos = mousePosition,

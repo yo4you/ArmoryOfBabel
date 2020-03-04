@@ -116,21 +116,41 @@ public class StringGrammarWindow : EditorWindow
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("import"))
 		{
-			StreamReader reader = new StreamReader(_directory + _exportName + ".json");
-			var jsonString = reader.ReadToEnd();
-			_grammars = JsonUtility.FromJson<SerializableGrammars>(jsonString).Values;
-			reader.Close();
-			reader.Dispose();
+			_grammars = ImportGrammars(_directory + _exportName + ".json");
 		}
 		if (GUILayout.Button("export"))
 		{
-			StreamWriter writer = new StreamWriter(_directory + _exportName + ".json");
-			var jsonString = JsonUtility.ToJson(new SerializableGrammars() { Values = _grammars });
-			writer.Write(jsonString);
-			writer.Close();
-			writer.Dispose();
+			ExportGrammars(_directory + _exportName + ".json", ref _grammars);
 		}
 		EditorGUILayout.EndHorizontal();
 		#endregion
+	}
+
+	public static void ExportGrammars(string fileDir, ref List<StringGrammarRule> grammars)
+	{
+		StreamWriter writer = new StreamWriter(fileDir);
+		var jsonString = JsonUtility.ToJson(new SerializableGrammars() { Values = grammars });
+		writer.Write(jsonString);
+		writer.Close();
+		writer.Dispose();
+	}
+
+	public static List<StringGrammarRule> ImportGrammars(string fileDir)
+	{
+		// TODO throw exception
+		try
+		{
+			StreamReader reader = new StreamReader(fileDir);
+			var jsonString = reader.ReadToEnd();
+			var Output = JsonUtility.FromJson<SerializableGrammars>(jsonString).Values;
+			reader.Close();
+			reader.Dispose();
+			return Output;
+		}
+		catch (FileNotFoundException ex)
+		{
+			Debug.LogError(ex.ToString());
+			return null;
+		}
 	}
 }
