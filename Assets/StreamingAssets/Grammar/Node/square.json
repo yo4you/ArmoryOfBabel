@@ -1,0 +1,121 @@
+{
+    "Values": [
+        {
+            "Name": "R",
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 129.0,
+                            "y": 124.0
+                        },
+                        "_node_text": "a",
+                        "_connectedNodes": [
+                            3
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 367.0,
+                            "y": 116.0
+                        },
+                        "_node_text": "c",
+                        "_connectedNodes": [
+                            2
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 246.0,
+                            "y": 2.0
+                        },
+                        "_node_text": "d",
+                        "_connectedNodes": [
+                            0
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 260.0,
+                            "y": 226.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": [
+                            1,
+                            2
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": -45.0,
+                            "y": 116.0
+                        },
+                        "_node_text": "a",
+                        "_connectedNodes": [
+                            0
+                        ]
+                    }
+                ],
+                "lastID": 5
+            },
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 84.0,
+                            "y": 137.0
+                        },
+                        "_node_text": "g",
+                        "_connectedNodes": [
+                            1
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 214.0,
+                            "y": 244.0
+                        },
+                        "_node_text": "g",
+                        "_connectedNodes": [
+                            2
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 305.0,
+                            "y": 164.0
+                        },
+                        "_node_text": "g",
+                        "_connectedNodes": [
+                            3
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 197.0,
+                            "y": 6.0
+                        },
+                        "_node_text": "g",
+                        "_connectedNodes": [
+                            0
+                        ]
+                    }
+                ],
+                "lastID": 4
+            }
+        }
+    ]
+}

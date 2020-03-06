@@ -1,0 +1,105 @@
+{
+    "Values": [
+        {
+            "Name": "C",
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 231.0,
+                            "y": 157.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": []
+                    },
+                    {
+                        "_pos": {
+                            "x": 170.0,
+                            "y": -59.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": [
+                            0
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": -5.0,
+                            "y": 79.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": [
+                            0
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 52.0,
+                            "y": 302.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": [
+                            0
+                        ]
+                    }
+                ],
+                "lastID": 4
+            },
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
+                "Values": [
+                    {
+                        "_pos": {
+                            "x": 23.0,
+                            "y": 84.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": [
+                            3
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 19.0,
+                            "y": -53.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": [
+                            3
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 44.0,
+                            "y": 232.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": [
+                            3
+                        ]
+                    },
+                    {
+                        "_pos": {
+                            "x": 190.0,
+                            "y": 88.0
+                        },
+                        "_node_text": "b",
+                        "_connectedNodes": []
+                    }
+                ],
+                "lastID": 4
+            }
+        }
+    ]
+}

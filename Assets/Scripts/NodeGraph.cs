@@ -11,21 +11,6 @@ public class NodeGraph : ICloneable
 	// the width of the connection lines
 	private const float _lineWidth = 2f;
 
-	public static explicit operator NodeGraph(Serializable_NodeGraph v)
-	{
-		var dict = new Dictionary<int, Node>();
-		for (int i = 0; i < v.Keys.Count; i++)
-		{
-			dict.Add(v.Keys[i], v.Values[i]);
-		}
-
-		return new NodeGraph()
-		{
-			_nodeDict = dict,
-			_lastId = v.lastID
-		};
-	}
-
 	// size of the nodes
 	// TODO don't hardcode this
 	private const int _nodeSize = 100;
@@ -205,5 +190,20 @@ public class NodeGraph : ICloneable
 	{
 		var json = JsonUtility.ToJson((Serializable_NodeGraph)this);
 		return (NodeGraph)JsonUtility.FromJson<Serializable_NodeGraph>(json);
+	}
+
+	public static explicit operator NodeGraph(Serializable_NodeGraph v)
+	{
+		var dict = new Dictionary<int, Node>();
+		for (int i = 0; i < v.Keys.Count; i++)
+		{
+			dict.Add(v.Keys[i], v.Values[i]);
+		}
+
+		return new NodeGraph()
+		{
+			_nodeDict = dict,
+			_lastId = v.lastID
+		};
 	}
 }

@@ -154,7 +154,7 @@ public class NodeGrammarExecutor : EditorWindow
 		{
 			_nodeEditorWindows[0].Changed = false;
 			_nodegraphs[0] = _nodeEditorWindows[0].Nodegraph;
-			_nodegraphs[1] = GrammarUtils.ApplyNodeGrammars(_outputString, _nodeGrammars, _nodegraphs[0]);
+			_nodegraphs[1] = GrammarUtils.ApplyNodeGrammars(_outputString, ref _nodeGrammars, _nodegraphs[0]);
 			_nodeEditorWindows[1].Nodegraph = _nodegraphs[1];
 		}
 		if (_selected)
@@ -221,7 +221,7 @@ public class NodeGrammarExecutor : EditorWindow
 
 	private void OnLostFocus()
 	{
-		// when the window stops being visible the focused window will be set to null, there's no other way to hide subwindows
+		// when the window stops being visible the focused window will be set to null, there's no other way to hide sub windows
 		if (focusedWindow == null)
 		{
 			if (_nodeEditorWindows[0] == null)
