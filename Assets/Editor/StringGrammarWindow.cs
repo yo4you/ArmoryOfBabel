@@ -56,15 +56,8 @@ public class StringGrammarWindow : EditorWindow
 		GetWindow<StringGrammarWindow>(false, "String Grammars", true);
 	}
 
-	private void OnGUI()
+	private void GrammarAddition()
 	{
-		if (_directory == "")
-		{
-			_directory = Application.streamingAssetsPath + "/Grammar/String/";
-		}
-
-		#region AddGrammars
-
 		EditorGUILayout.LabelField("Add string grammar");
 		if (_removedEntryIndex != -1)
 		{
@@ -89,14 +82,10 @@ public class StringGrammarWindow : EditorWindow
 			_grammars.OrderBy(x => x.Chance);
 		}
 		EditorGUILayout.EndHorizontal();
+	}
 
-		#endregion AddGrammars
-
-		EditorGUILayout.Separator();
-		EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-
-		#region GrammarList
-
+	private void GrammarDisplay()
+	{
 		_grammarListScroll = EditorGUILayout.BeginScrollView(_grammarListScroll);
 		for (int i = 0; i < _grammars.Count; i++)
 		{
@@ -112,14 +101,10 @@ public class StringGrammarWindow : EditorWindow
 			EditorGUILayout.EndHorizontal();
 		}
 		EditorGUILayout.EndScrollView();
+	}
 
-		#endregion GrammarList
-
-		EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-		EditorGUILayout.Separator();
-
-		#region Tester
-
+	private void GrammarEvaluator()
+	{
 		EditorGUILayout.LabelField("Grammar Evaluator");
 
 		_testString = EditorGUILayout.TextField("Test String", _testString);
@@ -135,6 +120,26 @@ public class StringGrammarWindow : EditorWindow
 		}
 
 		EditorGUILayout.EndScrollView();
+	}
+
+	private void OnGUI()
+	{
+		if (_directory == "")
+		{
+			_directory = Application.streamingAssetsPath + "/Grammar/String/";
+		}
+
+		GrammarAddition();
+
+		EditorGUILayout.Separator();
+		EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+		GrammarDisplay();
+
+		EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+		EditorGUILayout.Separator();
+
+		GrammarEvaluator();
 
 		// TODO find a better way to do this
 		for (int i = 0; i < _bottomPaddingLines; i++)
@@ -142,10 +147,11 @@ public class StringGrammarWindow : EditorWindow
 			EditorGUILayout.Separator();
 		}
 
-		#endregion Tester
+		SaveAndLoadDisplay();
+	}
 
-		#region Save and Load
-
+	private void SaveAndLoadDisplay()
+	{
 		_exportName = EditorGUILayout.TextField("Grammar Name : ", _exportName);
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("import"))
@@ -157,7 +163,5 @@ public class StringGrammarWindow : EditorWindow
 			ExportGrammars(_directory + _exportName + ".json", ref _grammars);
 		}
 		EditorGUILayout.EndHorizontal();
-
-		#endregion Save and Load
 	}
 }

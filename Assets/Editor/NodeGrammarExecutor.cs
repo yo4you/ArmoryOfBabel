@@ -98,6 +98,69 @@ public class NodeGrammarExecutor : EditorWindow
 		}
 	}
 
+	private void DrawNodeOptions()
+	{
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Node Grammar Name");
+		_nodeGrammarName = GUILayout.TextField(_nodeGrammarName);
+		if (GUILayout.Button("+", GUILayout.Width(_buttonWidth)))
+		{
+			var grammars = NodeGrammarEditorWindow.ImportGrammars(_nodeDirectory + _nodeGrammarName + ".json");
+			_nodeGrammars.AddRange(grammars);
+		}
+		if (GUILayout.Button("↺", GUILayout.Width(_buttonWidth)))
+		{
+			_nodeGrammars = new List<NodeGrammar>();
+		}
+		EditorGUILayout.EndHorizontal();
+
+		EditorGUILayout.LabelField("Loaded node grammars");
+		_grammarViewScroll = EditorGUILayout.BeginScrollView(_grammarViewScroll, GUILayout.Height(100f));
+		foreach (var grammar in _nodeGrammars)
+		{
+			EditorGUILayout.LabelField(grammar.Name);
+		}
+		EditorGUILayout.EndScrollView();
+
+		if (_nodeEditorWindows[0].Changed)
+		{
+			_nodeEditorWindows[0].Changed = false;
+			_nodegraphs[0] = _nodeEditorWindows[0].Nodegraph;
+			_nodegraphs[1] = GrammarUtils.ApplyNodeGrammars(_outputString, ref _nodeGrammars, _nodegraphs[0]);
+			_nodeEditorWindows[1].Nodegraph = _nodegraphs[1];
+		}
+	}
+
+	private void DrawStringGrammarOptions()
+	{
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("String Grammar Import :");
+		StringGrammarName = EditorGUILayout.TextField(StringGrammarName);
+		EditorGUILayout.EndHorizontal();
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Input String :");
+		InputString = GUILayout.TextField(InputString);
+		EditorGUILayout.LabelField("Seed :");
+		Seed = EditorGUILayout.IntField(Seed);
+		EditorGUILayout.EndHorizontal();
+
+		if (_stringGrammarDirty)
+		{
+			_stringgrammars = StringGrammarWindow.ImportGrammars(_stringDirectory + StringGrammarName + ".json");
+			_stringGrammarDirty = false;
+		}
+		if (_inputDirty)
+		{
+			_inputDirty = false;
+			if (_stringgrammars != null)
+			{
+				_outputString = GrammarUtils.ApplyGrammars(ref _stringgrammars, InputString, Seed);
+			}
+		}
+		EditorGUILayout.LabelField($"Output String : {_outputString}");
+		EditorGUILayout.Space();
+	}
+
 	private void Enable()
 	{
 		GenerateEditorWindows();
@@ -170,62 +233,9 @@ public class NodeGrammarExecutor : EditorWindow
 			GenerateEditorWindows();
 		}
 
-		EditorGUILayout.BeginHorizontal();
-		EditorGUILayout.LabelField("String Grammar Import :");
-		StringGrammarName = EditorGUILayout.TextField(StringGrammarName);
-		EditorGUILayout.EndHorizontal();
-		EditorGUILayout.BeginHorizontal();
-		EditorGUILayout.LabelField("Input String :");
-		InputString = GUILayout.TextField(InputString);
-		EditorGUILayout.LabelField("Seed :");
-		Seed = EditorGUILayout.IntField(Seed);
-		EditorGUILayout.EndHorizontal();
+		DrawStringGrammarOptions();
+		DrawNodeOptions();
 
-		if (_stringGrammarDirty)
-		{
-			_stringgrammars = StringGrammarWindow.ImportGrammars(_stringDirectory + StringGrammarName + ".json");
-			_stringGrammarDirty = false;
-		}
-		if (_inputDirty)
-		{
-			_inputDirty = false;
-			if (_stringgrammars != null)
-			{
-				_outputString = GrammarUtils.ApplyGrammars(ref _stringgrammars, InputString, Seed);
-			}
-		}
-		EditorGUILayout.LabelField($"Output String : {_outputString}");
-		EditorGUILayout.Space();
-
-		EditorGUILayout.BeginHorizontal();
-		EditorGUILayout.LabelField("Node Grammar Name");
-		_nodeGrammarName = GUILayout.TextField(_nodeGrammarName);
-		if (GUILayout.Button("+", GUILayout.Width(_buttonWidth)))
-		{
-			var grammars = NodeGrammarEditorWindow.ImportGrammars(_nodeDirectory + _nodeGrammarName + ".json");
-			_nodeGrammars.AddRange(grammars);
-		}
-		if (GUILayout.Button("↺", GUILayout.Width(_buttonWidth)))
-		{
-			_nodeGrammars = new List<NodeGrammar>();
-		}
-		EditorGUILayout.EndHorizontal();
-
-		EditorGUILayout.LabelField("Loaded node grammars");
-		_grammarViewScroll = EditorGUILayout.BeginScrollView(_grammarViewScroll, GUILayout.Height(100f));
-		foreach (var grammar in _nodeGrammars)
-		{
-			EditorGUILayout.LabelField(grammar.Name);
-		}
-		EditorGUILayout.EndScrollView();
-
-		if (_nodeEditorWindows[0].Changed)
-		{
-			_nodeEditorWindows[0].Changed = false;
-			_nodegraphs[0] = _nodeEditorWindows[0].Nodegraph;
-			_nodegraphs[1] = GrammarUtils.ApplyNodeGrammars(_outputString, ref _nodeGrammars, _nodegraphs[0]);
-			_nodeEditorWindows[1].Nodegraph = _nodegraphs[1];
-		}
 		if (_selected)
 		{
 			DrawEditorWindows();

@@ -95,6 +95,65 @@ public class NodeGrammarEditorWindow : EditorWindow
 		LoadGrammar(_grammarSelectedIndex);
 	}
 
+	private void GrammarNameOptions()
+	{
+		GUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Grammar Name");
+		var current_grammar = _grammars[_grammarSelectedIndex];
+		current_grammar.Name = GUILayout.TextField(_grammars[_grammarSelectedIndex].Name);
+		_grammars[_grammarSelectedIndex] = current_grammar;
+		GUILayout.EndHorizontal();
+	}
+
+	private void GrammarSaveAndLoad()
+	{
+		_exportName = EditorGUILayout.TextField("Grammar Name : ", _exportName);
+		EditorGUILayout.BeginHorizontal();
+		if (GUILayout.Button("import"))
+		{
+			_grammars = ImportGrammars(_directory + _exportName + ".json");
+			LoadGrammar(_grammarSelectedIndex);
+		}
+		if (GUILayout.Button("export"))
+		{
+			SaveGrammar(_grammarSelectedIndex);
+			StreamWriter writer = new StreamWriter(_directory + _exportName + ".json");
+			var jsonString = SerializableNodeGrammars_Converter.ToJson(_grammars);
+			writer.Write(jsonString);
+			writer.Close();
+			writer.Dispose();
+		}
+		EditorGUILayout.EndHorizontal();
+	}
+
+	private void GrammarToolbar()
+	{
+		int current_grammarIndex = _grammarSelectedIndex;
+		var grammar_labels = new string[_grammars.Count];
+		for (int i = 0; i < _grammars.Count; i++)
+		{
+			grammar_labels[i] = _grammars[i].Name;
+		}
+
+		EditorGUILayout.BeginHorizontal();
+		_grammarSelectedIndex = GUILayout.Toolbar(_grammarSelectedIndex, grammar_labels);
+		if (GUILayout.Button("+", GUILayout.Width(_buttonWidth)))
+		{
+			_grammars.Add(new NodeGrammar
+			{
+				Name = "New Grammar",
+				LeftHand = new NodeGraph(),
+				RightHand = new NodeGraph()
+			});
+		}
+		EditorGUILayout.EndHorizontal();
+		if (current_grammarIndex != _grammarSelectedIndex)
+		{
+			SaveGrammar(current_grammarIndex);
+			LoadGrammar(_grammarSelectedIndex);
+		}
+	}
+
 	private void LoadGrammar(int grammarIndex)
 	{
 		if (_grammars.Count == 0)
@@ -141,43 +200,10 @@ public class NodeGrammarEditorWindow : EditorWindow
 			EnableProperly();
 			return;
 		}
-		if (GUILayout.Button("Reset the Windows"))
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				GetWindow<NodeEditorWindow>()?.Close();
-			}
-			GenerateEditorWindows();
-		}
 
-		#region Grammar selection
+		WindowResetButton();
 
-		int current_grammarIndex = _grammarSelectedIndex;
-		var grammar_labels = new string[_grammars.Count];
-		for (int i = 0; i < _grammars.Count; i++)
-		{
-			grammar_labels[i] = _grammars[i].Name;
-		}
-
-		EditorGUILayout.BeginHorizontal();
-		_grammarSelectedIndex = GUILayout.Toolbar(_grammarSelectedIndex, grammar_labels);
-		if (GUILayout.Button("+", GUILayout.Width(_buttonWidth)))
-		{
-			_grammars.Add(new NodeGrammar
-			{
-				Name = "New Grammar",
-				LeftHand = new NodeGraph(),
-				RightHand = new NodeGraph()
-			});
-		}
-		EditorGUILayout.EndHorizontal();
-		if (current_grammarIndex != _grammarSelectedIndex)
-		{
-			SaveGrammar(current_grammarIndex);
-			LoadGrammar(_grammarSelectedIndex);
-		}
-
-		#endregion Grammar selection
+		GrammarToolbar();
 
 		if (_grammars.Count == 0)
 		{
@@ -191,38 +217,9 @@ public class NodeGrammarEditorWindow : EditorWindow
 			return;
 		}
 
-		#region Grammar name change
+		GrammarNameOptions();
 
-		GUILayout.BeginHorizontal();
-		EditorGUILayout.LabelField("Grammar Name");
-		var current_grammar = _grammars[_grammarSelectedIndex];
-		current_grammar.Name = GUILayout.TextField(_grammars[_grammarSelectedIndex].Name);
-		_grammars[_grammarSelectedIndex] = current_grammar;
-		GUILayout.EndHorizontal();
-
-		#endregion Grammar name change
-
-		#region Save and Load
-
-		_exportName = EditorGUILayout.TextField("Grammar Name : ", _exportName);
-		EditorGUILayout.BeginHorizontal();
-		if (GUILayout.Button("import"))
-		{
-			_grammars = ImportGrammars(_directory + _exportName + ".json");
-			LoadGrammar(_grammarSelectedIndex);
-		}
-		if (GUILayout.Button("export"))
-		{
-			SaveGrammar(_grammarSelectedIndex);
-			StreamWriter writer = new StreamWriter(_directory + _exportName + ".json");
-			var jsonString = SerializableNodeGrammars_Converter.ToJson(_grammars);
-			writer.Write(jsonString);
-			writer.Close();
-			writer.Dispose();
-		}
-		EditorGUILayout.EndHorizontal();
-
-		#endregion Save and Load
+		GrammarSaveAndLoad();
 
 		if (_selected)
 		{
@@ -267,5 +264,17 @@ public class NodeGrammarEditorWindow : EditorWindow
 			LeftHand = _nodeEditorWindows[(int)HandSide.LEFT].Nodegraph,
 			RightHand = _nodeEditorWindows[(int)HandSide.RIGHT].Nodegraph
 		};
+	}
+
+	private void WindowResetButton()
+	{
+		if (GUILayout.Button("Reset the Windows"))
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				GetWindow<NodeEditorWindow>()?.Close();
+			}
+			GenerateEditorWindows();
+		}
 	}
 }

@@ -51,53 +51,11 @@ public class NodeEditorWindow : EditorWindow
 		switch (button)
 		{
 			case 0:
-				if (Editable)
-				{
-					_selectedObject = clicked_object;
-				}
-				_currentState = WindowState.CLICKED;
+				LeftClick(clicked_object);
 				break;
 
 			case 1:
-				if (!Editable)
-				{
-					break;
-				}
-
-				if (_selectedObject != null && _currentState == WindowState.RIGHT_CLICKED)
-				{
-					Changed = true;
-					Nodegraph.Connect(_selectedObject, clicked_object);
-					_currentState = WindowState.SELECTED;
-					_selectedObject = null;
-					GUI.changed = true;
-				}
-				else
-				{
-					GenericMenu emptyClickMenu = new GenericMenu();
-
-					if (clicked_object != null)
-					{
-						emptyClickMenu.AddItem(new GUIContent("Remove node"), false, () =>
-						{
-							Changed = true;
-							_nodegraph.Delete(clicked_object);
-							clicked_object = null;
-						});
-
-						emptyClickMenu.AddItem(new GUIContent("Connect"), false, () =>
-						{
-							Changed = true;
-							_selectedObject = clicked_object;
-							_currentState = WindowState.RIGHT_CLICKED;
-						});
-					}
-					else
-					{
-						emptyClickMenu.AddItem(new GUIContent("Add node"), false, () => OnClickAddNode(mousePosition));
-					}
-					emptyClickMenu.ShowAsContext();
-				}
+				RightClick(clicked_object, mousePosition);
 				break;
 
 			default:
@@ -133,6 +91,15 @@ public class NodeEditorWindow : EditorWindow
 		{
 			Nodegraph.Offset(delta);
 		}
+	}
+
+	private void LeftClick(Node clicked_object)
+	{
+		if (Editable)
+		{
+			_selectedObject = clicked_object;
+		}
+		_currentState = WindowState.CLICKED;
 	}
 
 	private void OnClickAddNode(Vector2 mousePosition)
@@ -171,20 +138,7 @@ public class NodeEditorWindow : EditorWindow
 	private void ProcessEvents(Event e)
 	{
 		// check if the player clicks away from the window and when they click back
-		switch (e.type)
-		{
-			case EventType.MouseEnterWindow:
-				_currentState = WindowState.SELECTED;
-				break;
-
-			case EventType.MouseLeaveWindow:
-				_currentState = WindowState.UNSELECTED;
-				_selectedObject = null;
-				break;
-
-			default:
-				break;
-		}
+		UpdateMouseInWindowState(e);
 
 		switch (_currentState)
 		{
@@ -202,7 +156,8 @@ public class NodeEditorWindow : EditorWindow
 
 			case WindowState.CLICKED:
 				// escape will put us back in a starting state at any time
-				if (e.type == EventType.MouseUp || (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape))
+				bool escapeDown = (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape);
+				if (e.type == EventType.MouseUp || escapeDown)
 				{
 					_currentState = WindowState.SELECTED;
 					_selectedObject = null;
@@ -216,6 +171,67 @@ public class NodeEditorWindow : EditorWindow
 				break;
 
 			case WindowState.UNSELECTED:
+			default:
+				break;
+		}
+	}
+
+	private void RightClick(Node clicked_object, Vector2 mousePosition)
+	{
+		if (!Editable)
+		{
+			return;
+		}
+
+		if (_selectedObject != null && _currentState == WindowState.RIGHT_CLICKED)
+		{
+			Changed = true;
+			Nodegraph.Connect(_selectedObject, clicked_object);
+			_currentState = WindowState.SELECTED;
+			_selectedObject = null;
+			GUI.changed = true;
+		}
+		else
+		{
+			GenericMenu emptyClickMenu = new GenericMenu();
+
+			if (clicked_object != null)
+			{
+				emptyClickMenu.AddItem(new GUIContent("Remove node"), false, () =>
+				{
+					Changed = true;
+					_nodegraph.Delete(clicked_object);
+					clicked_object = null;
+				});
+
+				emptyClickMenu.AddItem(new GUIContent("Connect"), false, () =>
+				{
+					Changed = true;
+					_selectedObject = clicked_object;
+					_currentState = WindowState.RIGHT_CLICKED;
+				});
+			}
+			else
+			{
+				emptyClickMenu.AddItem(new GUIContent("Add node"), false, () => OnClickAddNode(mousePosition));
+			}
+			emptyClickMenu.ShowAsContext();
+		}
+	}
+
+	private void UpdateMouseInWindowState(Event e)
+	{
+		switch (e.type)
+		{
+			case EventType.MouseEnterWindow:
+				_currentState = WindowState.SELECTED;
+				break;
+
+			case EventType.MouseLeaveWindow:
+				_currentState = WindowState.UNSELECTED;
+				_selectedObject = null;
+				break;
+
 			default:
 				break;
 		}
