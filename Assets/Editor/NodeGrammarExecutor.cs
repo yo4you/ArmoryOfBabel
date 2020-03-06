@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NodeGrammarExecutor : EditorWindow
 {
+	#region Fields
 	private string _nodeDirectory = "";
 	private string _stringDirectory = "";
 	private string _outputString;
@@ -25,7 +26,7 @@ public class NodeGrammarExecutor : EditorWindow
 	// ratio * w = h
 	private const float _editorWHRatio = 0.75f;
 	private float _editorHeightRatio = 0.5f;
-	private NodeGraph[] _nodegraphs = new NodeGraph[2] { null, null};
+	private NodeGraph[] _nodegraphs = new NodeGraph[2] { null, null };
 	public string InputString
 	{
 		get => _inputString; set
@@ -64,6 +65,7 @@ public class NodeGrammarExecutor : EditorWindow
 		}
 	}
 	private enum HandSide { LEFT, RIGHT }
+	#endregion
 
 	[MenuItem("Custom/Node Grammar Executor")]
 	private static void OpenWindow()
@@ -91,6 +93,7 @@ public class NodeGrammarExecutor : EditorWindow
 			_nodeDirectory = Application.streamingAssetsPath + "/Grammar/Node/";
 			_stringDirectory = Application.streamingAssetsPath + "/Grammar/String/";
 		}
+
 		if (GUILayout.Button("Reset the Windows"))
 		{
 			for (int i = 0; i < 4; i++)
@@ -224,11 +227,11 @@ public class NodeGrammarExecutor : EditorWindow
 		// when the window stops being visible the focused window will be set to null, there's no other way to hide sub windows
 		if (focusedWindow == null)
 		{
+			_selected = false;
 			if (_nodeEditorWindows[0] == null)
 			{
 				return;
 			}
-			_selected = false;
 			SaveNodeGraphs();
 
 			for (int i = 0; i < 2; i++)
@@ -238,13 +241,16 @@ public class NodeGrammarExecutor : EditorWindow
 			}
 		}
 	}
+
 	private void OnDisable()
 	{
 		foreach (var item in _nodeEditorWindows)
 		{
-			item.Close();
+			item.CloseNextFrame=true;
+			item.CloseNextFrame=true;
 		}
 	}
+
 	private void SaveNodeGraphs()
 	{
 	}

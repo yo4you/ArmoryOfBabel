@@ -191,6 +191,7 @@ public class NodeEditorWindow : EditorWindow
 
 						emptyClickMenu.AddItem(new GUIContent("Connect"), false, () =>
 						{
+							Changed = true;
 							_selectedObject = clicked_object;
 							_currentState = WindowState.RIGHT_CLICKED;
 						});

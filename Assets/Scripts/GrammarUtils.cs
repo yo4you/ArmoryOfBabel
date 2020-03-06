@@ -85,9 +85,9 @@ public static class GrammarUtils
 			}
 			foreach (var rule in rules)
 			{
-				if (IsNodeRoleApplicable(rule, ref nodeGraph))
+				if (IsNodeRoleApplicable(rule, ref output, out OrderedDictionary<int, int> translationTable))
 				{
-					ApplyNodeRule(rule, ref nodeGraph);
+					ApplyNodeRule(rule, ref output, ref translationTable);
 					break;
 				}
 			}
@@ -96,17 +96,46 @@ public static class GrammarUtils
 		return output;
 	}
 
-	private static void ApplyNodeRule(NodeGrammar rule, ref NodeGraph nodeGraph)
+	private static void ApplyNodeRule(NodeGrammar rule, ref NodeGraph nodeGraph, ref OrderedDictionary<int, int> translationTable)
 	{
-		Debug.Log("applied");
+		foreach (var translation in translationTable)
+		{
+			var node = nodeGraph._nodeDict[translation.Value];
+			if (rule.RightHand._nodeDict.TryGetValue(translation.Key, out Node replacementNode))
+			{
+				node.Node_text = replacementNode.Node_text;
+				List<int> newConnections = new List<int>();
+				foreach (var connection in node.ConnectedNodes)
+				{
+					if (!translationTable.Values.Contains(connection))
+					{
+						newConnections.Add(connection);
+					}
+		 		}
+				foreach (var connection in replacementNode.ConnectedNodes)
+				{
+					if (translationTable.TryGetValue(connection, out int index))
+					{
+						newConnections.Add(index);
+					}
+				}
+				node.ConnectedNodes = newConnections;
+			}
+			else
+			{
+				Debug.Log("delete");
+				nodeGraph.Delete(node);
+			}
+		}
+
 	}
 
-	private static bool IsNodeRoleApplicable(NodeGrammar rule, ref NodeGraph nodeGraph)
+	private static bool IsNodeRoleApplicable(NodeGrammar rule, ref NodeGraph nodeGraph, out OrderedDictionary<int, int> translationTable)
 	{
 		var match_dict = rule.LeftHand._nodeDict;
 		var smallest_index = match_dict.Keys.Min();
 		var first_node = match_dict[smallest_index].Node_text;
-
+		translationTable = null;
 		foreach (var match in nodeGraph._nodeDict)
 		{
 			if (MatchNodeGraphInsert(smallest_index, match.Key, ref match_dict, ref nodeGraph._nodeDict, out OrderedDictionary<int, int> translation))
@@ -115,10 +144,10 @@ public static class GrammarUtils
 				{
 					Debug.Log($"{item.Key} : {item.Value}");
 				}
+				translationTable = translation;
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -203,7 +232,7 @@ public static class GrammarUtils
 			}
 			foreach (var unconnectednode in graph.Where(i => i.Value.ConnectedNodes.Contains(lastTableEntry.Value)))
 			{
-				if ( taggedIndices.Contains(unconnectednode.Key))
+				if (taggedIndices.Contains(unconnectednode.Key))
 				{
 					continue;
 				}

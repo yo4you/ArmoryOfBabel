@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class NodeGrammarEditorWindow : EditorWindow
 {
+	#region Fields
 	// width * ratio = margin
 	private const float _marginRatio = 0.02f;
 	// ratio * w = h
@@ -12,7 +13,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private float _editorHeightRatio = 0.5f;
 
 	private NodeGrammarEditorWindow _window;
-	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null,null};
+	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null, null };
 	private bool _selected = true;
 	private bool _enabledLastFrame;
 	private List<NodeGrammar> _grammars = new List<NodeGrammar>();
@@ -23,6 +24,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private string _directory = "";
 
 	private enum HandSide { LEFT, RIGHT }
+	#endregion
 
 	[MenuItem("Custom/Node Grammar Editor")]
 	private static void OpenWindow()
@@ -36,6 +38,14 @@ public class NodeGrammarEditorWindow : EditorWindow
 	{
 		// for some reason OnEnable is called when starting play mode but OnGui isn't called so we get weird floating windows
 		_enabledLastFrame = true;
+	}
+
+	private void OnDisable()
+	{
+		foreach (var item in _nodeEditorWindows)
+		{
+			item.CloseNextFrame = true;
+		}
 	}
 
 	private void EnableProperly()
@@ -58,11 +68,12 @@ public class NodeGrammarEditorWindow : EditorWindow
 		// when the window stops being visible the focused window will be set to null, there's no other way to hide subwindows
 		if (focusedWindow == null)
 		{
+			_selected = false;
 			if (_nodeEditorWindows[0] == null)
 			{
 				return;
 			}
-			_selected = false;
+
 			SaveGrammar(_grammarSelectedIndex);
 			_grammarSelectedIndex = 0;
 			for (int i = 0; i < 2; i++)
@@ -70,21 +81,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 				_nodeEditorWindows[i].Close();
 			}
 		}
-	}
-
-	private void SaveGrammar(int grammarIndex)
-	{
-		if (_grammars.Count == 0)
-		{
-			return;
-		}
-
-		_grammars[grammarIndex] = new NodeGrammar
-		{
-			Name = _grammars[grammarIndex].Name,
-			LeftHand = _nodeEditorWindows[(int)HandSide.LEFT].Nodegraph,
-			RightHand = _nodeEditorWindows[(int)HandSide.RIGHT].Nodegraph
-		};
 	}
 
 	private void OnFocus()
@@ -123,6 +119,21 @@ public class NodeGrammarEditorWindow : EditorWindow
 		_nodeEditorWindows[(int)HandSide.RIGHT].Nodegraph = _grammars[grammarIndex].RightHand;
 	}
 
+	private void SaveGrammar(int grammarIndex)
+	{
+		if (_grammars.Count == 0)
+		{
+			return;
+		}
+
+		_grammars[grammarIndex] = new NodeGrammar
+		{
+			Name = _grammars[grammarIndex].Name,
+			LeftHand = _nodeEditorWindows[(int)HandSide.LEFT].Nodegraph,
+			RightHand = _nodeEditorWindows[(int)HandSide.RIGHT].Nodegraph
+		};
+	}
+
 	internal static List<NodeGrammar> ImportGrammars(string directory)
 	{
 		StreamReader reader = new StreamReader(directory);
@@ -133,13 +144,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 		return outp;
 	}
 
-	private void OnDisable()
-	{
-		foreach (var item in _nodeEditorWindows)
-		{
-			item.CloseNextFrame = true;
-		}
-	}
 	private void OnGUI()
 	{
 		if (_directory == "")
