@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 /// <summary>
 /// this class provides the player with the ability to execute certain attacks when corresponding keys are pressed
 /// </summary>
@@ -13,8 +11,9 @@ public class PlayerAttackControl : MonoBehaviour
 	{
 		_animator = GetComponent<Animator>();
 	}
-	void Update()
-    {
+
+	private void Update()
+	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			_animator.Play("light_hit");
@@ -22,8 +21,6 @@ public class PlayerAttackControl : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.LeftControl))
 		{
 			_animator.Play("heavy_hit");
-
 		}
 	}
-
 }

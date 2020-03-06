@@ -13,38 +13,23 @@ namespace mattmc3.Common.Collections.Generic
 		public KeyedCollection2(Func<TItem, TKey> getKeyForItemDelegate)
 			: base()
 		{
-			if (getKeyForItemDelegate == null) throw new ArgumentNullException(DelegateNullExceptionMessage);
+			if (getKeyForItemDelegate == null)
+			{
+				throw new ArgumentNullException(DelegateNullExceptionMessage);
+			}
+
 			_getKeyForItemDelegate = getKeyForItemDelegate;
 		}
 
 		public KeyedCollection2(Func<TItem, TKey> getKeyForItemDelegate, IEqualityComparer<TKey> comparer)
 			: base(comparer)
 		{
-			if (getKeyForItemDelegate == null) throw new ArgumentNullException(DelegateNullExceptionMessage);
+			if (getKeyForItemDelegate == null)
+			{
+				throw new ArgumentNullException(DelegateNullExceptionMessage);
+			}
+
 			_getKeyForItemDelegate = getKeyForItemDelegate;
-		}
-
-		protected override TKey GetKeyForItem(TItem item)
-		{
-			return _getKeyForItemDelegate(item);
-		}
-
-		public void SortByKeys()
-		{
-			var comparer = Comparer<TKey>.Default;
-			SortByKeys(comparer);
-		}
-
-		public void SortByKeys(IComparer<TKey> keyComparer)
-		{
-			var comparer = new Comparer2<TItem>((x, y) => keyComparer.Compare(GetKeyForItem(x), GetKeyForItem(y)));
-			Sort(comparer);
-		}
-
-		public void SortByKeys(Comparison<TKey> keyComparison)
-		{
-			var comparer = new Comparer2<TItem>((x, y) => keyComparison(GetKeyForItem(x), GetKeyForItem(y)));
-			Sort(comparer);
 		}
 
 		public void Sort()
@@ -66,6 +51,29 @@ namespace mattmc3.Common.Collections.Generic
 			{
 				list.Sort(comparer);
 			}
+		}
+
+		public void SortByKeys()
+		{
+			var comparer = Comparer<TKey>.Default;
+			SortByKeys(comparer);
+		}
+
+		public void SortByKeys(IComparer<TKey> keyComparer)
+		{
+			var comparer = new Comparer2<TItem>((x, y) => keyComparer.Compare(GetKeyForItem(x), GetKeyForItem(y)));
+			Sort(comparer);
+		}
+
+		public void SortByKeys(Comparison<TKey> keyComparison)
+		{
+			var comparer = new Comparer2<TItem>((x, y) => keyComparison(GetKeyForItem(x), GetKeyForItem(y)));
+			Sort(comparer);
+		}
+
+		protected override TKey GetKeyForItem(TItem item)
+		{
+			return _getKeyForItemDelegate(item);
 		}
 	}
 }

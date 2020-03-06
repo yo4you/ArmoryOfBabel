@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// usefull methods when dealing with string operations
 /// </summary>
-static class StringUtils
+internal static class StringUtils
 {
 	/// <summary>
 	/// returns a string where a pattern is replaced only once according to the provided paramaters

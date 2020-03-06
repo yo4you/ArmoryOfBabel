@@ -6,25 +6,39 @@ using UnityEngine;
 public class NodeGrammarEditorWindow : EditorWindow
 {
 	#region Fields
-	// width * ratio = margin
-	private const float _marginRatio = 0.02f;
+
 	// ratio * w = h
 	private const float _editorWHRatio = 0.75f;
+
+	// width * ratio = margin
+	private const float _marginRatio = 0.02f;
+
+	private float _buttonWidth = 20;
+	private string _directory = "";
 	private float _editorHeightRatio = 0.5f;
 
-	private NodeGrammarEditorWindow _window;
-	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null, null };
-	private bool _selected = true;
 	private bool _enabledLastFrame;
+	private string _exportName;
 	private List<NodeGrammar> _grammars = new List<NodeGrammar>();
 	private int _grammarSelectedIndex;
-	private float _buttonWidth = 20;
+	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null, null };
 	private Vector2 _scrollPos;
-	private string _exportName;
-	private string _directory = "";
+	private bool _selected = true;
+	private NodeGrammarEditorWindow _window;
 
 	private enum HandSide { LEFT, RIGHT }
-	#endregion
+
+	#endregion Fields
+
+	internal static List<NodeGrammar> ImportGrammars(string directory)
+	{
+		StreamReader reader = new StreamReader(directory);
+		var jsonString = reader.ReadToEnd();
+		var outp = SerializableNodeGrammars_Converter.FromJson(jsonString);
+		reader.Close();
+		reader.Dispose();
+		return outp;
+	}
 
 	[MenuItem("Custom/Node Grammar Editor")]
 	private static void OpenWindow()
@@ -34,17 +48,19 @@ public class NodeGrammarEditorWindow : EditorWindow
 		window.wantsMouseEnterLeaveWindow = true;
 	}
 
-	private void OnEnable()
+	private void DrawEditorWindows()
 	{
-		// for some reason OnEnable is called when starting play mode but OnGui isn't called so we get weird floating windows
-		_enabledLastFrame = true;
-	}
-
-	private void OnDisable()
-	{
-		foreach (var item in _nodeEditorWindows)
+		var margin = _marginRatio * position.width;
+		float editorWidth = (position.width - 3 * margin) / 2;
+		float editorHeight = position.height * _editorHeightRatio;
+		float editorYOffset = position.height - editorHeight - margin;
+		for (int i = 0; i < 2; i++)
 		{
-			item.CloseNextFrame = true;
+			_nodeEditorWindows[i].position = new Rect(
+			position.position.x + margin + (i == (int)HandSide.RIGHT ? editorWidth + margin : 0),
+			position.position.y + editorYOffset,
+			editorWidth,
+			editorHeight);
 		}
 	}
 
@@ -61,35 +77,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 		};
 		GenerateEditorWindows();
 		_selected = true;
-	}
-
-	private void OnLostFocus()
-	{
-		// when the window stops being visible the focused window will be set to null, there's no other way to hide subwindows
-		if (focusedWindow == null)
-		{
-			_selected = false;
-			if (_nodeEditorWindows[0] == null)
-			{
-				return;
-			}
-
-			SaveGrammar(_grammarSelectedIndex);
-			_grammarSelectedIndex = 0;
-			for (int i = 0; i < 2; i++)
-			{
-				_nodeEditorWindows[i].Close();
-			}
-		}
-	}
-
-	private void OnFocus()
-	{
-		if (!_selected)
-		{
-			_selected = true;
-			GenerateEditorWindows();
-		}
 	}
 
 	private void GenerateEditorWindows()
@@ -119,29 +106,27 @@ public class NodeGrammarEditorWindow : EditorWindow
 		_nodeEditorWindows[(int)HandSide.RIGHT].Nodegraph = _grammars[grammarIndex].RightHand;
 	}
 
-	private void SaveGrammar(int grammarIndex)
+	private void OnDisable()
 	{
-		if (_grammars.Count == 0)
+		foreach (var item in _nodeEditorWindows)
 		{
-			return;
+			item.CloseNextFrame = true;
 		}
-
-		_grammars[grammarIndex] = new NodeGrammar
-		{
-			Name = _grammars[grammarIndex].Name,
-			LeftHand = _nodeEditorWindows[(int)HandSide.LEFT].Nodegraph,
-			RightHand = _nodeEditorWindows[(int)HandSide.RIGHT].Nodegraph
-		};
 	}
 
-	internal static List<NodeGrammar> ImportGrammars(string directory)
+	private void OnEnable()
 	{
-		StreamReader reader = new StreamReader(directory);
-		var jsonString = reader.ReadToEnd();
-		var outp = SerializableNodeGrammars_Converter.FromJson(jsonString);
-		reader.Close();
-		reader.Dispose();
-		return outp;
+		// for some reason OnEnable is called when starting play mode but OnGui isn't called so we get weird floating windows
+		_enabledLastFrame = true;
+	}
+
+	private void OnFocus()
+	{
+		if (!_selected)
+		{
+			_selected = true;
+			GenerateEditorWindows();
+		}
 	}
 
 	private void OnGUI()
@@ -166,6 +151,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 		}
 
 		#region Grammar selection
+
 		int current_grammarIndex = _grammarSelectedIndex;
 		var grammar_labels = new string[_grammars.Count];
 		for (int i = 0; i < _grammars.Count; i++)
@@ -191,7 +177,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 			LoadGrammar(_grammarSelectedIndex);
 		}
 
-		#endregion
+		#endregion Grammar selection
 
 		if (_grammars.Count == 0)
 		{
@@ -204,14 +190,17 @@ public class NodeGrammarEditorWindow : EditorWindow
 			LoadGrammar(_grammarSelectedIndex);
 			return;
 		}
+
 		#region Grammar name change
+
 		GUILayout.BeginHorizontal();
 		EditorGUILayout.LabelField("Grammar Name");
 		var current_grammar = _grammars[_grammarSelectedIndex];
 		current_grammar.Name = GUILayout.TextField(_grammars[_grammarSelectedIndex].Name);
 		_grammars[_grammarSelectedIndex] = current_grammar;
 		GUILayout.EndHorizontal();
-		#endregion
+
+		#endregion Grammar name change
 
 		#region Save and Load
 
@@ -232,7 +221,8 @@ public class NodeGrammarEditorWindow : EditorWindow
 			writer.Dispose();
 		}
 		EditorGUILayout.EndHorizontal();
-		#endregion
+
+		#endregion Save and Load
 
 		if (_selected)
 		{
@@ -244,19 +234,38 @@ public class NodeGrammarEditorWindow : EditorWindow
 		}
 	}
 
-	private void DrawEditorWindows()
+	private void OnLostFocus()
 	{
-		var margin = _marginRatio * position.width;
-		float editorWidth = (position.width - 3 * margin) / 2;
-		float editorHeight = position.height * _editorHeightRatio;
-		float editorYOffset = position.height - editorHeight - margin;
-		for (int i = 0; i < 2; i++)
+		// when the window stops being visible the focused window will be set to null, there's no other way to hide subwindows
+		if (focusedWindow == null)
 		{
-			_nodeEditorWindows[i].position = new Rect(
-			position.position.x + margin + (i == (int)HandSide.RIGHT ? editorWidth + margin : 0),
-			position.position.y + editorYOffset,
-			editorWidth,
-			editorHeight);
+			_selected = false;
+			if (_nodeEditorWindows[0] == null)
+			{
+				return;
+			}
+
+			SaveGrammar(_grammarSelectedIndex);
+			_grammarSelectedIndex = 0;
+			for (int i = 0; i < 2; i++)
+			{
+				_nodeEditorWindows[i].Close();
+			}
 		}
+	}
+
+	private void SaveGrammar(int grammarIndex)
+	{
+		if (_grammars.Count == 0)
+		{
+			return;
+		}
+
+		_grammars[grammarIndex] = new NodeGrammar
+		{
+			Name = _grammars[grammarIndex].Name,
+			LeftHand = _nodeEditorWindows[(int)HandSide.LEFT].Nodegraph,
+			RightHand = _nodeEditorWindows[(int)HandSide.RIGHT].Nodegraph
+		};
 	}
 }

@@ -5,28 +5,35 @@ using UnityEngine;
 public class NodeGrammarExecutor : EditorWindow
 {
 	#region Fields
-	private string _nodeDirectory = "";
-	private string _stringDirectory = "";
-	private string _outputString;
-	private bool _inputDirty;
-	private string _inputString;
-	private int _seed;
-	private bool _stringGrammarDirty;
-	private List<StringGrammarRule> _stringgrammars;
-	private string _stringGrammarName;
-	private string _nodeGrammarName;
+
 	private const float _buttonWidth = 20;
-	private List<NodeGrammar> _nodeGrammars = new List<NodeGrammar>();
-	private Vector2 _grammarViewScroll;
-	private bool _enabledLastFrame;
-	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null, null };
-	private bool _selected = true;
-	// width * ratio = margin
-	private const float _marginRatio = 0.02f;
+
 	// ratio * w = h
 	private const float _editorWHRatio = 0.75f;
+
+	// width * ratio = margin
+	private const float _marginRatio = 0.02f;
+
 	private float _editorHeightRatio = 0.5f;
+	private bool _enabledLastFrame;
+	private Vector2 _grammarViewScroll;
+	private bool _inputDirty;
+	private string _inputString;
+	private string _nodeDirectory = "";
+	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null, null };
+	private string _nodeGrammarName;
+	private List<NodeGrammar> _nodeGrammars = new List<NodeGrammar>();
 	private NodeGraph[] _nodegraphs = new NodeGraph[2] { null, null };
+	private string _outputString;
+	private int _seed;
+	private bool _selected = true;
+	private string _stringDirectory = "";
+	private bool _stringGrammarDirty;
+	private string _stringGrammarName;
+	private List<StringGrammarRule> _stringgrammars;
+
+	private enum HandSide { LEFT, RIGHT }
+
 	public string InputString
 	{
 		get => _inputString; set
@@ -64,8 +71,8 @@ public class NodeGrammarExecutor : EditorWindow
 			_stringGrammarName = value;
 		}
 	}
-	private enum HandSide { LEFT, RIGHT }
-	#endregion
+
+	#endregion Fields
 
 	[MenuItem("Custom/Node Grammar Executor")]
 	private static void OpenWindow()
@@ -75,9 +82,69 @@ public class NodeGrammarExecutor : EditorWindow
 		window.wantsMouseEnterLeaveWindow = true;
 	}
 
+	private void DrawEditorWindows()
+	{
+		var margin = _marginRatio * position.width;
+		float editorWidth = (position.width - 3 * margin) / 2;
+		float editorHeight = position.height * _editorHeightRatio;
+		float editorYOffset = position.height - editorHeight - margin;
+		for (int i = 0; i < 2; i++)
+		{
+			_nodeEditorWindows[i].position = new Rect(
+			position.position.x + margin + (i == (int)HandSide.RIGHT ? editorWidth + margin : 0),
+			position.position.y + editorYOffset,
+			editorWidth,
+			editorHeight);
+		}
+	}
+
+	private void Enable()
+	{
+		GenerateEditorWindows();
+		_selected = true;
+	}
+
+	private void GenerateEditorWindows()
+	{
+		foreach (var window in _nodeEditorWindows)
+		{
+			window?.Close();
+		}
+		_nodeEditorWindows = new NodeEditorWindow[2];
+		for (int i = 0; i < 2; i++)
+		{
+			_nodeEditorWindows[i] = CreateInstance<NodeEditorWindow>();
+			_nodeEditorWindows[i].ShowPopup();
+			_nodeEditorWindows[i].Nodegraph = new NodeGraph();
+		}
+		_nodeEditorWindows[1].Editable = false;
+	}
+
+	private void OnDisable()
+	{
+		foreach (var item in _nodeEditorWindows)
+		{
+			item.CloseNextFrame = true;
+			item.CloseNextFrame = true;
+		}
+	}
+
 	private void OnEnable()
 	{
 		_enabledLastFrame = true;
+	}
+
+	private void OnFocus()
+	{
+		if (!_selected)
+		{
+			_selected = true;
+			GenerateEditorWindows();
+		}
+		for (int i = 0; i < 2; i++)
+		{
+			//_nodeEditorWindows[i].Nodegraph = _nodegraphs[i];
+		}
 	}
 
 	private void OnGUI()
@@ -102,7 +169,6 @@ public class NodeGrammarExecutor : EditorWindow
 			}
 			GenerateEditorWindows();
 		}
-
 
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.LabelField("String Grammar Import :");
@@ -170,58 +236,6 @@ public class NodeGrammarExecutor : EditorWindow
 		}
 	}
 
-	private void DrawEditorWindows()
-	{
-		var margin = _marginRatio * position.width;
-		float editorWidth = (position.width - 3 * margin) / 2;
-		float editorHeight = position.height * _editorHeightRatio;
-		float editorYOffset = position.height - editorHeight - margin;
-		for (int i = 0; i < 2; i++)
-		{
-			_nodeEditorWindows[i].position = new Rect(
-			position.position.x + margin + (i == (int)HandSide.RIGHT ? editorWidth + margin : 0),
-			position.position.y + editorYOffset,
-			editorWidth,
-			editorHeight);
-		}
-	}
-
-	private void Enable()
-	{
-		GenerateEditorWindows();
-		_selected = true;
-	}
-
-	private void GenerateEditorWindows()
-	{
-
-		foreach (var window in _nodeEditorWindows)
-		{
-			window?.Close();
-		}
-		_nodeEditorWindows = new NodeEditorWindow[2];
-		for (int i = 0; i < 2; i++)
-		{
-			_nodeEditorWindows[i] = CreateInstance<NodeEditorWindow>();
-			_nodeEditorWindows[i].ShowPopup();
-			_nodeEditorWindows[i].Nodegraph = new NodeGraph();
-		}
-		_nodeEditorWindows[1].Editable = false;
-	}
-
-	private void OnFocus()
-	{
-		if (!_selected)
-		{
-			_selected = true;
-			GenerateEditorWindows();
-		}
-		for (int i = 0; i < 2; i++)
-		{
-			//_nodeEditorWindows[i].Nodegraph = _nodegraphs[i];
-		}
-	}
-
 	private void OnLostFocus()
 	{
 		// when the window stops being visible the focused window will be set to null, there's no other way to hide sub windows
@@ -239,15 +253,6 @@ public class NodeGrammarExecutor : EditorWindow
 				_nodegraphs[i] = _nodeEditorWindows[i].Nodegraph;
 				_nodeEditorWindows[i].Close();
 			}
-		}
-	}
-
-	private void OnDisable()
-	{
-		foreach (var item in _nodeEditorWindows)
-		{
-			item.CloseNextFrame=true;
-			item.CloseNextFrame=true;
 		}
 	}
 

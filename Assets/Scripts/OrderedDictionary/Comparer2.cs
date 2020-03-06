@@ -13,11 +13,15 @@ namespace mattmc3.Common.Collections.Generic
 
 		public Comparer2(Comparison<T> comparison)
 		{
-			if (comparison == null) throw new ArgumentNullException("comparison");
+			if (comparison == null)
+			{
+				throw new ArgumentNullException("comparison");
+			}
+
 			_compareFunction = comparison;
 		}
 
-		#endregion
+		#endregion Constructors
 
 		public override int Compare(T arg1, T arg2)
 		{

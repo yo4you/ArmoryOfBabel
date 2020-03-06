@@ -1,25 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FollowPlayerSmoothly : MonoBehaviour
 {
-	[Range(0f,1f)]
-	[SerializeField]
-	float _smoothing;
-	[SerializeField]
-	Vector3 _offset;
-	GameObject _toFollow;
 	private BindCameraToTileMap _cameraBinder;
 
-	void Start()
+	[SerializeField]
+	private Vector3 _offset;
+
+	[Range(0f, 1f)]
+	[SerializeField]
+	private float _smoothing;
+
+	private GameObject _toFollow;
+
+	private void Start()
 	{
 		_toFollow = GameObject.FindGameObjectWithTag("Player");
 		_cameraBinder = GetComponent<BindCameraToTileMap>();
 	}
 
-	void Update()
-    {
+	private void Update()
+	{
 		_cameraBinder.Target_Position = Vector3.Lerp(transform.position, _toFollow.transform.position + _offset, _smoothing);
-    }
+	}
 }

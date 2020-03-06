@@ -5,8 +5,8 @@ using UnityEngine;
 
 public struct NodeGrammar
 {
-	public string Name;
 	public NodeGraph LeftHand;
+	public string Name;
 	public NodeGraph RightHand;
 
 	public static explicit operator NodeGrammar(Serializable_Grammar v)
@@ -22,16 +22,6 @@ public struct NodeGrammar
 
 public static class SerializableNodeGrammars_Converter
 {
-	public static string ToJson(List<NodeGrammar> grammars)
-	{
-		var serializable_grams = new Serializable_Grammars();
-		foreach (var grammar in grammars)
-		{
-			serializable_grams.Values.Add((Serializable_Grammar)grammar);
-		}
-		return JsonUtility.ToJson(serializable_grams,true);
-	}
-
 	public static List<NodeGrammar> FromJson(string json)
 	{
 		var outp = new List<NodeGrammar>();
@@ -44,17 +34,22 @@ public static class SerializableNodeGrammars_Converter
 		return outp;
 	}
 
+	public static string ToJson(List<NodeGrammar> grammars)
+	{
+		var serializable_grams = new Serializable_Grammars();
+		foreach (var grammar in grammars)
+		{
+			serializable_grams.Values.Add((Serializable_Grammar)grammar);
+		}
+		return JsonUtility.ToJson(serializable_grams, true);
+	}
 }
-[Serializable]
-public class Serializable_Grammars
-{
-	public List<Serializable_Grammar> Values = new List<Serializable_Grammar>();
-}
+
 [Serializable]
 public class Serializable_Grammar
 {
-	public string Name;
 	public Serializable_NodeGraph LeftHand;
+	public string Name;
 	public Serializable_NodeGraph RightHand;
 
 	public static explicit operator Serializable_Grammar(NodeGrammar v)
@@ -67,12 +62,19 @@ public class Serializable_Grammar
 		};
 	}
 }
+
+[Serializable]
+public class Serializable_Grammars
+{
+	public List<Serializable_Grammar> Values = new List<Serializable_Grammar>();
+}
+
 [Serializable]
 public class Serializable_NodeGraph
 {
 	public List<int> Keys;
-	public List<Node> Values;
 	public int lastID;
+	public List<Node> Values;
 
 	public static explicit operator Serializable_NodeGraph(NodeGraph v)
 	{

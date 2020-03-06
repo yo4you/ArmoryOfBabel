@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
-
 
 /// <summary>
 /// an editor window used for creating basic nodegraphs
@@ -10,25 +7,14 @@ using UnityEngine;
 public class NodeEditorWindow : EditorWindow
 {
 	private WindowState _currentState = WindowState.SELECTED;
+	private NodeGraph _nodegraph;
+
+	private bool _repaint;
+
 	/// <summary>
 	/// the object we last clicked
 	/// </summary>
 	private Node _selectedObject;
-	private bool _repaint;
-	private NodeGraph _nodegraph;
-
-	public NodeGraph Nodegraph
-	{
-		get => _nodegraph; set
-		{
-			_repaint = true;
-			_nodegraph = value;
-		}
-	}
-
-	public bool Editable { get; internal set; } = true;
-	public bool Changed { get; internal set; }
-	public bool CloseNextFrame { get; internal set; }
 
 	private enum WindowState
 	{
@@ -38,109 +24,18 @@ public class NodeEditorWindow : EditorWindow
 		RIGHT_CLICKED
 	}
 
-	private void OnGUI()
+	public bool Changed { get; internal set; }
+
+	public bool CloseNextFrame { get; internal set; }
+
+	public bool Editable { get; internal set; } = true;
+
+	public NodeGraph Nodegraph
 	{
-	
-		if (CloseNextFrame)
-		{
-			GUIUtility.ExitGUI();
-			return;
-		}
-
-		if (Nodegraph == null)
-		{
-			return;
-		}
-
-		Nodegraph.Draw();
-		ProcessEvents(Event.current);
-
-		if (GUI.changed || _repaint)
+		get => _nodegraph; set
 		{
 			_repaint = true;
-			Repaint();
-		}
-	}
-
-
-	private void ProcessEvents(Event e)
-	{
-		// check if the player clicks away from the window and when they click back
-		switch (e.type)
-		{
-			case EventType.MouseEnterWindow:
-				_currentState = WindowState.SELECTED;
-				break;
-			case EventType.MouseLeaveWindow:
-				_currentState = WindowState.UNSELECTED;
-				_selectedObject = null;
-				break;
-			default:
-				break;
-		}
-
-		switch (_currentState)
-		{
-			case WindowState.RIGHT_CLICKED:
-			case WindowState.SELECTED:
-				if (e.type == EventType.MouseDown)
-				{
-					Click(e.mousePosition, e.button);
-					if (e.clickCount == 2)
-					{
-						DoubleClick();
-					}
-				}
-				break;
-			case WindowState.CLICKED:
-				// escape will put us back in a starting state at any time 
-				if (e.type == EventType.MouseUp || (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape))
-				{
-					_currentState = WindowState.SELECTED;
-					_selectedObject = null;
-				}
-				if (e.type == EventType.MouseDrag)
-				{
-					Drag(e.delta);
-					// this ensures we drag each frame instead of only when we move the  mouse
-					e.Use();
-				}
-				break;
-			case WindowState.UNSELECTED:
-			default:
-				break;
-		}
-	}
-
-	private void DoubleClick()
-	{
-		if (_selectedObject == null)
-		{
-			return;
-		}
-
-		var windowContent = CreateInstance<RenameWindow>();
-		windowContent.Node = _selectedObject;
-		var pos = _selectedObject.Pos + focusedWindow.position.position;
-		windowContent.position = new Rect(pos.x, pos.y, 300, 50);
-		windowContent.ShowPopup();
-	}
-
-
-
-	/// <summary>
-	/// moves the selected object or the screen if the background is selected
-	/// </summary>
-	/// <param name="delta"></param>
-	private void Drag(Vector2 delta)
-	{
-		if (_selectedObject != null)
-		{
-			_selectedObject.Pos += delta;
-		}
-		else
-		{
-			Nodegraph.Offset(delta);
+			_nodegraph = value;
 		}
 	}
 
@@ -162,6 +57,7 @@ public class NodeEditorWindow : EditorWindow
 				}
 				_currentState = WindowState.CLICKED;
 				break;
+
 			case 1:
 				if (!Editable)
 				{
@@ -201,11 +97,41 @@ public class NodeEditorWindow : EditorWindow
 						emptyClickMenu.AddItem(new GUIContent("Add node"), false, () => OnClickAddNode(mousePosition));
 					}
 					emptyClickMenu.ShowAsContext();
-
 				}
 				break;
+
 			default:
 				break;
+		}
+	}
+
+	private void DoubleClick()
+	{
+		if (_selectedObject == null)
+		{
+			return;
+		}
+
+		var windowContent = CreateInstance<RenameWindow>();
+		windowContent.Node = _selectedObject;
+		var pos = _selectedObject.Pos + focusedWindow.position.position;
+		windowContent.position = new Rect(pos.x, pos.y, 300, 50);
+		windowContent.ShowPopup();
+	}
+
+	/// <summary>
+	/// moves the selected object or the screen if the background is selected
+	/// </summary>
+	/// <param name="delta"></param>
+	private void Drag(Vector2 delta)
+	{
+		if (_selectedObject != null)
+		{
+			_selectedObject.Pos += delta;
+		}
+		else
+		{
+			Nodegraph.Offset(delta);
 		}
 	}
 
@@ -217,5 +143,81 @@ public class NodeEditorWindow : EditorWindow
 			Pos = mousePosition,
 			Node_text = "b"
 		});
+	}
+
+	private void OnGUI()
+	{
+		if (CloseNextFrame)
+		{
+			GUIUtility.ExitGUI();
+			return;
+		}
+
+		if (Nodegraph == null)
+		{
+			return;
+		}
+
+		Nodegraph.Draw();
+		ProcessEvents(Event.current);
+
+		if (GUI.changed || _repaint)
+		{
+			_repaint = true;
+			Repaint();
+		}
+	}
+
+	private void ProcessEvents(Event e)
+	{
+		// check if the player clicks away from the window and when they click back
+		switch (e.type)
+		{
+			case EventType.MouseEnterWindow:
+				_currentState = WindowState.SELECTED;
+				break;
+
+			case EventType.MouseLeaveWindow:
+				_currentState = WindowState.UNSELECTED;
+				_selectedObject = null;
+				break;
+
+			default:
+				break;
+		}
+
+		switch (_currentState)
+		{
+			case WindowState.RIGHT_CLICKED:
+			case WindowState.SELECTED:
+				if (e.type == EventType.MouseDown)
+				{
+					Click(e.mousePosition, e.button);
+					if (e.clickCount == 2)
+					{
+						DoubleClick();
+					}
+				}
+				break;
+
+			case WindowState.CLICKED:
+				// escape will put us back in a starting state at any time
+				if (e.type == EventType.MouseUp || (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape))
+				{
+					_currentState = WindowState.SELECTED;
+					_selectedObject = null;
+				}
+				if (e.type == EventType.MouseDrag)
+				{
+					Drag(e.delta);
+					// this ensures we drag each frame instead of only when we move the  mouse
+					e.Use();
+				}
+				break;
+
+			case WindowState.UNSELECTED:
+			default:
+				break;
+		}
 	}
 }

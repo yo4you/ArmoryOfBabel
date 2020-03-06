@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
 /// <summary>
 /// this class contains implementation for formal grammar execution
 /// </summary>
@@ -12,7 +13,7 @@ public static class GrammarUtils
 	/// applies a set of formal grammar rules to string and returns the result
 	/// runs until no more grammar can be applied to the string or execution exceeds 1000 cycles
 	/// grammars are applied in a random order according to their weighted randomness
-	/// each cycle applies at most one grammar rules to the string 
+	/// each cycle applies at most one grammar rules to the string
 	/// </summary>
 	/// <param name="grammars">list of grammars to apply </param>
 	/// <param name="start_string">the string to which the grammars will be applied</param>
@@ -26,7 +27,7 @@ public static class GrammarUtils
 		var random_state = Random.state;
 		Random.InitState(seed);
 
-		// we sum up the combined random weight of all our grammars, this is used so we determine the individual chances as portions of this total 
+		// we sum up the combined random weight of all our grammars, this is used so we determine the individual chances as portions of this total
 		var total_weight = grammars.Sum(i => i.Chance);
 	string_changed:
 		if (cycle_count-- < 0)
@@ -91,7 +92,6 @@ public static class GrammarUtils
 					break;
 				}
 			}
-
 		}
 		return output;
 	}
@@ -111,7 +111,7 @@ public static class GrammarUtils
 					{
 						newConnections.Add(connection);
 					}
-		 		}
+				}
 				foreach (var connection in replacementNode.ConnectedNodes)
 				{
 					if (translationTable.TryGetValue(connection, out int index))
@@ -127,50 +127,6 @@ public static class GrammarUtils
 				nodeGraph.Delete(node);
 			}
 		}
-
-	}
-
-	private static bool IsNodeRoleApplicable(NodeGrammar rule, ref NodeGraph nodeGraph, out OrderedDictionary<int, int> translationTable)
-	{
-		var match_dict = rule.LeftHand._nodeDict;
-		var smallest_index = match_dict.Keys.Min();
-		var first_node = match_dict[smallest_index].Node_text;
-		translationTable = null;
-		foreach (var match in nodeGraph._nodeDict)
-		{
-			if (MatchNodeGraphInsert(smallest_index, match.Key, ref match_dict, ref nodeGraph._nodeDict, out OrderedDictionary<int, int> translation))
-			{
-				foreach (var item in translation)
-				{
-					Debug.Log($"{item.Key} : {item.Value}");
-				}
-				translationTable = translation;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static bool MatchNodeGraphInsert(
-		int patternGraphIndex,
-		int graphIndex,
-		ref Dictionary<int, Node> patternDict,
-		ref Dictionary<int, Node> graph,
-		out OrderedDictionary<int, int> indexTranslation)
-	{
-		indexTranslation = new OrderedDictionary<int, int>();
-		if (patternDict[patternGraphIndex].Node_text != graph[graphIndex].Node_text)
-		{
-			return false;
-		}
-
-
-		var translationTable = new OrderedDictionary<int, int>
-		{
-			{ patternGraphIndex, graphIndex }
-		};
-
-		return CheckNodeValidity(ref translationTable, ref patternDict, ref graph, ref indexTranslation);
 	}
 
 	private static bool CheckNodeValidity(
@@ -217,7 +173,7 @@ public static class GrammarUtils
 
 		possibleMatch:;
 		}
-		// reverse lookup 
+		// reverse lookup
 		List<int> taggedIndices = new List<int>();
 
 		foreach (var pattern in patternDict)
@@ -247,7 +203,6 @@ public static class GrammarUtils
 			return false;
 
 		possibleMatch:;
-
 		}
 
 		foreach (var clone in translationTable)
@@ -258,5 +213,47 @@ public static class GrammarUtils
 			}
 		}
 		return true;
+	}
+
+	private static bool IsNodeRoleApplicable(NodeGrammar rule, ref NodeGraph nodeGraph, out OrderedDictionary<int, int> translationTable)
+	{
+		var match_dict = rule.LeftHand._nodeDict;
+		var smallest_index = match_dict.Keys.Min();
+		var first_node = match_dict[smallest_index].Node_text;
+		translationTable = null;
+		foreach (var match in nodeGraph._nodeDict)
+		{
+			if (MatchNodeGraphInsert(smallest_index, match.Key, ref match_dict, ref nodeGraph._nodeDict, out OrderedDictionary<int, int> translation))
+			{
+				foreach (var item in translation)
+				{
+					Debug.Log($"{item.Key} : {item.Value}");
+				}
+				translationTable = translation;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static bool MatchNodeGraphInsert(
+		int patternGraphIndex,
+		int graphIndex,
+		ref Dictionary<int, Node> patternDict,
+		ref Dictionary<int, Node> graph,
+		out OrderedDictionary<int, int> indexTranslation)
+	{
+		indexTranslation = new OrderedDictionary<int, int>();
+		if (patternDict[patternGraphIndex].Node_text != graph[graphIndex].Node_text)
+		{
+			return false;
+		}
+
+		var translationTable = new OrderedDictionary<int, int>
+		{
+			{ patternGraphIndex, graphIndex }
+		};
+
+		return CheckNodeValidity(ref translationTable, ref patternDict, ref graph, ref indexTranslation);
 	}
 }

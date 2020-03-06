@@ -7,14 +7,15 @@ namespace mattmc3.Common.Collections.Generic
 {
 	public class DictionaryEnumerator<TKey, TValue> : IDictionaryEnumerator, IDisposable
 	{
-		readonly IEnumerator<KeyValuePair<TKey, TValue>> impl;
-		public void Dispose() { impl.Dispose(); }
+		private readonly IEnumerator<KeyValuePair<TKey, TValue>> impl;
+
 		public DictionaryEnumerator(IDictionary<TKey, TValue> value)
 		{
-			this.impl = value.GetEnumerator();
+			impl = value.GetEnumerator();
 		}
-		public void Reset() { impl.Reset(); }
-		public bool MoveNext() { return impl.MoveNext(); }
+
+		public object Current => Entry;
+
 		public DictionaryEntry Entry
 		{
 			get
@@ -23,8 +24,24 @@ namespace mattmc3.Common.Collections.Generic
 				return new DictionaryEntry(pair.Key, pair.Value);
 			}
 		}
-		public object Key { get { return impl.Current.Key; } }
-		public object Value { get { return impl.Current.Value; } }
-		public object Current { get { return Entry; } }
+
+		public object Key => impl.Current.Key;
+
+		public object Value => impl.Current.Value;
+
+		public void Dispose()
+		{
+			impl.Dispose();
+		}
+
+		public bool MoveNext()
+		{
+			return impl.MoveNext();
+		}
+
+		public void Reset()
+		{
+			impl.Reset();
+		}
 	}
 }
