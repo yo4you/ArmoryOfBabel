@@ -107,7 +107,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 
 	private void GrammarSaveAndLoad()
 	{
-		_exportName = EditorGUILayout.TextField("Grammar Name : ", _exportName);
+		_exportName = EditorGUILayout.TextField("File Name : ", _exportName);
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("import"))
 		{

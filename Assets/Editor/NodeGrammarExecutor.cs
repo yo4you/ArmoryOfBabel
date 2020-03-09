@@ -19,6 +19,7 @@ public class NodeGrammarExecutor : EditorWindow
 	private string _inputString;
 	private string _nodeDirectory = "";
 	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null, null };
+	private bool _nodeGrammarDirty;
 	private string _nodeGrammarName;
 	private List<NodeGrammar> _nodeGrammars = new List<NodeGrammar>();
 	private NodeGraph[] _nodegraphs = new NodeGraph[2] { null, null };
@@ -103,11 +104,12 @@ public class NodeGrammarExecutor : EditorWindow
 		{
 			var grammars = NodeGrammarEditorWindow.ImportGrammars(_nodeDirectory + _nodeGrammarName + ".json");
 			_nodeGrammars.AddRange(grammars);
+			_nodeGrammarDirty = true;
 		}
 		if (GUILayout.Button("↺", GUILayout.Width(_buttonWidth)))
 		{
 			_nodeGrammars = new List<NodeGrammar>();
-			_nodeGrammars = new List<NodeGrammar>();
+			_nodeGrammarDirty = true;
 		}
 		EditorGUILayout.EndHorizontal();
 
@@ -119,8 +121,9 @@ public class NodeGrammarExecutor : EditorWindow
 		}
 		EditorGUILayout.EndScrollView();
 
-		if (_nodeEditorWindows[0].Changed)
+		if (_nodeEditorWindows[0].Changed || _nodeGrammarDirty)
 		{
+			_nodeGrammarDirty = false;
 			_nodeEditorWindows[0].Changed = false;
 			_nodegraphs[0] = _nodeEditorWindows[0].Nodegraph;
 			_nodegraphs[1] = GrammarUtils.ApplyNodeGrammars(_outputString, ref _nodeGrammars, _nodegraphs[0]);
