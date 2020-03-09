@@ -225,10 +225,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 		{
 			DrawEditorWindows();
 		}
-		if (GUI.changed)
-		{
-			Repaint();
-		}
 	}
 
 	private void OnLostFocus()

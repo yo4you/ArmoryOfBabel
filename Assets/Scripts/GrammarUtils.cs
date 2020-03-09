@@ -75,6 +75,10 @@ public static class GrammarUtils
 
 	public static NodeGraph ApplyNodeGrammars(string ruleSequence, ref List<NodeGrammar> nodeGrammars, NodeGraph nodeGraph)
 	{
+		if (ruleSequence == null)
+		{
+			return nodeGraph;
+		}
 		NodeGraph output = (NodeGraph)nodeGraph.Clone();
 		for (int i = 0; i < ruleSequence.Length; i++)
 		{
@@ -96,8 +100,48 @@ public static class GrammarUtils
 		return output;
 	}
 
+	private static void AddMissingNodes(NodeGrammar rule, ref NodeGraph nodeGraph, ref OrderedDictionary<int, int> translationTable)
+	{
+		// we use the first node as a refrence point to offset the positions
+		Node node0RH = rule.RightHand._nodeDict.First().Value;
+		Node node0Graph = nodeGraph._nodeDict.First().Value;
+		// add all new nodes created by the rule and give them the proper index
+		foreach (var rhNode in rule.RightHand._nodeDict)
+		{
+			if (!rule.LeftHand._nodeDict.ContainsKey(rhNode.Key))
+			{
+				var newNode = new Node()
+				{
+					Node_text = rhNode.Value.Node_text
+				};
+
+				newNode.Pos = node0Graph.Pos + rhNode.Value.Pos - node0Graph.Pos;
+
+				var newIndex = nodeGraph.CreateNode(newNode);
+				translationTable.Add(rhNode.Key, newIndex);
+			}
+		}
+		// iterate trough the array once again to add all the missing connections
+		// 		foreach (var rhNode in rule.RightHand._nodeDict)
+		// 		{
+		// 			if (!rule.LeftHand._nodeDict.ContainsKey(rhNode.Key))
+		// 			{
+		// 				var newNode = nodeGraph._nodeDict[translationTable[rhNode.Key]];
+		// 				foreach (var connection in rhNode.Value.ConnectedNodes)
+		// 				{
+		// 					if (translationTable.TryGetValue(connection, out int translatedConnection))
+		// 					{
+		// 						newNode.ConnectedNodes.Add(translatedConnection);
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+	}
+
 	private static void ApplyNodeRule(NodeGrammar rule, ref NodeGraph nodeGraph, ref OrderedDictionary<int, int> translationTable)
 	{
+		AddMissingNodes(rule, ref nodeGraph, ref translationTable);
+
 		foreach (var translation in translationTable)
 		{
 			var node = nodeGraph._nodeDict[translation.Value];
@@ -123,7 +167,6 @@ public static class GrammarUtils
 			}
 			else
 			{
-				Debug.Log("delete");
 				nodeGraph.Delete(node);
 			}
 		}
@@ -227,7 +270,7 @@ public static class GrammarUtils
 			{
 				foreach (var item in translation)
 				{
-					Debug.Log($"{item.Key} : {item.Value}");
+					//Debug.Log($"{item.Key} : {item.Value}");
 				}
 				translationTable = translation;
 				return true;

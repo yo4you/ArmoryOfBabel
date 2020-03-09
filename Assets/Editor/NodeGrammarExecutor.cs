@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class NodeGrammarExecutor : EditorWindow
 {
-	#region Fields
-
 	private const float _buttonWidth = 20;
 
 	// ratio * w = h
@@ -72,8 +70,6 @@ public class NodeGrammarExecutor : EditorWindow
 		}
 	}
 
-	#endregion Fields
-
 	[MenuItem("Custom/Node Grammar Executor")]
 	private static void OpenWindow()
 	{
@@ -110,6 +106,7 @@ public class NodeGrammarExecutor : EditorWindow
 		}
 		if (GUILayout.Button("↺", GUILayout.Width(_buttonWidth)))
 		{
+			_nodeGrammars = new List<NodeGrammar>();
 			_nodeGrammars = new List<NodeGrammar>();
 		}
 		EditorGUILayout.EndHorizontal();
@@ -188,7 +185,6 @@ public class NodeGrammarExecutor : EditorWindow
 		foreach (var item in _nodeEditorWindows)
 		{
 			item.CloseNextFrame = true;
-			item.CloseNextFrame = true;
 		}
 	}
 
@@ -224,25 +220,12 @@ public class NodeGrammarExecutor : EditorWindow
 			_stringDirectory = Application.streamingAssetsPath + "/Grammar/String/";
 		}
 
-		if (GUILayout.Button("Reset the Windows"))
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				GetWindow<NodeEditorWindow>()?.Close();
-			}
-			GenerateEditorWindows();
-		}
-
+		ResetWindowButton();
 		DrawStringGrammarOptions();
 		DrawNodeOptions();
-
 		if (_selected)
 		{
 			DrawEditorWindows();
-		}
-		if (GUI.changed)
-		{
-			Repaint();
 		}
 	}
 
@@ -263,6 +246,18 @@ public class NodeGrammarExecutor : EditorWindow
 				_nodegraphs[i] = _nodeEditorWindows[i].Nodegraph;
 				_nodeEditorWindows[i].Close();
 			}
+		}
+	}
+
+	private void ResetWindowButton()
+	{
+		if (GUILayout.Button("Reset the Windows"))
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				GetWindow<NodeEditorWindow>()?.Close();
+			}
+			GenerateEditorWindows();
 		}
 	}
 
