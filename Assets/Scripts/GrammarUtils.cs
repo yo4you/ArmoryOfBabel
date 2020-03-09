@@ -104,7 +104,7 @@ public static class GrammarUtils
 	{
 		// we use the first node as a refrence point to offset the positions
 		Node node0RH = rule.RightHand._nodeDict.First().Value;
-		Node node0Graph = nodeGraph._nodeDict.First().Value;
+		Node node0Graph = nodeGraph._nodeDict[translationTable.First().Value];
 		// add all new nodes created by the rule and give them the proper index
 		foreach (var rhNode in rule.RightHand._nodeDict)
 		{
@@ -115,7 +115,7 @@ public static class GrammarUtils
 					Node_text = rhNode.Value.Node_text
 				};
 
-				newNode.Pos = node0Graph.Pos + rhNode.Value.Pos - node0Graph.Pos;
+				newNode.Pos = node0Graph.Pos + rhNode.Value.Pos - node0RH.Pos;
 
 				var newIndex = nodeGraph.CreateNode(newNode);
 				translationTable.Add(rhNode.Key, newIndex);
