@@ -14,6 +14,8 @@ public class Node
 	public string _node_text;
 
 	public Vector2 _pos;
+	public int _value = 0;
+	private const int _defaultFontSize = 12;
 
 	// width and height of the square node
 	private const int _nodeSize = 100;
@@ -52,15 +54,25 @@ public class Node
 	/// <summary>
 	/// draws the node upon the editorwindow
 	/// </summary>
-	internal void Draw(int id)
+	internal void Draw(int id, float scale)
 	{
 		_nodeStyle = _nodeStyle ?? GenerateNodeStyle();
-		_rect.position = Pos;
-		GUI.Box(_rect, $"{Node_text}:{id}", _nodeStyle);
+		_nodeStyle.fontSize = (int)(_defaultFontSize * scale);
+		_rect.position = Pos * scale;
+		_rect.size = new Vector2(_nodeSize, _nodeSize) * scale;
+
+		_nodeStyle.border = new RectOffset((int)(_boxMargin * scale), (int)(_boxMargin * scale), (int)(_boxMargin * scale), (int)(_boxMargin * scale));
+		_nodeStyle.padding = _nodeStyle.border;// new RectOffset(_boxMargin, _boxMargin, _boxMargin, _boxMargin);
 		if (IconTextures.TryGetValue(_node_text, out Texture texture))
 		{
 			GUI.DrawTexture(_rect, texture);
 		}
+		var text = $"{Node_text}:{id}";
+		if (_value != 0)
+		{
+			text += $"\nvalue:{_value}";
+		}
+		GUI.Box(_rect, text, _nodeStyle);
 	}
 
 	/// <summary>
@@ -76,6 +88,7 @@ public class Node
 	private static Dictionary<string, Texture> LoadTexture()
 	{
 		_iconTextures = new Dictionary<string, Texture> {
+			{"backGround", EditorGUIUtility.Load("builtin skins/darkskin/images/node0.png") as Texture },
 			{"A",  EditorGUIUtility.Load("BtnA.png") as Texture},
 			{"B",  EditorGUIUtility.Load("BtnB.png") as Texture},
 			{"X",  EditorGUIUtility.Load("BtnX.png") as Texture},
@@ -97,9 +110,7 @@ public class Node
 	private GUIStyle GenerateNodeStyle()
 	{
 		var nodeStyle = new GUIStyle();
-		nodeStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/node0.png") as Texture2D;
-		nodeStyle.border = new RectOffset(_boxMargin, _boxMargin, _boxMargin, _boxMargin);
-		nodeStyle.padding = new RectOffset(_boxMargin, _boxMargin, _boxMargin, _boxMargin);
+		nodeStyle.normal.background = IconTextures["backGround"] as Texture2D;
 		nodeStyle.wordWrap = true;
 		return nodeStyle;
 	}

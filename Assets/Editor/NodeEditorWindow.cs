@@ -16,6 +16,10 @@ public class NodeEditorWindow : EditorWindow
 	/// </summary>
 	private Node _selectedObject;
 
+	private float _zoomAmount = 1f;
+	private float _zoomMax = 10f;
+	private float _zoomSpeed = 0.1f;
+
 	private enum WindowState
 	{
 		UNSELECTED,
@@ -70,10 +74,10 @@ public class NodeEditorWindow : EditorWindow
 			return;
 		}
 
-		var windowContent = CreateInstance<RenameWindow>();
+		var windowContent = CreateInstance<EditNodeValuesWindow>();
 		windowContent.Node = _selectedObject;
 		var pos = _selectedObject.Pos + focusedWindow.position.position;
-		windowContent.position = new Rect(pos.x, pos.y, 300, 50);
+		windowContent.position = new Rect(pos.x, pos.y, 300, 100);
 		windowContent.ShowPopup();
 	}
 
@@ -124,8 +128,7 @@ public class NodeEditorWindow : EditorWindow
 		{
 			return;
 		}
-
-		Nodegraph.Draw();
+		Nodegraph.Draw(1f / _zoomAmount);
 		ProcessEvents(Event.current);
 
 		if (GUI.changed || _repaint)
@@ -139,6 +142,11 @@ public class NodeEditorWindow : EditorWindow
 	{
 		// check if the player clicks away from the window and when they click back
 		UpdateMouseInWindowState(e);
+		if (e.type == EventType.ScrollWheel)
+		{
+			_zoomAmount += e.delta.y * _zoomSpeed;
+			_zoomAmount = Mathf.Clamp(_zoomAmount, 1f, _zoomMax);
+		}
 
 		switch (_currentState)
 		{

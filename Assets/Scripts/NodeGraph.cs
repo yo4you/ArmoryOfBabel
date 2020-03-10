@@ -112,7 +112,7 @@ public class NodeGraph : ICloneable
 	/// <summary>
 	/// draws the nodes onto the editor window
 	/// </summary>
-	public void Draw()
+	public void Draw(float scale)
 	{
 		// we draw the connections first so they render under the nodes
 		foreach (var item in _nodeDict)
@@ -121,7 +121,7 @@ public class NodeGraph : ICloneable
 			{
 				continue;
 			}
-			DrawConnections(item.Value);
+			DrawConnections(item.Value, scale);
 		}
 
 		// then draw the nodes
@@ -131,7 +131,7 @@ public class NodeGraph : ICloneable
 			{
 				continue;
 			}
-			item.Value.Draw(item.Key);
+			item.Value.Draw(item.Key, scale);
 		}
 	}
 
@@ -182,16 +182,16 @@ public class NodeGraph : ICloneable
 	/// draws the bezier curve starting from the right side of this node to all the connected nodes and places a little circle at the end
 	/// </summary>
 	/// <param name="node"></param>
-	private void DrawConnections(Node node)
+	private void DrawConnections(Node node, float scale)
 	{
 		foreach (var connection in node.ConnectedNodes)
 		{
 			if (_nodeDict.TryGetValue(connection, out Node connectedNode) && connectedNode != null)
 			{
 				// we add the margin because the nodes are rounded
-				var start = node.Pos + new Vector2(_nodeSize - _nodeMargin, _nodeSize * 0.5f);
-				var end = connectedNode.Pos + new Vector2(_nodeMargin, _nodeSize * 0.5f);
-				Vector2 tangentCurve = (Vector2.left * 80);
+				var start = (node.Pos + new Vector2(_nodeSize - _nodeMargin, _nodeSize * 0.5f)) * scale;
+				var end = (connectedNode.Pos + new Vector2(_nodeMargin, _nodeSize * 0.5f)) * scale;
+				Vector2 tangentCurve = (Vector2.left * 80 * scale);
 				Handles.DrawBezier(
 					start,
 					end,
@@ -201,7 +201,7 @@ public class NodeGraph : ICloneable
 					texture: null,
 					_lineWidth
 					);
-				Handles.DrawSolidDisc(end, Vector3.forward, _ballSize);
+				Handles.DrawSolidDisc(end, Vector3.forward, _ballSize * scale);
 			}
 		}
 	}
