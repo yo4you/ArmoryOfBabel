@@ -12,7 +12,8 @@ public class NodeGrammarExecutor : EditorWindow
 	// width * ratio = margin
 	private const float _marginRatio = 0.02f;
 
-	private float _editorHeightRatio = 0.5f;
+	private readonly float _editorHeightRatio = 0.5f;
+	private readonly NodeGraph[] _nodegraphs = new NodeGraph[2] { null, null };
 	private bool _enabledLastFrame;
 	private Vector2 _grammarViewScroll;
 	private bool _inputDirty;
@@ -22,7 +23,6 @@ public class NodeGrammarExecutor : EditorWindow
 	private bool _nodeGrammarDirty;
 	private string _nodeGrammarName;
 	private List<NodeGrammar> _nodeGrammars = new List<NodeGrammar>();
-	private NodeGraph[] _nodegraphs = new NodeGraph[2] { null, null };
 	private string _outputString;
 	private int _seed;
 	private bool _selected = true;

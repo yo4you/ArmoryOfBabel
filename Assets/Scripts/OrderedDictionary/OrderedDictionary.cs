@@ -216,7 +216,7 @@ namespace mattmc3.Common.Collections.Generic
 			}
 			else
 			{
-				value = default(TValue);
+				value = default;
 				return false;
 			}
 		}

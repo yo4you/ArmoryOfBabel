@@ -6,6 +6,8 @@ using UnityEngine;
 /// </summary>
 public class NodeEditorWindow : EditorWindow
 {
+	private readonly float _zoomMax = 10f;
+	private readonly float _zoomSpeed = 0.1f;
 	private WindowState _currentState = WindowState.SELECTED;
 	private NodeGraph _nodegraph;
 
@@ -17,8 +19,6 @@ public class NodeEditorWindow : EditorWindow
 	private Node _selectedObject;
 
 	private float _zoomAmount = 1f;
-	private float _zoomMax = 10f;
-	private float _zoomSpeed = 0.1f;
 
 	private enum WindowState
 	{

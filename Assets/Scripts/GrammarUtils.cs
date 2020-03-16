@@ -112,10 +112,11 @@ public static class GrammarUtils
 			{
 				var newNode = new Node()
 				{
-					Node_text = rhNode.Value.Node_text
+					Node_text = rhNode.Value.Node_text,
+					Value = rhNode.Value.Value
 				};
 
-				newNode.Pos = node0Graph.Pos + rhNode.Value.Pos - node0RH.Pos;
+				newNode.Pos = node0Graph.Pos + rhNode.Value.Pos - node0RH.Pos + Random.insideUnitCircle * 200;
 
 				var newIndex = nodeGraph.CreateNode(newNode);
 				translationTable.Add(rhNode.Key, newIndex);
@@ -133,6 +134,7 @@ public static class GrammarUtils
 			if (rule.RightHand._nodeDict.TryGetValue(translation.Key, out Node replacementNode))
 			{
 				node.Node_text = replacementNode.Node_text;
+				node.Value = replacementNode.Value;
 				List<int> newConnections = new List<int>();
 				foreach (var connection in node.ConnectedNodes)
 				{
@@ -190,8 +192,10 @@ public static class GrammarUtils
 
 			foreach (var graphConnection in graphNode.ConnectedNodes)
 			{
-				var cloned = new OrderedDictionary<int, int>(translationTable);
-				cloned.Add(patternConnection, graphConnection);
+				var cloned = new OrderedDictionary<int, int>(translationTable)
+				{
+					{ patternConnection, graphConnection }
+				};
 				if (CheckNodeValidity(ref cloned, ref patternDict, ref graph, ref indextranslation))
 				{
 					goto possibleMatch;
@@ -220,8 +224,10 @@ public static class GrammarUtils
 				{
 					continue;
 				}
-				var cloned = new OrderedDictionary<int, int>(translationTable);
-				cloned.Add(pattern.Key, unconnectednode.Key);
+				var cloned = new OrderedDictionary<int, int>(translationTable)
+				{
+					{ pattern.Key, unconnectednode.Key }
+				};
 				if (CheckNodeValidity(ref cloned, ref patternDict, ref graph, ref indextranslation))
 				{
 					taggedIndices.Add(unconnectednode.Key);

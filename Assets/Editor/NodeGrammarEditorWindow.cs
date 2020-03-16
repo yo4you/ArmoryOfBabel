@@ -13,10 +13,10 @@ public class NodeGrammarEditorWindow : EditorWindow
 	// width * ratio = margin
 	private const float _marginRatio = 0.02f;
 
-	private float _buttonWidth = 20;
+	private readonly float _buttonWidth = 20;
+	private readonly float _editorHeightRatio = 0.5f;
+	private readonly NodeGrammarEditorWindow _window;
 	private string _directory = "";
-	private float _editorHeightRatio = 0.5f;
-
 	private bool _enabledLastFrame;
 	private string _exportName;
 	private List<NodeGrammar> _grammars = new List<NodeGrammar>();
@@ -24,7 +24,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null, null };
 	private Vector2 _scrollPos;
 	private bool _selected = true;
-	private NodeGrammarEditorWindow _window;
 
 	private enum HandSide { LEFT, RIGHT }
 

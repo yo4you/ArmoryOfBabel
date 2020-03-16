@@ -4,13 +4,13 @@ using UnityEngine;
 internal class EditNodeValuesWindow : EditorWindow
 {
 	private string _newName = "";
-	private int _newValue = 0;
+	private float _newValue = 0;
 	public Node Node { get; set; }
 
 	private void OnGUI()
 	{
 		_newName = EditorGUILayout.TextField("New Name", _newName);
-		_newValue = EditorGUILayout.IntField("New Value", _newValue);
+		_newValue = EditorGUILayout.FloatField("New Value", _newValue);
 		if (Event.current.type == EventType.MouseLeaveWindow ||
 			Event.current.keyCode == KeyCode.Return ||
 			GUILayout.Button("Confirm"))
@@ -22,7 +22,7 @@ internal class EditNodeValuesWindow : EditorWindow
 			}
 			if (_newValue != 0)
 			{
-				Node._value = _newValue;
+				Node.Value = _newValue;
 			}
 			Close();
 		}

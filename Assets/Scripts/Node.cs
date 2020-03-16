@@ -14,7 +14,7 @@ public class Node
 	public string _node_text;
 
 	public Vector2 _pos;
-	public int _value = 0;
+	public float _value = 0;
 	private const int _defaultFontSize = 12;
 
 	// width and height of the square node
@@ -23,11 +23,10 @@ public class Node
 	private static Dictionary<string, Texture> _iconTextures;
 
 	// this is used to control the rounded corners of the node
-	private int _boxMargin = 12;
+	private readonly int _boxMargin = 12;
 
 	private GUIStyle _nodeStyle;
 	private Rect _rect;
-	private Texture _texture;
 
 	public Node()
 	{
@@ -51,8 +50,10 @@ public class Node
 	/// </summary>
 	public Vector2 Pos { get => _pos; set => _pos = value; }
 
+	public float Value { get => _value; set => _value = value; }
+
 	/// <summary>
-	/// draws the node upon the editorwindow
+	/// draws the node upon the editor window
 	/// </summary>
 	internal void Draw(int id, float scale)
 	{
@@ -63,14 +64,16 @@ public class Node
 
 		_nodeStyle.border = new RectOffset((int)(_boxMargin * scale), (int)(_boxMargin * scale), (int)(_boxMargin * scale), (int)(_boxMargin * scale));
 		_nodeStyle.padding = _nodeStyle.border;// new RectOffset(_boxMargin, _boxMargin, _boxMargin, _boxMargin);
+		var text = $"{Node_text}\nid:{id}";
+		if (Value != 0)
+		{
+			text += $"\nvalue:{Value}";
+		}
+
 		if (IconTextures.TryGetValue(_node_text, out Texture texture))
 		{
-			GUI.DrawTexture(_rect, texture);
-		}
-		var text = $"{Node_text}:{id}";
-		if (_value != 0)
-		{
-			text += $"\nvalue:{_value}";
+			_nodeStyle.normal.background = texture as Texture2D;
+			//GUI.DrawTexture(_rect, text, texture);
 		}
 		GUI.Box(_rect, text, _nodeStyle);
 	}
@@ -88,7 +91,7 @@ public class Node
 	private static Dictionary<string, Texture> LoadTexture()
 	{
 		_iconTextures = new Dictionary<string, Texture> {
-			{"backGround", EditorGUIUtility.Load("builtin skins/darkskin/images/node0.png") as Texture },
+			{"backGround",  EditorGUIUtility.Load("simple.png") as Texture},
 			{"A",  EditorGUIUtility.Load("BtnA.png") as Texture},
 			{"B",  EditorGUIUtility.Load("BtnB.png") as Texture},
 			{"X",  EditorGUIUtility.Load("BtnX.png") as Texture},
@@ -103,6 +106,10 @@ public class Node
 			{"TYPE",  EditorGUIUtility.Load("Settings.png") as Texture},
 			{"SPD",  EditorGUIUtility.Load("menu.png") as Texture},
 			{"DMG",  EditorGUIUtility.Load("starRate.png") as Texture},
+			{"AH",  EditorGUIUtility.Load("BtnAh.png") as Texture},
+			{"BH",  EditorGUIUtility.Load("BtnBh.png") as Texture},
+			{"XH",  EditorGUIUtility.Load("BtnXh.png") as Texture},
+			{"UIC",  EditorGUIUtility.Load("BtnUIcap.png") as Texture},
 		};
 		return _iconTextures;
 	}
