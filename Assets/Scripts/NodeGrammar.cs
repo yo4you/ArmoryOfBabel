@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -17,6 +18,16 @@ public struct NodeGrammar
 			RightHand = (NodeGraph)v.RightHand,
 			Name = v.Name,
 		};
+	}
+
+	public static List<NodeGrammar> ImportGrammars(string directory)
+	{
+		StreamReader reader = new StreamReader(directory);
+		var jsonString = reader.ReadToEnd();
+		var outp = SerializableNodeGrammars_Converter.FromJson(jsonString);
+		reader.Close();
+		reader.Dispose();
+		return outp;
 	}
 }
 

@@ -43,6 +43,18 @@ public class NodeGraph : ICloneable
 		};
 	}
 
+	/// <summary>
+	/// adds the node to the nodegraph and returns it's assigned ID
+	/// </summary>
+	/// <param name="node"></param>
+	/// <returns></returns>
+	public int AddNode(Node node)
+	{
+		_nodeDict[_lastId] = node;
+		_lastId++;
+		return _lastId - 1;
+	}
+
 	public object Clone()
 	{
 		var json = JsonUtility.ToJson((Serializable_NodeGraph)this);
@@ -74,32 +86,20 @@ public class NodeGraph : ICloneable
 			return;
 		}
 
-		var id0 = GetId(node0);
-		var id1 = GetId(node1);
+		var id0 = GetIdFromNode(node0);
+		var id1 = GetIdFromNode(node1);
 		Connect(id0, id1);
-	}
-
-	/// <summary>
-	/// adds the node to the nodegraph and returns it's assigned ID
-	/// </summary>
-	/// <param name="node"></param>
-	/// <returns></returns>
-	public int CreateNode(Node node)
-	{
-		_nodeDict[_lastId] = node;
-		_lastId++;
-		return _lastId - 1;
 	}
 
 	public void Delete(Node node)
 	{
 		Disconnect(node);
-		_nodeDict.Remove(GetId(node));
+		_nodeDict.Remove(GetIdFromNode(node));
 	}
 
 	public void Disconnect(Node disconnect_node)
 	{
-		var id = GetId(disconnect_node);
+		var id = GetIdFromNode(disconnect_node);
 		foreach (var node in _nodeDict)
 		{
 			if (node.Value.ConnectedNodes.Contains(id))
@@ -133,6 +133,11 @@ public class NodeGraph : ICloneable
 			}
 			item.Value.Draw(item.Key, scale);
 		}
+	}
+
+	public int GetIdFromNode(Node node0)
+	{
+		return _nodeDict.FirstOrDefault(kv => kv.Value == node0).Key;
 	}
 
 	/// <summary>
@@ -204,10 +209,5 @@ public class NodeGraph : ICloneable
 				Handles.DrawSolidDisc(end, Vector3.forward, _ballSize * scale);
 			}
 		}
-	}
-
-	private int GetId(Node node0)
-	{
-		return _nodeDict.FirstOrDefault(kv => kv.Value == node0).Key;
 	}
 }

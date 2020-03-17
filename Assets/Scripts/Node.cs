@@ -35,6 +35,8 @@ public class Node
 
 	public static Dictionary<string, Texture> IconTextures { get => _iconTextures ?? LoadTexture(); set => _iconTextures = value; }
 
+	public bool Active { get; internal set; }
+
 	/// <summary>
 	/// Ids of the corresponding connections in the nodegraph
 	/// </summary>

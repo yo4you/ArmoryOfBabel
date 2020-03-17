@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class NodeGrammarEditorWindow : EditorWindow
 {
-	#region Fields
-
 	// ratio * w = h
 	private const float _editorWHRatio = 0.75f;
 
@@ -26,18 +24,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private bool _selected = true;
 
 	private enum HandSide { LEFT, RIGHT }
-
-	#endregion Fields
-
-	internal static List<NodeGrammar> ImportGrammars(string directory)
-	{
-		StreamReader reader = new StreamReader(directory);
-		var jsonString = reader.ReadToEnd();
-		var outp = SerializableNodeGrammars_Converter.FromJson(jsonString);
-		reader.Close();
-		reader.Dispose();
-		return outp;
-	}
 
 	[MenuItem("Custom/Node Grammar Editor")]
 	private static void OpenWindow()
@@ -110,7 +96,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("import"))
 		{
-			_grammars = ImportGrammars(_directory + _exportName + ".json");
+			_grammars = NodeGrammar.ImportGrammars(_directory + _exportName + ".json");
 			LoadGrammar(_grammarSelectedIndex);
 		}
 		if (GUILayout.Button("export"))
@@ -168,7 +154,10 @@ public class NodeGrammarEditorWindow : EditorWindow
 	{
 		foreach (var item in _nodeEditorWindows)
 		{
-			item.CloseNextFrame = true;
+			if (item != null)
+			{
+				item.CloseNextFrame = true;
+			}
 		}
 	}
 

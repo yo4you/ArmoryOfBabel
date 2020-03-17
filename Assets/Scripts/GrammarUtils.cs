@@ -116,9 +116,9 @@ public static class GrammarUtils
 					Value = rhNode.Value.Value
 				};
 
-				newNode.Pos = node0Graph.Pos + rhNode.Value.Pos - node0RH.Pos + Random.insideUnitCircle * 200;
+				newNode.Pos = node0Graph.Pos + rhNode.Value.Pos - node0RH.Pos;
 
-				var newIndex = nodeGraph.CreateNode(newNode);
+				var newIndex = nodeGraph.AddNode(newNode);
 				translationTable.Add(rhNode.Key, newIndex);
 			}
 		}
@@ -259,10 +259,6 @@ public static class GrammarUtils
 		{
 			if (MatchNodeGraphInsert(smallest_index, match.Key, ref match_dict, ref nodeGraph._nodeDict, out OrderedDictionary<int, int> translation))
 			{
-				foreach (var item in translation)
-				{
-					//Debug.Log($"{item.Key} : {item.Value}");
-				}
 				translationTable = translation;
 				return true;
 			}

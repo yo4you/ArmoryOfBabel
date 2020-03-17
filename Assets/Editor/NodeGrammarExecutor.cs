@@ -102,7 +102,7 @@ public class NodeGrammarExecutor : EditorWindow
 		_nodeGrammarName = GUILayout.TextField(_nodeGrammarName);
 		if (GUILayout.Button("+", GUILayout.Width(_buttonWidth)))
 		{
-			var grammars = NodeGrammarEditorWindow.ImportGrammars(_nodeDirectory + _nodeGrammarName + ".json");
+			var grammars = NodeGrammar.ImportGrammars(_nodeDirectory + _nodeGrammarName + ".json");
 			_nodeGrammars.AddRange(grammars);
 			_nodeGrammarDirty = true;
 		}
@@ -187,7 +187,10 @@ public class NodeGrammarExecutor : EditorWindow
 	{
 		foreach (var item in _nodeEditorWindows)
 		{
-			item.CloseNextFrame = true;
+			if (item != null)
+			{
+				item.CloseNextFrame = true;
+			}
 		}
 	}
 

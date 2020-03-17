@@ -109,7 +109,7 @@ public class NodeEditorWindow : EditorWindow
 	private void OnClickAddNode(Vector2 mousePosition)
 	{
 		Changed = true;
-		Nodegraph.CreateNode(new Node()
+		Nodegraph.AddNode(new Node()
 		{
 			Pos = mousePosition,
 			Node_text = "b"
