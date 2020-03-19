@@ -112,6 +112,7 @@ public class Node
 			{"BH",  EditorGUIUtility.Load("BtnBh.png") as Texture},
 			{"XH",  EditorGUIUtility.Load("BtnXh.png") as Texture},
 			{"UIC",  EditorGUIUtility.Load("BtnUIcap.png") as Texture},
+			{"DT",  EditorGUIUtility.Load("dt.png") as Texture},
 		};
 		return _iconTextures;
 	}

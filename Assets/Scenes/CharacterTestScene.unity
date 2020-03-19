@@ -565,7 +565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a678e9c36506a449bec83af640ad8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mechanicGrammarName: MH_DB
+  _mechanicGrammarName: toggle
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

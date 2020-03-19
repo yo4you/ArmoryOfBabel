@@ -115,17 +115,7 @@ public static class NodeBehaviour
 
 		if (state && prevNode.Node_text == "VAL")
 		{
-			var nodeCap = 100f;
-			var id = graph.GetIdFromNode(node);
-			foreach (var item in graph._nodeDict)
-			{
-				if (item.Value.Node_text == "UIC" && item.Value.ConnectedNodes.Contains(id))
-				{
-					nodeCap = item.Value.Value;
-				}
-			}
 			node.Value += prevNode.Value;
-			Mathf.Clamp(node.Value, 0, nodeCap);
 		}
 	}
 
@@ -133,7 +123,7 @@ public static class NodeBehaviour
 	{
 		node.Active = state;
 
-		if (prevNode.Node_text == "VAL")
+		if (prevNode.Node_text == "VAL" || prevNode.Node_text == "DT")
 		{
 			if (state)
 			{
@@ -150,7 +140,7 @@ public static class NodeBehaviour
 	{
 		if (prevNode.Active)
 		{
-			node.Active = prevNode.Value > node.Value;
+			node.Active = prevNode.Value >= node.Value;
 		}
 		else
 		{
