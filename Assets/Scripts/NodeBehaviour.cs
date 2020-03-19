@@ -31,7 +31,6 @@ public static class NodeBehaviour
 
 	public static void SetState_HitNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
 	{
-		node.Active = state;
 		if (state)
 		{
 			Debug.Log("created projectile callback");
@@ -70,6 +69,7 @@ public static class NodeBehaviour
 			node.Active = false;
 			return;
 		}
+
 		// TODO check cooldowns
 		if (prevNode.Node_text == "VAL" || prevNode.Node_text == "DMG" || prevNode.Node_text == "SPD" || prevNode.Node_text == "TYPE")
 		{

@@ -42,4 +42,13 @@ internal static class MathUtils
 		}
 		return outp;
 	}
+
+	public static float RoundAngleToDirection(float angle)
+	{
+		while (angle < 0f)
+		{
+			angle += 360f;
+		}
+		return ((int)(((angle + 22.5f) % 360f) / 45f)) * 45f;
+	}
 }

@@ -1,0 +1,1705 @@
+fileFormatVersion: 2
+guid: 11c12a0cd4e8d2e4b9ccb8034bcfa873
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8293903116822253023
+    second: sweep_0
+  - first:
+      213: 8400658814399312337
+    second: sweep_1
+  - first:
+      213: 1887230225760885301
+    second: sweep_2
+  - first:
+      213: 3278690480541640456
+    second: sweep_3
+  - first:
+      213: 5081354064211168389
+    second: sweep_4
+  - first:
+      213: -5887407826830932702
+    second: sweep_5
+  - first:
+      213: -2537341726068876932
+    second: sweep_6
+  - first:
+      213: 1557664418683263023
+    second: sweep_7
+  - first:
+      213: -1755330794270303068
+    second: sweep_8
+  - first:
+      213: 5033555139497563001
+    second: sweep_9
+  - first:
+      213: 6033620756940458555
+    second: sweep_10
+  - first:
+      213: -6249403798085812287
+    second: sweep_11
+  - first:
+      213: -2275225766434779167
+    second: sweep_12
+  - first:
+      213: 646871392404216794
+    second: sweep_13
+  - first:
+      213: 1984699668987304131
+    second: sweep_14
+  - first:
+      213: 1141066907210440770
+    second: sweep_15
+  - first:
+      213: 8664967317171796430
+    second: sweep_16
+  - first:
+      213: -396841194707434084
+    second: sweep_17
+  - first:
+      213: -8542726553875660537
+    second: sweep_18
+  - first:
+      213: -9188989749645203586
+    second: sweep_19
+  - first:
+      213: 5229035863572524512
+    second: sweep_20
+  - first:
+      213: 2115355830195138183
+    second: sweep_21
+  - first:
+      213: 6259798430149322148
+    second: sweep_22
+  - first:
+      213: 4325991535446441934
+    second: sweep_23
+  - first:
+      213: 4877305516139747841
+    second: sweep_24
+  - first:
+      213: 3600321986216053207
+    second: sweep_25
+  - first:
+      213: 8883946261122859162
+    second: sweep_26
+  - first:
+      213: 6667330583484765304
+    second: sweep_27
+  - first:
+      213: -1214341274468048809
+    second: sweep_28
+  - first:
+      213: 6406037102304520206
+    second: sweep_29
+  - first:
+      213: 1771162298436857505
+    second: sweep_30
+  - first:
+      213: 6151794049966701160
+    second: sweep_31
+  - first:
+      213: -6283348318638409135
+    second: sweep_32
+  - first:
+      213: 8267268241015541311
+    second: sweep_33
+  - first:
+      213: -9153471611958412183
+    second: sweep_34
+  - first:
+      213: 2683340554348767706
+    second: sweep_35
+  - first:
+      213: 3391395531012597433
+    second: sweep_36
+  - first:
+      213: 992104015832968154
+    second: sweep_37
+  - first:
+      213: 3876381069612064550
+    second: sweep_38
+  - first:
+      213: -7376680752704169283
+    second: sweep_39
+  - first:
+      213: -1012173368394031977
+    second: sweep_40
+  - first:
+      213: -3706523289286216791
+    second: sweep_41
+  - first:
+      213: -1922558253044628316
+    second: sweep_42
+  - first:
+      213: -8609734133789324028
+    second: sweep_43
+  - first:
+      213: -2475633206333667003
+    second: sweep_44
+  - first:
+      213: -1769710795142929061
+    second: sweep_45
+  - first:
+      213: -3030349256159623474
+    second: sweep_46
+  - first:
+      213: 8016313562623109209
+    second: sweep_47
+  - first:
+      213: 1273965485904100004
+    second: sweep_48
+  - first:
+      213: 1007123910355675586
+    second: sweep_49
+  - first:
+      213: -1654991834545426921
+    second: sweep_50
+  - first:
+      213: 8410724888758248022
+    second: sweep_51
+  - first:
+      213: -7044279857012492835
+    second: sweep_52
+  - first:
+      213: -7261691292599529350
+    second: sweep_53
+  - first:
+      213: 8519352404631377012
+    second: sweep_54
+  - first:
+      213: -4309601538796501306
+    second: sweep_55
+  - first:
+      213: 3063297618131646083
+    second: sweep_56
+  - first:
+      213: 6653458924633291525
+    second: sweep_57
+  - first:
+      213: 5497800654375803355
+    second: sweep_58
+  - first:
+      213: 2689740508409749098
+    second: sweep_59
+  - first:
+      213: -684286891087932619
+    second: sweep_60
+  - first:
+      213: -5425386694059160824
+    second: sweep_61
+  - first:
+      213: 3692995275437897927
+    second: sweep_62
+  - first:
+      213: -9083691123507208843
+    second: sweep_63
+  - first:
+      213: -2523719538353677401
+    second: sweep_64
+  - first:
+      213: -4886254705529747674
+    second: sweep_65
+  - first:
+      213: 7340635546675567959
+    second: sweep_66
+  - first:
+      213: 8643102256221239510
+    second: sweep_67
+  - first:
+      213: 8363299900647036460
+    second: sweep_68
+  - first:
+      213: -5942023157762465525
+    second: sweep_69
+  - first:
+      213: -1384775677775948497
+    second: sweep_70
+  - first:
+      213: 8718112878248088164
+    second: sweep_71
+  - first:
+      213: 215545481800137566
+    second: sweep_72
+  - first:
+      213: 5051167139792790465
+    second: sweep_73
+  - first:
+      213: -842083221704507099
+    second: sweep_74
+  - first:
+      213: 3866944921110359701
+    second: sweep_75
+  - first:
+      213: 5577007318838640347
+    second: sweep_76
+  - first:
+      213: 3548998055796146634
+    second: sweep_77
+  - first:
+      213: 2131063256895351620
+    second: sweep_78
+  - first:
+      213: -193256658761031029
+    second: sweep_79
+  - first:
+      213: 4517131530753770676
+    second: sweep_80
+  - first:
+      213: -2374550624689637508
+    second: sweep_81
+  - first:
+      213: -7610781821838601098
+    second: sweep_82
+  - first:
+      213: 7512023417302177061
+    second: sweep_83
+  - first:
+      213: 6455707113506983069
+    second: sweep_84
+  - first:
+      213: 3146150899498424596
+    second: sweep_85
+  - first:
+      213: 6439892096534863976
+    second: sweep_86
+  - first:
+      213: 3308797274996702583
+    second: sweep_87
+  - first:
+      213: 2222435946002112462
+    second: sweep_88
+  - first:
+      213: 4837746871701043957
+    second: sweep_89
+  - first:
+      213: 1666054348306880304
+    second: sweep_90
+  - first:
+      213: -4768993576339387172
+    second: sweep_91
+  - first:
+      213: 7157991838479191965
+    second: sweep_92
+  - first:
+      213: 5930784648228940326
+    second: sweep_93
+  - first:
+      213: 3652629114008949499
+    second: sweep_94
+  - first:
+      213: 9067552673781672058
+    second: sweep_95
+  - first:
+      213: -2820328070080412674
+    second: sweep_96
+  - first:
+      213: 2145601751443929047
+    second: sweep_97
+  - first:
+      213: 1941796048306125304
+    second: sweep_98
+  - first:
+      213: -7585485620984313296
+    second: sweep_99
+  - first:
+      213: 6724759951173979762
+    second: sweep_100
+  - first:
+      213: 7659810414968280658
+    second: sweep_101
+  - first:
+      213: -6807887956810422787
+    second: sweep_102
+  - first:
+      213: 1809122339479152047
+    second: sweep_103
+  - first:
+      213: 9083615352556458509
+    second: sweep_104
+  - first:
+      213: 7039200765943967243
+    second: sweep_105
+  - first:
+      213: 3677820559568447076
+    second: sweep_106
+  - first:
+      213: 8038838408961424639
+    second: sweep_107
+  - first:
+      213: 4380149984398135870
+    second: sweep_108
+  - first:
+      213: -6588804994335740836
+    second: sweep_109
+  - first:
+      213: 7790246661388141760
+    second: sweep_110
+  - first:
+      213: -3834683426374759960
+    second: sweep_111
+  - first:
+      213: -3522560654920552270
+    second: sweep_112
+  - first:
+      213: 6388540015014830288
+    second: sweep_113
+  - first:
+      213: -7074134490160020443
+    second: sweep_114
+  - first:
+      213: -8005701593212653948
+    second: sweep_115
+  - first:
+      213: 1913638785268615465
+    second: sweep_116
+  - first:
+      213: -7560879899792930691
+    second: sweep_117
+  - first:
+      213: -3429110073099998602
+    second: sweep_118
+  - first:
+      213: 7533776437730298430
+    second: sweep_119
+  - first:
+      213: -193625932947728114
+    second: sweep_120
+  - first:
+      213: 217352980764412792
+    second: sweep_121
+  - first:
+      213: 6194259537488449376
+    second: sweep_122
+  - first:
+      213: 8819043138757926671
+    second: sweep_123
+  - first:
+      213: -1220627120604436789
+    second: sweep_124
+  - first:
+      213: -8532015646616646537
+    second: sweep_125
+  - first:
+      213: -7266264549920855751
+    second: sweep_126
+  - first:
+      213: 5953775452629241062
+    second: sweep_127
+  - first:
+      213: 1084613559657058342
+    second: sweep_128
+  - first:
+      213: 4372082230054619543
+    second: sweep_129
+  - first:
+      213: -7296974201616349046
+    second: sweep_130
+  - first:
+      213: 9053485417781867083
+    second: sweep_131
+  - first:
+      213: -4655926670457012984
+    second: sweep_132
+  - first:
+      213: -83122522540441345
+    second: sweep_133
+  - first:
+      213: 9066218031391569484
+    second: sweep_134
+  - first:
+      213: 1578577140162802715
+    second: sweep_135
+  - first:
+      213: -8122233098536365268
+    second: sweep_136
+  - first:
+      213: 7225748777709822007
+    second: sweep_137
+  - first:
+      213: 6776816189205843027
+    second: sweep_138
+  - first:
+      213: -6241411717178599992
+    second: sweep_139
+  - first:
+      213: -5100494167408138284
+    second: sweep_140
+  - first:
+      213: 8958964814929683168
+    second: sweep_141
+  - first:
+      213: -1384493524723617389
+    second: sweep_142
+  - first:
+      213: 2127675672080846144
+    second: sweep_143
+  - first:
+      213: -3281858577959067447
+    second: sweep_144
+  - first:
+      213: -5297524077519142169
+    second: sweep_145
+  - first:
+      213: -6844997109671955585
+    second: sweep_146
+  - first:
+      213: 2235256977178115746
+    second: sweep_147
+  - first:
+      213: 7779220830854188708
+    second: sweep_148
+  - first:
+      213: 2122491487933990610
+    second: sweep_149
+  - first:
+      213: 4979033980592152074
+    second: sweep_150
+  - first:
+      213: 8859836569608696745
+    second: sweep_151
+  - first:
+      213: 7426851377703463155
+    second: sweep_152
+  - first:
+      213: -4301427387063910744
+    second: sweep_153
+  - first:
+      213: 5426014817924069926
+    second: sweep_154
+  - first:
+      213: 395679561140212244
+    second: sweep_155
+  - first:
+      213: -1394453208678912419
+    second: sweep_156
+  - first:
+      213: -565451315545626960
+    second: sweep_157
+  - first:
+      213: -5092758078628960374
+    second: sweep_158
+  - first:
+      213: -2779454262417692361
+    second: sweep_159
+  - first:
+      213: 45931271114536361
+    second: sweep_160
+  - first:
+      213: 3350902032774602766
+    second: sweep_161
+  - first:
+      213: -1821304086041816451
+    second: sweep_162
+  - first:
+      213: 1700313496175575974
+    second: sweep_163
+  - first:
+      213: 985318877383095892
+    second: sweep_164
+  - first:
+      213: 5068310813580581525
+    second: sweep_165
+  - first:
+      213: -5897856361924537248
+    second: sweep_166
+  - first:
+      213: 8771753192596952969
+    second: sweep_167
+  - first:
+      213: 4854773202739467951
+    second: sweep_168
+  - first:
+      213: -6185094915219836939
+    second: sweep_169
+  - first:
+      213: 1432661801486082565
+    second: sweep_170
+  - first:
+      213: 9200433946438217476
+    second: sweep_171
+  - first:
+      213: 18186169218325277
+    second: sweep_172
+  - first:
+      213: -2591739274606149267
+    second: sweep_173
+  - first:
+      213: -246238511674234713
+    second: sweep_174
+  - first:
+      213: -5329153411631422957
+    second: sweep_175
+  - first:
+      213: -1853154060594529950
+    second: sweep_176
+  - first:
+      213: 6773453341801237589
+    second: sweep_177
+  - first:
+      213: 2890233939869354004
+    second: sweep_178
+  - first:
+      213: -356659827108254913
+    second: sweep_179
+  - first:
+      213: -3618330315846365614
+    second: sweep_180
+  - first:
+      213: 7939442716683857956
+    second: sweep_181
+  - first:
+      213: 7566100041902615585
+    second: sweep_182
+  - first:
+      213: -2191263162719942006
+    second: sweep_183
+  - first:
+      213: -117348122468929191
+    second: sweep_184
+  - first:
+      213: -4741075853708684523
+    second: sweep_185
+  - first:
+      213: -5665076615584672784
+    second: sweep_186
+  - first:
+      213: -5715362597944500769
+    second: sweep_187
+  - first:
+      213: 2077334671767953324
+    second: sweep_188
+  - first:
+      213: -494996258125998507
+    second: sweep_189
+  - first:
+      213: 5169833322540134878
+    second: sweep_190
+  - first:
+      213: 139437116882473731
+    second: sweep_191
+  - first:
+      213: 2302724965719636055
+    second: sweep_192
+  - first:
+      213: 6531995727795657381
+    second: sweep_193
+  - first:
+      213: 3114327059345239869
+    second: sweep_194
+  - first:
+      213: -7245052321564641129
+    second: sweep_195
+  - first:
+      213: -1003653233657554723
+    second: sweep_196
+  - first:
+      213: -922978325821775394
+    second: sweep_197
+  - first:
+      213: -457126193390575260
+    second: sweep_198
+  - first:
+      213: -3770246067064318121
+    second: sweep_199
+  - first:
+      213: -6510490415089438267
+    second: sweep_200
+  - first:
+      213: 828849519249625437
+    second: sweep_201
+  - first:
+      213: 4114861240695246609
+    second: sweep_202
+  - first:
+      213: 8779051424087379745
+    second: sweep_203
+  - first:
+      213: 3143644054944657380
+    second: sweep_204
+  - first:
+      213: 3585759529210917477
+    second: sweep_205
+  - first:
+      213: -2184577013615621850
+    second: sweep_206
+  - first:
+      213: 1527568066405601314
+    second: sweep_207
+  - first:
+      213: -941962777369421910
+    second: sweep_208
+  - first:
+      213: 5951409799260973847
+    second: sweep_209
+  - first:
+      213: -4667164869953053792
+    second: sweep_210
+  - first:
+      213: 2820291672340571790
+    second: sweep_211
+  - first:
+      213: 1869497123321980674
+    second: sweep_212
+  - first:
+      213: 3694822198793828748
+    second: sweep_213
+  - first:
+      213: -8342027402579713000
+    second: sweep_214
+  - first:
+      213: -1617952304529867644
+    second: sweep_215
+  - first:
+      213: 791239645844073622
+    second: sweep_216
+  - first:
+      213: -4405823861507422962
+    second: sweep_217
+  - first:
+      213: -4145329802053068105
+    second: sweep_218
+  - first:
+      213: 6971821826570924562
+    second: sweep_219
+  - first:
+      213: -2918015026724016870
+    second: sweep_220
+  - first:
+      213: -2924293404562540055
+    second: sweep_221
+  - first:
+      213: -6278596072746217130
+    second: sweep_222
+  - first:
+      213: -3597536127540479359
+    second: sweep_223
+  - first:
+      213: 3611421112244646967
+    second: sweep_224
+  - first:
+      213: 7356190872137243688
+    second: sweep_225
+  - first:
+      213: -8140208609526221237
+    second: sweep_226
+  - first:
+      213: 6325080726256154608
+    second: sweep_227
+  - first:
+      213: -4563037251591150987
+    second: sweep_228
+  - first:
+      213: 196301424472904035
+    second: sweep_229
+  - first:
+      213: 9207265458470773270
+    second: sweep_230
+  - first:
+      213: 8549694819942868827
+    second: sweep_231
+  - first:
+      213: -7445677013470734000
+    second: sweep_232
+  - first:
+      213: 4816013023952390638
+    second: sweep_233
+  - first:
+      213: -7193324905947065033
+    second: sweep_234
+  - first:
+      213: -6178968156245394390
+    second: sweep_235
+  - first:
+      213: -4828166524671167398
+    second: sweep_236
+  - first:
+      213: -4860306076599434859
+    second: sweep_237
+  - first:
+      213: -2314241140390430170
+    second: sweep_238
+  - first:
+      213: -5455749028725194689
+    second: sweep_239
+  - first:
+      213: 1507427735552950330
+    second: sweep_240
+  - first:
+      213: -1293781083011714546
+    second: sweep_241
+  - first:
+      213: -2593441112918095506
+    second: sweep_242
+  - first:
+      213: -3940582730672053647
+    second: sweep_243
+  - first:
+      213: 4258164942511326258
+    second: sweep_244
+  - first:
+      213: -2092863474304283416
+    second: sweep_245
+  - first:
+      213: 4994671391559393527
+    second: sweep_246
+  - first:
+      213: -4063567424491775303
+    second: sweep_247
+  - first:
+      213: 5849941180736882955
+    second: sweep_248
+  - first:
+      213: -1758574707649554724
+    second: sweep_249
+  - first:
+      213: 8118017294135043523
+    second: sweep_250
+  - first:
+      213: 833505299650251015
+    second: sweep_251
+  - first:
+      213: 4962793871371406592
+    second: sweep_252
+  - first:
+      213: 3056432028075237442
+    second: sweep_253
+  - first:
+      213: 5679179004910968017
+    second: sweep_254
+  - first:
+      213: -9191649223841274349
+    second: sweep_255
+  - first:
+      213: -311620974059968829
+    second: sweep_256
+  - first:
+      213: 2106728379818520178
+    second: sweep_257
+  - first:
+      213: 1649128045474061662
+    second: sweep_258
+  - first:
+      213: 2723389373405367091
+    second: sweep_259
+  - first:
+      213: -629113104772213294
+    second: sweep_260
+  externalObjects: {}
+  serializedVersion: 10
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: sweep_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 464
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdd02b711fcd91370800000000000000
+      internalID: 8293903116822253023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 464
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d1768fdea2259470800000000000000
+      internalID: 8400658814399312337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 464
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53a9bdf24e9c03a10800000000000000
+      internalID: 1887230225760885301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 464
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 807a32dee9f308d20800000000000000
+      internalID: 3278690480541640456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 416
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58c4b476998948640800000000000000
+      internalID: 5081354064211168389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_5
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 416
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22543e936c9bb4ea0800000000000000
+      internalID: -5887407826830932702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_6
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 416
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7953efb42d89ccd0800000000000000
+      internalID: -2537341726068876932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 368
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2891e2398fed9510800000000000000
+      internalID: 1557664418683263023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_8
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 368
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4acd63851ffc3a7e0800000000000000
+      internalID: -1755330794270303068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_9
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 368
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 973181ffab7cad540800000000000000
+      internalID: 5033555139497563001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_10
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 368
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3a0cd66c1abbb350800000000000000
+      internalID: 6033620756940458555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cf3e1d3b58a549a0800000000000000
+      internalID: -6249403798085812287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_12
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 320
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1efc6d75836cc60e0800000000000000
+      internalID: -2275225766434779167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_13
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 320
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adb9d97aa162af800800000000000000
+      internalID: 646871392404216794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_14
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 320
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c8d2d365d11b8b10800000000000000
+      internalID: 1984699668987304131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 272
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2406b357e42e5df00800000000000000
+      internalID: 1141066907210440770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_16
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 272
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec9f462bdd5204870800000000000000
+      internalID: 8664967317171796430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_17
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 272
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c95c83539032e7af0800000000000000
+      internalID: -396841194707434084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_18
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 272
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 701c1f6e573227980800000000000000
+      internalID: -8542726553875660537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_19
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 224
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7721bf02862a7080800000000000000
+      internalID: -9188989749645203586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_20
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 224
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0eda40ec964419840800000000000000
+      internalID: 5229035863572524512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_21
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 224
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78e25508be04b5d10800000000000000
+      internalID: 2115355830195138183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_22
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 224
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a52992a1854fd650800000000000000
+      internalID: 6259798430149322148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 176
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecfb1a3a162090c30800000000000000
+      internalID: 4325991535446441934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_24
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 176
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10a109e968bafa340800000000000000
+      internalID: 4877305516139747841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_25
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 176
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d9cf6965c9e6f130800000000000000
+      internalID: 3600321986216053207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_26
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 176
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9043e92e0e1a4b70800000000000000
+      internalID: 8883946261122859162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_27
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87415b437dd178c50800000000000000
+      internalID: 6667330583484765304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_28
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 128
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 750ac337b0bc52fe0800000000000000
+      internalID: -1214341274468048809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_29
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 128
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0865dccdc0d6e850800000000000000
+      internalID: 6406037102304520206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_30
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 128
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1aea4e5f9be649810800000000000000
+      internalID: 1771162298436857505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_31
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 80
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86a70a748109f5550800000000000000
+      internalID: 6151794049966701160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_32
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 80
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15a728baeff0dc8a0800000000000000
+      internalID: -6283348318638409135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_33
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 80
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3e8990d9ac3bb270800000000000000
+      internalID: 8267268241015541311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_34
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 80
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96cb89be01658f080800000000000000
+      internalID: -9153471611958412183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_35
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad9ab5964042d3520800000000000000
+      internalID: 2683340554348767706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_36
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b66ade5448a01f20800000000000000
+      internalID: 3391395531012597433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_37
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 32
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adb66f39859a4cd00800000000000000
+      internalID: 992104015832968154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sweep_38
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 32
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62f964c7b0cabc530800000000000000
+      internalID: 3876381069612064550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 597610acee9e75e4ab511e37b4c25053
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

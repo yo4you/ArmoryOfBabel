@@ -257,7 +257,7 @@ public static class GrammarUtils
 		translationTable = null;
 		foreach (var match in nodeGraph.NodeDict)
 		{
-			if (MatchNodeGraphInsert(smallest_index, match.Key, ref match_dict, ref nodeGraph.NodeDict, out OrderedDictionary<int, int> translation))
+			if (MatchNodeGraphInsert(smallest_index, match.Key, ref match_dict, nodeGraph.NodeDict, out OrderedDictionary<int, int> translation))
 			{
 				translationTable = translation;
 				return true;
@@ -270,7 +270,7 @@ public static class GrammarUtils
 		int patternGraphIndex,
 		int graphIndex,
 		ref Dictionary<int, Node> patternDict,
-		ref Dictionary<int, Node> graph,
+		Dictionary<int, Node> graph,
 		out OrderedDictionary<int, int> indexTranslation)
 	{
 		indexTranslation = new OrderedDictionary<int, int>();

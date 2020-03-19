@@ -13,11 +13,18 @@ public class PlayerMovement : MonoBehaviour
 	private float _attackDelay;
 
 	private float _attackDelayTimer = 0f;
+	private Vector3 _moveOffset = new Vector3();
 	private Rigidbody2D _rigidBody;
 
 	[SerializeField]
 	[Tooltip("the speed at which the player moves")]
 	private float _speed;
+
+	private void FixedUpdate()
+	{
+		_rigidBody.MovePosition(transform.position + _speed * Time.deltaTime * _moveOffset);
+		_moveOffset = new Vector3();
+	}
 
 	private void RegisterMovementToAnimator(Vector3 moveOffset)
 	{
@@ -33,11 +40,11 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Update()
 	{
-		var moveOffset = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+		var moveInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
 		// ensure that diagonal movement isn't faster than non-diagonal
-		if (moveOffset.magnitude > 1f)
+		if (moveInput.magnitude > 1f)
 		{
-			moveOffset.Normalize();
+			moveInput.Normalize();
 		}
 
 		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
@@ -46,13 +53,12 @@ public class PlayerMovement : MonoBehaviour
 			if (_attackDelayTimer > 0f)
 			{
 				_attackDelayTimer -= Time.deltaTime;
-				RegisterMovementToAnimator(moveOffset);
+				RegisterMovementToAnimator(moveInput);
 			}
 			return;
 		}
 		_attackDelayTimer = _attackDelay;
-		RegisterMovementToAnimator(moveOffset);
-
-		_rigidBody.MovePosition(transform.position + _speed * Time.deltaTime * moveOffset);
+		RegisterMovementToAnimator(moveInput);
+		_moveOffset = moveInput;
 	}
 }
