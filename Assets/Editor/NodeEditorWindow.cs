@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -6,11 +7,33 @@ using UnityEngine;
 /// </summary>
 public class NodeEditorWindow : EditorWindow
 {
+	private readonly Dictionary<string, string> _addNodeOptions = new Dictionary<string, string>()
+	{
+		{ "Input/ A Button", "A"},
+		{ "Input/ B Button", "B"},
+		{ "Input/ X Button", "X"},
+		{ "Input/ Hold A Button", "AH"},
+		{ "Input/ Hold B Button", "BH"},
+		{ "Input/ Hold X Button", "XH"},
+		{ "Output/ Activator", "OUT"},
+		{ "Output/ Property Damage", "DMG"},
+		{ "Output/ Property Speed", "SPD"},
+		{ "Output/ Property Type", "TYPE"},
+		{ "Hit Response", "HIT"},
+		{ "Logic Gate/ And", "AND"},
+		{ "Logic Gate/ Or", "OR"},
+		{ "Logic Gate/ Not", "NOT"},
+		{ "UI/ Element", "UI"},
+		{ "UI/ Element Capacity", "UIC"},
+		{ "UI/ Treshold Input", "VAL"},
+		{ "Addition Multiplication Value", "VAL"},
+		{ "Delta Time Value", "DT"},
+	};
+
 	private readonly float _zoomMax = 10f;
 	private readonly float _zoomSpeed = 0.1f;
 	private WindowState _currentState = WindowState.SELECTED;
 	private NodeGraph _nodegraph;
-
 	private bool _repaint;
 
 	/// <summary>
@@ -106,13 +129,13 @@ public class NodeEditorWindow : EditorWindow
 		_currentState = WindowState.CLICKED;
 	}
 
-	private void OnClickAddNode(Vector2 mousePosition)
+	private void OnClickAddNode(Vector2 mousePosition, string text)
 	{
 		Changed = true;
 		Nodegraph.AddNode(new Node()
 		{
 			Pos = mousePosition,
-			Node_text = "b"
+			Node_text = text
 		});
 	}
 
@@ -221,7 +244,11 @@ public class NodeEditorWindow : EditorWindow
 			}
 			else
 			{
-				emptyClickMenu.AddItem(new GUIContent("Add node"), false, () => OnClickAddNode(mousePosition));
+				emptyClickMenu.AddItem(new GUIContent("Generic Node"), false, () => OnClickAddNode(mousePosition, "S"));
+				foreach (var menuOption in _addNodeOptions)
+				{
+					emptyClickMenu.AddItem(new GUIContent(menuOption.Key), false, () => OnClickAddNode(mousePosition, menuOption.Value));
+				}
 			}
 			emptyClickMenu.ShowAsContext();
 		}
