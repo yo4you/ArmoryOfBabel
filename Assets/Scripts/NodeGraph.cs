@@ -28,6 +28,8 @@ public class NodeGraph : ICloneable
 	// TODO don't hardcode this
 	private const int _nodeSize = 100;
 
+	public Dictionary<int, Node> NodeDict { get => _nodeDict; set => _nodeDict = value; }
+
 	public static explicit operator NodeGraph(Serializable_NodeGraph v)
 	{
 		var dict = new Dictionary<int, Node>();
@@ -38,7 +40,7 @@ public class NodeGraph : ICloneable
 
 		return new NodeGraph()
 		{
-			_nodeDict = dict,
+			NodeDict = dict,
 			_lastId = v.lastID
 		};
 	}
@@ -50,7 +52,7 @@ public class NodeGraph : ICloneable
 	/// <returns></returns>
 	public int AddNode(Node node)
 	{
-		_nodeDict[_lastId] = node;
+		NodeDict[_lastId] = node;
 		_lastId++;
 		return _lastId - 1;
 	}
@@ -68,9 +70,9 @@ public class NodeGraph : ICloneable
 	/// <param name="nodeId1"></param>
 	public void Connect(int nodeId0, int nodeId1)
 	{
-		if (nodeId0 != nodeId1 && !_nodeDict[nodeId0].ConnectedNodes.Contains(nodeId1))
+		if (nodeId0 != nodeId1 && !NodeDict[nodeId0].ConnectedNodes.Contains(nodeId1))
 		{
-			_nodeDict[nodeId0].ConnectedNodes.Add(nodeId1);
+			NodeDict[nodeId0].ConnectedNodes.Add(nodeId1);
 		}
 	}
 
@@ -94,13 +96,13 @@ public class NodeGraph : ICloneable
 	public void Delete(Node node)
 	{
 		Disconnect(node);
-		_nodeDict.Remove(GetIdFromNode(node));
+		NodeDict.Remove(GetIdFromNode(node));
 	}
 
 	public void Disconnect(Node disconnect_node)
 	{
 		var id = GetIdFromNode(disconnect_node);
-		foreach (var node in _nodeDict)
+		foreach (var node in NodeDict)
 		{
 			if (node.Value.ConnectedNodes.Contains(id))
 			{
@@ -115,7 +117,7 @@ public class NodeGraph : ICloneable
 	public void Draw(float scale)
 	{
 		// we draw the connections first so they render under the nodes
-		foreach (var item in _nodeDict)
+		foreach (var item in NodeDict)
 		{
 			if (item.Value == null)
 			{
@@ -125,7 +127,7 @@ public class NodeGraph : ICloneable
 		}
 
 		// then draw the nodes
-		foreach (var item in _nodeDict)
+		foreach (var item in NodeDict)
 		{
 			if (item.Value == null)
 			{
@@ -137,7 +139,7 @@ public class NodeGraph : ICloneable
 
 	public int GetIdFromNode(Node node0)
 	{
-		return _nodeDict.FirstOrDefault(kv => kv.Value == node0).Key;
+		return NodeDict.FirstOrDefault(kv => kv.Value == node0).Key;
 	}
 
 	/// <summary>
@@ -147,7 +149,7 @@ public class NodeGraph : ICloneable
 	/// <returns></returns>
 	public Node GetNodeUnderPosition(Vector2 mousePosition)
 	{
-		foreach (var item in _nodeDict)
+		foreach (var item in NodeDict)
 		{
 			if (item.Value != null)
 			{
@@ -166,7 +168,7 @@ public class NodeGraph : ICloneable
 	/// <param name="offset">amount to move by</param>
 	public void Offset(Vector2 offset)
 	{
-		foreach (var item in _nodeDict)
+		foreach (var item in NodeDict)
 		{
 			if (item.Value != null)
 			{
@@ -177,7 +179,7 @@ public class NodeGraph : ICloneable
 
 	internal void Modify(int nodeID, string newName)
 	{
-		if (_nodeDict.TryGetValue(nodeID, out Node node))
+		if (NodeDict.TryGetValue(nodeID, out Node node))
 		{
 			node.Node_text = newName;
 		}
@@ -191,7 +193,7 @@ public class NodeGraph : ICloneable
 	{
 		foreach (var connection in node.ConnectedNodes)
 		{
-			if (_nodeDict.TryGetValue(connection, out Node connectedNode) && connectedNode != null)
+			if (NodeDict.TryGetValue(connection, out Node connectedNode) && connectedNode != null)
 			{
 				// we add the margin because the nodes are rounded
 				var start = (node.Pos + new Vector2(_nodeSize - _nodeMargin, _nodeSize * 0.5f)) * scale;

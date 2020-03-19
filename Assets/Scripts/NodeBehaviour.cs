@@ -11,7 +11,7 @@ public static class NodeBehaviour
 		}
 		node.Active = true;
 		int id = graph.GetIdFromNode(node);
-		foreach (var potentialConnection in graph._nodeDict)
+		foreach (var potentialConnection in graph.NodeDict)
 		{
 			if (potentialConnection.Value.ConnectedNodes.Contains(id))
 			{
@@ -55,7 +55,7 @@ public static class NodeBehaviour
 		node.Active = false;
 		foreach (var connection in node.ConnectedNodes)
 		{
-			if (graph._nodeDict[connection].Active)
+			if (graph.NodeDict[connection].Active)
 			{
 				node.Active = true;
 				return;
@@ -81,7 +81,7 @@ public static class NodeBehaviour
 		var spd = 1f;
 		var dmg = 1f;
 		var type = 0f;
-		foreach (var potentialAffector in graph._nodeDict)
+		foreach (var potentialAffector in graph.NodeDict)
 		{
 			if (!potentialAffector.Value.ConnectedNodes.Contains(id))
 			{

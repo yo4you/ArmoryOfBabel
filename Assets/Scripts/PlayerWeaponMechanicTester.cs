@@ -56,7 +56,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		});
 
 		_mechanicGraph = GrammarUtils.ApplyNodeGrammars("S", ref grammars, inputGraph);
-		foreach (var node in _mechanicGraph._nodeDict)
+		foreach (var node in _mechanicGraph.NodeDict)
 		{
 			var nodeText = node.Value.Node_text;
 			if (_inputDefenitions.TryGetValue(nodeText, out KeyCode keycode))
@@ -78,9 +78,9 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 						_uiNodes.Add(node.Value);
 						foreach (var connection in node.Value.ConnectedNodes)
 						{
-							if (_mechanicGraph._nodeDict[connection].Node_text == "VAL")
+							if (_mechanicGraph.NodeDict[connection].Node_text == "VAL")
 							{
-								_mechanicGraph._nodeDict[connection].Node_text = "TRESH";
+								_mechanicGraph.NodeDict[connection].Node_text = "TRESH";
 							}
 						}
 
@@ -89,7 +89,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 				case "UIC":
 					foreach (var connectedNodeID in node.Value.ConnectedNodes)
 					{
-						var connectedNode = _mechanicGraph._nodeDict[connectedNodeID];
+						var connectedNode = _mechanicGraph.NodeDict[connectedNodeID];
 						if (connectedNode.Node_text == "UI")
 						{
 							_uiNodeCaps.Add(connectedNode, node.Value);
@@ -115,7 +115,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{
 			foreach (var connection in node.ConnectedNodes)
 			{
-				SetNodeActivity(node, _mechanicGraph._nodeDict[connection], state);
+				SetNodeActivity(node, _mechanicGraph.NodeDict[connection], state);
 			}
 		}
 	}

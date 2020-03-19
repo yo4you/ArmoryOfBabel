@@ -103,12 +103,12 @@ public static class GrammarUtils
 	private static void AddMissingNodes(NodeGrammar rule, ref NodeGraph nodeGraph, ref OrderedDictionary<int, int> translationTable)
 	{
 		// we use the first node as a refrence point to offset the positions
-		Node node0RH = rule.RightHand._nodeDict.First().Value;
-		Node node0Graph = nodeGraph._nodeDict[translationTable.First().Value];
+		Node node0RH = rule.RightHand.NodeDict.First().Value;
+		Node node0Graph = nodeGraph.NodeDict[translationTable.First().Value];
 		// add all new nodes created by the rule and give them the proper index
-		foreach (var rhNode in rule.RightHand._nodeDict)
+		foreach (var rhNode in rule.RightHand.NodeDict)
 		{
-			if (!rule.LeftHand._nodeDict.ContainsKey(rhNode.Key))
+			if (!rule.LeftHand.NodeDict.ContainsKey(rhNode.Key))
 			{
 				var newNode = new Node()
 				{
@@ -130,8 +130,8 @@ public static class GrammarUtils
 
 		foreach (var translation in translationTable)
 		{
-			var node = nodeGraph._nodeDict[translation.Value];
-			if (rule.RightHand._nodeDict.TryGetValue(translation.Key, out Node replacementNode))
+			var node = nodeGraph.NodeDict[translation.Value];
+			if (rule.RightHand.NodeDict.TryGetValue(translation.Key, out Node replacementNode))
 			{
 				node.Node_text = replacementNode.Node_text;
 				node.Value = replacementNode.Value;
@@ -251,13 +251,13 @@ public static class GrammarUtils
 
 	private static bool IsNodeRoleApplicable(NodeGrammar rule, ref NodeGraph nodeGraph, out OrderedDictionary<int, int> translationTable)
 	{
-		var match_dict = rule.LeftHand._nodeDict;
+		var match_dict = rule.LeftHand.NodeDict;
 		var smallest_index = match_dict.Keys.Min();
 		var first_node = match_dict[smallest_index].Node_text;
 		translationTable = null;
-		foreach (var match in nodeGraph._nodeDict)
+		foreach (var match in nodeGraph.NodeDict)
 		{
-			if (MatchNodeGraphInsert(smallest_index, match.Key, ref match_dict, ref nodeGraph._nodeDict, out OrderedDictionary<int, int> translation))
+			if (MatchNodeGraphInsert(smallest_index, match.Key, ref match_dict, ref nodeGraph.NodeDict, out OrderedDictionary<int, int> translation))
 			{
 				translationTable = translation;
 				return true;

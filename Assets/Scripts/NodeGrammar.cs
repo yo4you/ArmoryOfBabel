@@ -91,8 +91,8 @@ public class Serializable_NodeGraph
 	{
 		return new Serializable_NodeGraph()
 		{
-			Keys = v._nodeDict.Keys.ToList(),
-			Values = v._nodeDict.Values.ToList(),
+			Keys = v.NodeDict.Keys.ToList(),
+			Values = v.NodeDict.Values.ToList(),
 			lastID = v._lastId
 		};
 	}
