@@ -16,8 +16,8 @@ TagManager:
   - Player
   - Enemy
   - EnemyProjectile
-  - 
-  - 
+  - Holes
+  - PlayerProjectile
   - 
   - 
   - 

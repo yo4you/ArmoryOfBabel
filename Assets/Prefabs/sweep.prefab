@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8864878955433026463}
   - component: {fileID: 1410214371633892174}
   - component: {fileID: -2894335685359055395}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: sweep
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 99
   m_Sprite: {fileID: 8293903116822253023, guid: 11c12a0cd4e8d2e4b9ccb8034bcfa873,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

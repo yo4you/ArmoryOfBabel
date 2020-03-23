@@ -53,7 +53,6 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{
 			_callBackNodes.Add(list[callbacknodeIndex].Activatee);
 			list.RemoveAt(callbacknodeIndex);
-			Debug.Log("callback on");
 		}
 		NodeBehaviour.Callbacks = new Stack<NodeActivationCallBack>(list);
 	}

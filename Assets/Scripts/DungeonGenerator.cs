@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SAP2D;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -24,12 +26,21 @@ public class DungeonGenerator : MonoBehaviour
 	[Tooltip("the maximum amount of times the system will try to spawn these rooms")]
 	private int _maxSpawnTries = 100;
 
+	private SAP2DPathfinder _pathFinder;
+	[SerializeField] private LayerMask _pathFindingLayerMask;
+
 	[SerializeField]
 	[Tooltip("prefabs we're using to spawn the dungeon out of")]
 	private GameObject[] _prefabs;
 
 	// stores all the rooms we've already spawned
 	private Dictionary<Vector2Int, GameObject> _roomGrid = new Dictionary<Vector2Int, GameObject>();
+
+	public IEnumerator StartColliderCalc()
+	{
+		yield return new WaitForFixedUpdate();
+		_pathFinder.CalculateColliders();
+	}
 
 	/// <summary>
 	/// Creates doorways connecting the adjacent rooms to the ones at the cursor position
@@ -57,7 +68,8 @@ public class DungeonGenerator : MonoBehaviour
 		var cellSize = GetComponent<Grid>().cellSize;
 		// the "cursor" is where we are in the dungeon while we're generating it, ensuring each new room is connected to the last
 		var cursor = new Vector2Int();
-
+		var min = new Vector2Int(99999, 99999);
+		var max = new Vector2Int(-99999, -99999);
 		// iterate trough our tries so the dungeon generator doesn't halt
 		for (int i = 0; i < _maxSpawnTries; i++)
 		{
@@ -75,7 +87,6 @@ public class DungeonGenerator : MonoBehaviour
 				}
 				// contains refrences in the prefab so we can identify the doors/walls and disable them as needed
 				var roomData = go.GetComponent<RoomDataIdentifier>();
-
 				Vector3 size = roomData.GetWallSize();
 				// the position in worldspace our new room should be generated at
 				Vector3 pos = new Vector3(
@@ -89,9 +100,34 @@ public class DungeonGenerator : MonoBehaviour
 
 			if (_roomGrid.Count > _maxRooms)
 			{
-				return;
+				break;
 			}
 			cursor += cursor_offset;
 		}
+		UpdatePathFinderData(cellSize);
+	}
+
+	private void UpdatePathFinderData(Vector3 cellSize)
+	{
+		List<Vector3> minimums = new List<Vector3>();
+		List<Vector3> maximum = new List<Vector3>();
+		foreach (var tilemap in FindObjectsOfType<Tilemap>())
+		{
+			tilemap.CompressBounds();
+			minimums.Add(tilemap.CellToWorld(tilemap.cellBounds.min));
+			maximum.Add(tilemap.CellToWorld(tilemap.cellBounds.max));
+		}
+		var minBound = MathUtils.MinBound(minimums.ToArray());
+		var maxBound = MathUtils.MaxBound(maximum.ToArray());
+
+		var sizeInCells = (maxBound - minBound) / cellSize.x;
+		_pathFinder = FindObjectOfType<SAP2DPathfinder>();
+		_pathFinder.RemoveGrid(_pathFinder.GetGrid(0));
+		_pathFinder.AddGrid((int)sizeInCells.x, (int)sizeInCells.y);
+		var pfGrid = _pathFinder.GetGrid(0);
+		pfGrid.Position = minBound;
+		pfGrid.ObstaclesLayer = _pathFindingLayerMask;
+		pfGrid.TileDiameter = cellSize.x;
+		StartCoroutine(StartColliderCalc());
 	}
 }

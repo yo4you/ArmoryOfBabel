@@ -93,10 +93,7 @@ public class BindCameraToTileMap : MonoBehaviour
 		{
 			// tilemaps come with a bunch of empty space, this will ensure the bounds we get are wrapped tightly
 			tilemap.CompressBounds();
-		}
 
-		foreach (var tilemap in TileMaps)
-		{
 			minimums.Add(tilemap.CellToWorld(tilemap.cellBounds.min));
 			maximum.Add(tilemap.CellToWorld(tilemap.cellBounds.max));
 		}
