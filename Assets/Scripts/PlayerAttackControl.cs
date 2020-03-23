@@ -9,10 +9,46 @@ public class PlayerAttackControl : MonoBehaviour
 	private Animator _animator;
 	[SerializeField] private Vector3 _offset;
 	[SerializeField] private ProjectileBehaviour _projectilePrefab;
-	[SerializeField] private GameObject _slashPrefab;
-	[SerializeField] private GameObject _sweepPrefab;
+	[SerializeField] private float _projectileSpeed;
+	private PlayerWeaponMechanicTester _pwmTester;
+	[SerializeField] private SweepBehaviour _slashPrefab;
+	[SerializeField] private SweepBehaviour _sweepPrefab;
 
-	public IEnumerator StartMeleeAttack(GameObject prefab)
+	public bool ProccessNode(float speed, float damage, int type, Node node)
+	{
+		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+		{
+			return false;
+		}
+		_animator.speed = speed;
+		switch (type)
+		{
+			case 0:
+				// TODO power anim
+				break;
+
+			case 1:
+				_animator.Play("light_hit");
+				StartCoroutine(StartProjectileAttack(_projectilePrefab, speed, damage, node));
+				break;
+
+			case 2:
+				_animator.Play("light_hit");
+				StartCoroutine(StartMeleeAttack(_slashPrefab, speed, damage, node));
+				break;
+
+			case 3:
+				_animator.Play("heavy_hit");
+				StartCoroutine(StartMeleeAttack(_sweepPrefab, speed, damage, node));
+				break;
+
+			default:
+				break;
+		}
+		return true;
+	}
+
+	public IEnumerator StartMeleeAttack(SweepBehaviour prefab, float speed, float damage, Node node)
 	{
 		yield return new WaitForFixedUpdate();
 
@@ -22,41 +58,39 @@ public class PlayerAttackControl : MonoBehaviour
 		float angle = 180f + MathUtils.RoundAngleToDirection(Vector2.SignedAngle(Vector2.right, direction));
 		var quat = Quaternion.Euler(0, 0, angle);
 		var offset = quat * _offset;
-		Instantiate(prefab, transform.position + offset, quat);
+		var hitbox = Instantiate(prefab, transform.position + offset, quat);
+		hitbox.GetComponent<Animator>().speed = speed;
+		hitbox.Damage = damage;
+		hitbox.PWM_Tester = _pwmTester;
+		hitbox.GeneratingNode = node;
 	}
 
-	public IEnumerator StartProjectileAttack(ProjectileBehaviour prefab)
+	public IEnumerator StartProjectileAttack(ProjectileBehaviour prefab, float speed, float damage, Node node)
 	{
 		yield return new WaitForFixedUpdate();
 
 		var direction = new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y"));
 		direction.Normalize();
 
-		Instantiate<ProjectileBehaviour>(prefab, transform.position, new Quaternion());
+		var projectile = Instantiate<ProjectileBehaviour>(prefab, transform.position, new Quaternion());
+		projectile.GetComponent<Animator>().speed = speed;
+		projectile.MoveDir = direction * _projectileSpeed;
+		projectile.Damage = damage;
+		projectile.PWM_Tester = _pwmTester;
+		projectile.GeneratingNode = node;
+	}
+
+	private void LateUpdate()
+	{
+		if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+		{
+			_animator.speed = 1;
+		}
 	}
 
 	private void Start()
 	{
 		_animator = GetComponent<Animator>();
-	}
-
-	private void Update()
-	{
-		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
-		{
-			return;
-		}
-
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			_animator.Play("light_hit");
-			//StartCoroutine(StartMeleeAttack(_slashPrefab));
-			StartCoroutine(StartProjectileAttack(_projectilePrefab));
-		}
-		else if (Input.GetKeyDown(KeyCode.LeftControl))
-		{
-			_animator.Play("heavy_hit");
-			StartCoroutine(StartMeleeAttack(_sweepPrefab));
-		}
+		_pwmTester = GetComponent<PlayerWeaponMechanicTester>();
 	}
 }

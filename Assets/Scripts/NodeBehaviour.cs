@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 
 public static class NodeBehaviour
 {
+	public static Stack<NodeActivationCallBack> Callbacks { get; set; } = new Stack<NodeActivationCallBack>();
+	public static PlayerAttackControl PlayerAttacks { get; internal set; }
+
 	public static void SetState_AndNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
 	{
 		if (!state)
@@ -31,9 +34,17 @@ public static class NodeBehaviour
 
 	public static void SetState_HitNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
 	{
-		if (state)
+		if (prevNode == null)
 		{
-			Debug.Log("created projectile callback");
+			node.Active = state;
+		}
+		else if (state)
+		{
+			if (Callbacks.Peek().Activatee == null)
+			{
+				Callbacks.Peek().Activatee = node;
+			}
+			//Debug.Log("created projectile callback");
 		}
 	}
 
@@ -105,8 +116,12 @@ public static class NodeBehaviour
 					continue;
 			}
 		}
-
-		Debug.Log($"pew projectile spd:{spd} dmg:{dmg} type:{type}");
+		node.Active = PlayerAttacks.ProccessNode(spd, dmg, (int)type, node);
+		if (Callbacks.Peek().Activator == null)
+		{
+			Callbacks.Peek().Activator = node;
+		}
+		//Debug.Log($"pew projectile spd:{spd} dmg:{dmg} type:{type}");
 	}
 
 	public static void SetState_UINode(Node prevNode, Node node, ref NodeGraph graph, bool state)

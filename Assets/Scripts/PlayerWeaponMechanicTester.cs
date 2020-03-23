@@ -21,24 +21,42 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{ "HIT",    NodeBehaviour.SetState_HitNode},
 		{ "DMG",    NodeBehaviour.SetState_ValNode},
 		{ "SPD",    NodeBehaviour.SetState_ValNode},
-		{ "TRESH",    NodeBehaviour.SetState_TreshNode},
-		{ "DT",    NodeBehaviour.SetState_ValNode},
+		{ "TRESH",  NodeBehaviour.SetState_TreshNode},
+		{ "DT",     NodeBehaviour.SetState_ValNode},
 		{ "GENERIC",NodeBehaviour.SetState_GenericNode},
 	};
 
+	private List<Node> _callBackNodes = new List<Node>();
 	private Dictionary<KeyCode, Node> _inputNodes = new Dictionary<KeyCode, Node>();
 
 	[SerializeField] private string _mechanicGrammarName;
 
 	private NodeGraph _mechanicGraph;
+
 	private List<Node> _notNodes = new List<Node>();
 
 	private List<Node> _timeNodes = new List<Node>();
+
 	private ChargeBarBehaviour[] _uiBars;
+
 	private Dictionary<Node, Node> _uiNodeCaps;
+
 	private List<Node> _uiNodes = new List<Node>();
 
 	private delegate void NodeHandleDelegate(Node prevNode, Node node, ref NodeGraph graph, bool state);
+
+	internal void CollisionCallback(Node generatingNode)
+	{
+		var list = new List<NodeActivationCallBack>(NodeBehaviour.Callbacks);
+		var callbacknodeIndex = list.FindLastIndex(i => i.Activator == generatingNode);
+		if (callbacknodeIndex != -1)
+		{
+			_callBackNodes.Add(list[callbacknodeIndex].Activatee);
+			list.RemoveAt(callbacknodeIndex);
+			Debug.Log("callback on");
+		}
+		NodeBehaviour.Callbacks = new Stack<NodeActivationCallBack>(list);
+	}
 
 	private void LoadMechanicGraph()
 	{
@@ -128,6 +146,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{
 			_uiBars[Index].gameObject.SetActive(false);
 		}
+		NodeBehaviour.PlayerAttacks = FindObjectOfType<PlayerAttackControl>();
 	}
 
 	private void Update()
@@ -136,6 +155,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{
 			LoadMechanicGraph();
 		}
+
 		foreach (var dtNode in _timeNodes)
 		{
 			dtNode.Value = Time.deltaTime;
@@ -144,6 +164,11 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		foreach (var notNode in _notNodes)
 		{
 			notNode.Active = true;
+		}
+
+		foreach (var callbackNodes in _callBackNodes)
+		{
+			SetNodeActivity(null, callbackNodes, true);
 		}
 
 		for (int i = 0; i < _uiNodes.Count; i++)
@@ -171,9 +196,15 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 		foreach (var input in _inputNodes)
 		{
+			NodeBehaviour.Callbacks.Push(new NodeActivationCallBack(null, null));
 			if (Input.GetKeyDown(input.Key))
 			{
 				SetNodeActivity(null, input.Value, true);
+			}
+			var callback = NodeBehaviour.Callbacks.Peek();
+			if (callback.Activatee == null || callback.Activator == null)
+			{
+				NodeBehaviour.Callbacks.Pop();
 			}
 		}
 		foreach (var notNode in _notNodes)
@@ -185,9 +216,16 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{
 			SetNodeActivity(null, input.Value, false);
 		}
+
+		foreach (var callbackNodes in _callBackNodes)
+		{
+			SetNodeActivity(null, callbackNodes, false);
+		}
+
 		foreach (var uiNode in _uiNodes)
 		{
 			SetNodeActivity(uiNode, uiNode, false);
 		}
+		_callBackNodes = new List<Node>();
 	}
 }

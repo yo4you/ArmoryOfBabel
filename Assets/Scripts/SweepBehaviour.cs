@@ -1,13 +1,3 @@
-﻿using UnityEngine;
-
-public class SweepBehaviour : MonoBehaviour
+﻿public class SweepBehaviour : HitBoxBehaviour
 {
-	public void AnimationOver()
-	{
-		Destroy(gameObject);
-	}
-
-	private void OnCollisionEnter2D(Collision2D collision)
-	{
-	}
 }
