@@ -19,6 +19,9 @@ public class DungeonGenerator : MonoBehaviour
 	};
 
 	[SerializeField]
+	private GameObject[] _enemyPrefabs;
+
+	[SerializeField]
 	[Tooltip("the maximum amount of times the prefabs will be spawned")]
 	private int _maxRooms = 10;
 
@@ -28,6 +31,8 @@ public class DungeonGenerator : MonoBehaviour
 
 	private SAP2DPathfinder _pathFinder;
 	[SerializeField] private LayerMask _pathFindingLayerMask;
+
+	private Transform _player;
 
 	[SerializeField]
 	[Tooltip("prefabs we're using to spawn the dungeon out of")]
@@ -52,18 +57,33 @@ public class DungeonGenerator : MonoBehaviour
 		for (int i = 0; i < _directions.Length; i++)
 		{
 			// if there's a room adjacent to our room break down the doorway in that direction
-			if (_roomGrid.TryGetValue(cursor + _directions[i], out GameObject go))
+			if (_roomGrid.TryGetValue(cursor + _directions[i], out GameObject adjenctRoom))
 			{
-				_roomGrid[cursor].GetComponent<RoomDataIdentifier>().Doorways[i].SetActive(false);
-				// get the adjacent room and break down the opposite facing doorway in that room
-				var ids = go.GetComponent<RoomDataIdentifier>();
-				ids.Doorways[(i + 2) % 4].SetActive(false);
+				//_roomGrid[cursor].GetComponent<RoomDataIdentifier>().Doorways[i].SetActive(false);
+
+				var adjenctRoomPop = adjenctRoom.GetComponent<RoomPopulator>();
+
+				var ids = adjenctRoom.GetComponent<RoomDataIdentifier>();
+				//ids.Doorways[(i + 2) % 4].SetActive(false);
+				if (adjenctRoomPop)
+				{
+					adjenctRoomPop.DoorsToOpen.Add(ids.Doorways[(i + 2) % 4]);
+				}
+
+				var Roompop = _roomGrid[cursor].GetComponent<RoomPopulator>();
+				if (Roompop)
+				{
+					Roompop.DoorsToOpen.Add(_roomGrid[cursor].GetComponent<RoomDataIdentifier>().Doorways[i]);
+					Roompop.DoorsToOpen.Add(ids.Doorways[(i + 2) % 4]);
+				}
 			}
 		}
 	}
 
 	private void Start()
 	{
+		_pathFinder = FindObjectOfType<SAP2DPathfinder>();
+		_player = FindObjectOfType<PlayerMovement>().gameObject.transform;
 		// the scale of individual cells
 		var cellSize = GetComponent<Grid>().cellSize;
 		// the "cursor" is where we are in the dungeon while we're generating it, ensuring each new room is connected to the last
@@ -88,14 +108,28 @@ public class DungeonGenerator : MonoBehaviour
 				// contains refrences in the prefab so we can identify the doors/walls and disable them as needed
 				var roomData = go.GetComponent<RoomDataIdentifier>();
 				Vector3 size = roomData.GetWallSize();
+				size.z = 100f;
 				// the position in worldspace our new room should be generated at
 				Vector3 pos = new Vector3(
 					size.x * cellSize.x * cursor.x,
 					size.y * cellSize.y * cursor.y,
 					0);
+
 				go.transform.position = pos;
+				var roomPop = go.AddComponent<RoomPopulator>();
+				roomPop.Player = _player;
+				var bounds = roomData.GetBounds();
+				bounds.center += pos;
+				var extends = bounds.extents;
+				extends.z = 100;
+				bounds.extents = extends;
+				roomPop.Bounds = bounds;
+				roomPop.PathFinder = _pathFinder;
+
+				var enemy = Instantiate(_enemyPrefabs[0], bounds.center, new Quaternion());
+				roomPop.Enemies.Add(enemy);
+				enemy.SetActive(false);
 				_roomGrid.Add(cursor, go);
-				CreateDoorWaysAtPosition(cursor);
 			}
 
 			if (_roomGrid.Count > _maxRooms)
@@ -104,6 +138,11 @@ public class DungeonGenerator : MonoBehaviour
 			}
 			cursor += cursor_offset;
 		}
+		foreach (var gridPoint in _roomGrid)
+		{
+			CreateDoorWaysAtPosition(gridPoint.Key);
+		}
+
 		UpdatePathFinderData(cellSize);
 	}
 
@@ -121,7 +160,6 @@ public class DungeonGenerator : MonoBehaviour
 		var maxBound = MathUtils.MaxBound(maximum.ToArray());
 
 		var sizeInCells = (maxBound - minBound) / cellSize.x;
-		_pathFinder = FindObjectOfType<SAP2DPathfinder>();
 		_pathFinder.RemoveGrid(_pathFinder.GetGrid(0));
 		_pathFinder.AddGrid((int)sizeInCells.x, (int)sizeInCells.y);
 		var pfGrid = _pathFinder.GetGrid(0);

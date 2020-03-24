@@ -21,6 +21,13 @@ public class RoomDataIdentifier : MonoBehaviour
 
 	public GameObject[] Doorways => _doorways;
 
+	public Bounds GetBounds()
+	{
+		var tilemap = _walls.GetComponent<Tilemap>();
+		tilemap.CompressBounds();
+		return tilemap.localBounds;
+	}
+
 	/// <summary>
 	/// compresses the bounds and returns the actual size of the collider part of this prefab
 	/// </summary>
