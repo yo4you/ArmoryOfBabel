@@ -13,7 +13,7 @@ internal class RoomPopulator : MonoBehaviour
 	public Bounds Bounds { get; set; }
 	public List<GameObject> DoorsToOpen { get; set; } = new List<GameObject>();
 
-	public List<GameObject> Enemies { get; set; } = new List<GameObject>();
+	public List<SAP2DAgent> Enemies { get; set; } = new List<SAP2DAgent>();
 
 	public SAP2DPathfinder PathFinder { get; internal set; }
 	public Transform Player { get; set; }
@@ -54,11 +54,16 @@ internal class RoomPopulator : MonoBehaviour
 		}
 		else if (_activated && containsPlayer)
 		{
+			foreach (var enemy in Enemies)
+			{
+				enemy.CanMove = true;
+				enemy.CanSearch = true;
+			}
 			_enemyCounter.SetVisible(true);
-			_enemyCounter.SetTally(Enemies.Count(e => e.activeSelf), Enemies.Count);
+			_enemyCounter.SetTally(Enemies.Count(e => e.gameObject.activeSelf), Enemies.Count);
 		}
 
-		if (_activated && (!Enemies.Any(i => i.activeSelf)))
+		if (_activated && (!Enemies.Any(i => i.gameObject.activeSelf)))
 		{
 			_enemyCounter.SetVisible(false);
 			OpenDoors();
@@ -70,12 +75,18 @@ internal class RoomPopulator : MonoBehaviour
 		_activated = true;
 		foreach (var enemy in Enemies)
 		{
-			enemy.SetActive(true);
+			enemy.gameObject.SetActive(true);
+			enemy.Target = Player;
 		}
 	}
 
 	private void DeActivateAI()
 	{
+		foreach (var enemy in Enemies)
+		{
+			enemy.CanMove = false;
+			enemy.CanSearch = false;
+		}
 	}
 
 	private void Start()
