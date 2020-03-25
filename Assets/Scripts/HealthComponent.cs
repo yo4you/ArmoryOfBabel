@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 
-internal class HealthComponent : MonoBehaviour
+public class HealthComponent : MonoBehaviour
 {
 	[SerializeField]
 	private float _startingHP;
 
+	private UIHealthBarManager _uiManager;
 	public float HP { get; set; }
 	public bool IsPlayer { get; set; }
+	public float StartingHP => _startingHP;
 
 	internal void Hit(float damage)
 	{
@@ -29,6 +31,11 @@ internal class HealthComponent : MonoBehaviour
 		}
 	}
 
+	private void OnDestroy()
+	{
+		_uiManager?.DeallocateElement(this);
+	}
+
 	private void RenderUIElement()
 	{
 		//TODO
@@ -36,7 +43,9 @@ internal class HealthComponent : MonoBehaviour
 
 	private void Start()
 	{
-		HP = _startingHP;
+		HP = StartingHP;
+		_uiManager = FindObjectOfType<UIHealthBarManager>();
+		_uiManager.AllocateElement(this);
 	}
 
 	private void Update()

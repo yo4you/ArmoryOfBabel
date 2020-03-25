@@ -37,7 +37,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private List<Node> _timeNodes = new List<Node>();
 
-	private ChargeBarBehaviour[] _uiBars;
+	private List<ChargeBarBehaviour> _uiBars = new List<ChargeBarBehaviour>();
 
 	private Dictionary<Node, Node> _uiNodeCaps;
 
@@ -139,9 +139,15 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private void Start()
 	{
-		_uiBars = FindObjectsOfType<ChargeBarBehaviour>();
+		foreach (var chargebar in FindObjectsOfType<ChargeBarBehaviour>())
+		{
+			if (chargebar.UsedForWeaponMechanics)
+			{
+				_uiBars.Add(chargebar);
+			}
+		}
 		LoadMechanicGraph();
-		for (int Index = _uiBars.Length - 1; Index >= _uiNodes.Count; Index--)
+		for (int Index = _uiBars.Count - 1; Index >= _uiNodes.Count; Index--)
 		{
 			_uiBars[Index].gameObject.SetActive(false);
 		}

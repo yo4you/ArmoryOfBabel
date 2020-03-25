@@ -3,7 +3,11 @@
 public class ChargeBarBehaviour : MonoBehaviour
 {
 	private RectTransform _bar;
+
 	private float _progressPercentage;
+
+	[SerializeField]
+	private bool _usedForWeaponMechanics;
 
 	public float ProgressPercentage
 	{
@@ -15,6 +19,8 @@ public class ChargeBarBehaviour : MonoBehaviour
 			_bar.localPosition = newpos;
 		}
 	}
+
+	public bool UsedForWeaponMechanics => _usedForWeaponMechanics;
 
 	private void Start()
 	{
