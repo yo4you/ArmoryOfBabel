@@ -14,6 +14,8 @@ public class RoomDataIdentifier : MonoBehaviour
 	[Tooltip("the part with the colliders")]
 	private GameObject _walls;
 
+	private Tilemap _wallsMap;
+
 	private enum Direction
 	{
 		NORTH, EAST, SOUTH, WEST
@@ -23,9 +25,14 @@ public class RoomDataIdentifier : MonoBehaviour
 
 	public Bounds GetBounds()
 	{
-		var tilemap = _walls.GetComponent<Tilemap>();
+		var tilemap = GetWalls();
 		tilemap.CompressBounds();
 		return tilemap.localBounds;
+	}
+
+	public Tilemap GetWalls()
+	{
+		return _wallsMap ?? _walls.GetComponent<Tilemap>();
 	}
 
 	/// <summary>
@@ -34,7 +41,7 @@ public class RoomDataIdentifier : MonoBehaviour
 	/// <returns></returns>
 	public Vector3Int GetWallSize()
 	{
-		var tilemap = _walls.GetComponent<Tilemap>();
+		var tilemap = GetWalls();
 		tilemap.CompressBounds();
 		return tilemap.size;
 	}

@@ -59,20 +59,18 @@ public class DungeonGenerator : MonoBehaviour
 			// if there's a room adjacent to our room break down the doorway in that direction
 			if (_roomGrid.TryGetValue(cursor + _directions[i], out GameObject adjenctRoom))
 			{
-				//_roomGrid[cursor].GetComponent<RoomDataIdentifier>().Doorways[i].SetActive(false);
-
 				var adjenctRoomPop = adjenctRoom.GetComponent<RoomPopulator>();
 
 				var ids = adjenctRoom.GetComponent<RoomDataIdentifier>();
-				//ids.Doorways[(i + 2) % 4].SetActive(false);
 				if (adjenctRoomPop)
 				{
 					adjenctRoomPop.DoorsToOpen.Add(ids.Doorways[(i + 2) % 4]);
 				}
-
+				// TODO set the rooms that should be enabled and disabled here
 				var Roompop = _roomGrid[cursor].GetComponent<RoomPopulator>();
 				if (Roompop)
 				{
+					Roompop.AdjenctRooms.Add(adjenctRoom);
 					Roompop.DoorsToOpen.Add(_roomGrid[cursor].GetComponent<RoomDataIdentifier>().Doorways[i]);
 					Roompop.DoorsToOpen.Add(ids.Doorways[(i + 2) % 4]);
 				}
@@ -90,6 +88,7 @@ public class DungeonGenerator : MonoBehaviour
 		var cursor = new Vector2Int();
 		var min = new Vector2Int(99999, 99999);
 		var max = new Vector2Int(-99999, -99999);
+		List<Tilemap> tilemaps = new List<Tilemap>();
 		// iterate trough our tries so the dungeon generator doesn't halt
 		for (int i = 0; i < _maxSpawnTries; i++)
 		{
@@ -100,13 +99,10 @@ public class DungeonGenerator : MonoBehaviour
 			if (!_roomGrid.ContainsKey(cursor))
 			{
 				var go = Instantiate(_prefabs[Random.Range(0, _prefabs.Length)], transform);
-				foreach (var tilemap in go.GetComponents<Tilemap>())
-				{
-					// remove any dead space in the tilemaps so they fit tightly together
-					tilemap.CompressBounds();
-				}
+
 				// contains refrences in the prefab so we can identify the doors/walls and disable them as needed
 				var roomData = go.GetComponent<RoomDataIdentifier>();
+				tilemaps.Add(roomData.GetWalls());
 				Vector3 size = roomData.GetWallSize();
 				size.z = 100f;
 				// the position in worldspace our new room should be generated at
@@ -125,11 +121,18 @@ public class DungeonGenerator : MonoBehaviour
 				bounds.extents = extends;
 				roomPop.Bounds = bounds;
 				roomPop.PathFinder = _pathFinder;
+				for (int j = 0; j < Random.Range(1, 3); j++)
+				{
+					var enemy = Instantiate(_enemyPrefabs[0], bounds.center + (Vector3)(Random.insideUnitCircle * Random.Range(0f, .4f)), new Quaternion());
+					roomPop.Enemies.Add(enemy);
+					enemy.SetActive(false);
+				}
 
-				var enemy = Instantiate(_enemyPrefabs[0], bounds.center, new Quaternion());
-				roomPop.Enemies.Add(enemy);
-				enemy.SetActive(false);
 				_roomGrid.Add(cursor, go);
+				if (!bounds.Contains(_player.transform.position))
+				{
+					roomPop.gameObject.SetActive(false);
+				}
 			}
 
 			if (_roomGrid.Count > _maxRooms)
@@ -143,14 +146,14 @@ public class DungeonGenerator : MonoBehaviour
 			CreateDoorWaysAtPosition(gridPoint.Key);
 		}
 
-		UpdatePathFinderData(cellSize);
+		UpdatePathFinderData(cellSize, tilemaps);
 	}
 
-	private void UpdatePathFinderData(Vector3 cellSize)
+	private void UpdatePathFinderData(Vector3 cellSize, List<Tilemap> tilemaps)
 	{
 		List<Vector3> minimums = new List<Vector3>();
 		List<Vector3> maximum = new List<Vector3>();
-		foreach (var tilemap in FindObjectsOfType<Tilemap>())
+		foreach (var tilemap in tilemaps)
 		{
 			tilemap.CompressBounds();
 			minimums.Add(tilemap.CellToWorld(tilemap.cellBounds.min));

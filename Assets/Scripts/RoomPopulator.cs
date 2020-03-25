@@ -8,6 +8,8 @@ internal class RoomPopulator : MonoBehaviour
 	private bool _activated;
 	private EnemyCounterUI _enemyCounter;
 	private bool _finished;
+	private RoomEvents _roomEvents;
+	public List<GameObject> AdjenctRooms { get; set; } = new List<GameObject>();
 	public Bounds Bounds { get; set; }
 	public List<GameObject> DoorsToOpen { get; set; } = new List<GameObject>();
 
@@ -18,34 +20,21 @@ internal class RoomPopulator : MonoBehaviour
 
 	public void OpenDoors()
 	{
-		Debug.Log("roomcomplete");
+		foreach (var room in AdjenctRooms)
+		{
+			room.SetActive(true);
+		}
 		foreach (var door in DoorsToOpen)
 		{
 			door.SetActive(false);
 		}
+
 		_finished = true;
 		PathFinder.CalculateColliders();
+		_roomEvents.DoorsOpened(this);
 	}
 
-	private void Activate()
-	{
-		_activated = true;
-		foreach (var enemy in Enemies)
-		{
-			enemy.SetActive(true);
-		}
-	}
-
-	private void DeActivateAI()
-	{
-	}
-
-	private void Start()
-	{
-		_enemyCounter = FindObjectOfType<EnemyCounterUI>();
-	}
-
-	private void Update()
+	public void Step()
 	{
 		if (_finished)
 		{
@@ -65,6 +54,7 @@ internal class RoomPopulator : MonoBehaviour
 		}
 		else if (_activated && containsPlayer)
 		{
+			_enemyCounter.SetVisible(true);
 			_enemyCounter.SetTally(Enemies.Count(e => e.activeSelf), Enemies.Count);
 		}
 
@@ -73,5 +63,29 @@ internal class RoomPopulator : MonoBehaviour
 			_enemyCounter.SetVisible(false);
 			OpenDoors();
 		}
+	}
+
+	private void Activate()
+	{
+		_activated = true;
+		foreach (var enemy in Enemies)
+		{
+			enemy.SetActive(true);
+		}
+	}
+
+	private void DeActivateAI()
+	{
+	}
+
+	private void Start()
+	{
+		_roomEvents = FindObjectOfType<RoomEvents>();
+		_enemyCounter = FindObjectOfType<EnemyCounterUI>();
+	}
+
+	private void Update()
+	{
+		Step();
 	}
 }

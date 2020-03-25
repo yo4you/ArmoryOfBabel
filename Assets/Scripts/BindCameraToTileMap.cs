@@ -34,6 +34,16 @@ public class BindCameraToTileMap : MonoBehaviour
 		}
 	}
 
+	public void UpdateTileMaps()
+	{
+		TileMaps = new List<Tilemap>(FindObjectsOfType<Tilemap>());
+	}
+
+	private void BindCameraToTileMap_OnDoorsOpen(RoomPopulator roompop)
+	{
+		UpdateTileMaps();
+	}
+
 	/// <summary>
 	/// stores the corners of the camera view in world space
 	/// </summary>
@@ -105,7 +115,7 @@ public class BindCameraToTileMap : MonoBehaviour
 	private void Start()
 	{
 		_camera = Camera.main;
-		// TODO make this dynamic
-		TileMaps = new List<Tilemap>(FindObjectsOfType<Tilemap>());
+		FindObjectOfType<RoomEvents>().OnDoorsOpen += BindCameraToTileMap_OnDoorsOpen; ;
+		UpdateTileMaps();
 	}
 }
