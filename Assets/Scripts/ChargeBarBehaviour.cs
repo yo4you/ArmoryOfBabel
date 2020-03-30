@@ -13,6 +13,7 @@ public class ChargeBarBehaviour : MonoBehaviour
 	{
 		get => _progressPercentage; set
 		{
+			_bar = _bar ?? GetProgressElement();
 			_progressPercentage = Mathf.Clamp(value, 0f, 100f);
 			var newpos = _bar.localPosition;
 			newpos.x = -_bar.rect.width * (100f - _progressPercentage) / 100f;
@@ -22,9 +23,14 @@ public class ChargeBarBehaviour : MonoBehaviour
 
 	public bool UsedForWeaponMechanics => _usedForWeaponMechanics;
 
+	private RectTransform GetProgressElement()
+	{
+		return gameObject.transform.Find("mask").Find("progress") as RectTransform;
+	}
+
 	private void Start()
 	{
-		_bar = gameObject.transform.Find("mask").Find("progress") as RectTransform;
+		_bar = GetProgressElement();
 		ProgressPercentage = 0f;
 	}
 }

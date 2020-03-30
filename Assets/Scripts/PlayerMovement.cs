@@ -13,17 +13,34 @@ public class PlayerMovement : MonoBehaviour
 	private float _attackDelay;
 
 	private float _attackDelayTimer = 0f;
+
+	private Vector3 _dodgeOffset = new Vector3();
+
+	[SerializeField]
+	[Tooltip("the speed at which the player dodges")]
+	private float _dodgeSpeed;
+
 	private Vector3 _moveOffset = new Vector3();
-	private Rigidbody2D _rigidBody;
 
 	[SerializeField]
 	[Tooltip("the speed at which the player moves")]
-	private float _speed;
+	private float _moveSpeed;
+
+	private Rigidbody2D _rigidBody;
 
 	private void FixedUpdate()
 	{
-		_rigidBody.MovePosition(transform.position + _speed * Time.deltaTime * _moveOffset);
-		_moveOffset = new Vector3();
+		if (_animator.GetCurrentAnimatorStateInfo(0).IsName("dodge"))
+		{
+			gameObject.layer = 13;
+			_rigidBody.MovePosition(transform.position + _dodgeSpeed * Time.deltaTime * _dodgeOffset);
+		}
+		else
+		{
+			gameObject.layer = 8;
+			_rigidBody.MovePosition(transform.position + _moveSpeed * Time.deltaTime * _moveOffset);
+			_moveOffset = new Vector3();
+		}
 	}
 
 	private void RegisterMovementToAnimator(Vector3 moveOffset)
@@ -47,18 +64,22 @@ public class PlayerMovement : MonoBehaviour
 			moveInput.Normalize();
 		}
 
-		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+		if ((!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement")) || _animator.speed != 1f)
 		{
-			// we apply a short delay to the attack input so that the player can press a direction and an attack simultaniously
-			if (_attackDelayTimer > 0f)
-			{
-				_attackDelayTimer -= Time.deltaTime;
-				RegisterMovementToAnimator(moveInput);
-			}
 			return;
 		}
-		_attackDelayTimer = _attackDelay;
+
 		RegisterMovementToAnimator(moveInput);
-		_moveOffset = moveInput;
+
+		if (Input.GetButtonDown("Dodge"))
+		{
+			_dodgeOffset = moveInput.normalized;
+
+			_animator.Play("dodge");
+		}
+		else
+		{
+			_moveOffset = moveInput;
+		}
 	}
 }

@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class PlayerWeaponMechanicTester : MonoBehaviour
 {
-	private readonly Dictionary<string, KeyCode> _inputDefenitions = new Dictionary<string, KeyCode>
+	private readonly Dictionary<string, string> _inputDefenitions = new Dictionary<string, string>
 	{
-		{"A",KeyCode.Z },
-		{"B",KeyCode.X },
-		{"X",KeyCode.C },
+		{"A","Attack 1"},
+		{"B","Attack 2" },
+		{"X","Special"},
 	};
 
 	private readonly Dictionary<string, NodeHandleDelegate> _nodeFunctions = new Dictionary<string, NodeHandleDelegate>
@@ -27,7 +27,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	};
 
 	private List<Node> _callBackNodes = new List<Node>();
-	private Dictionary<KeyCode, Node> _inputNodes = new Dictionary<KeyCode, Node>();
+	private Dictionary<string, Node> _inputNodes = new Dictionary<string, Node>();
 
 	[SerializeField] private string _mechanicGrammarName;
 
@@ -63,7 +63,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		_timeNodes = new List<Node>();
 		_uiNodes = new List<Node>();
 		_uiNodeCaps = new Dictionary<Node, Node>();
-		_inputNodes = new Dictionary<KeyCode, Node>();
+		_inputNodes = new Dictionary<string, Node>();
 
 		var grammars = NodeGrammar.ImportGrammars(Application.streamingAssetsPath + "/Grammar/Node/" + _mechanicGrammarName + ".json");
 		var inputGraph = new NodeGraph();
@@ -76,7 +76,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		foreach (var node in _mechanicGraph.NodeDict)
 		{
 			var nodeText = node.Value.Node_text;
-			if (_inputDefenitions.TryGetValue(nodeText, out KeyCode keycode))
+			if (_inputDefenitions.TryGetValue(nodeText, out string keycode))
 			{
 				_inputNodes.Add(keycode, node.Value);
 			}
@@ -202,7 +202,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		foreach (var input in _inputNodes)
 		{
 			NodeBehaviour.Callbacks.Push(new NodeActivationCallBack(null, null));
-			if (Input.GetKeyDown(input.Key))
+			if (Input.GetButtonDown(input.Key))
 			{
 				SetNodeActivity(null, input.Value, true);
 			}

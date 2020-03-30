@@ -11,14 +11,20 @@ public class PlayerAttackControl : MonoBehaviour
 	[SerializeField] private ProjectileBehaviour _projectilePrefab;
 	[SerializeField] private float _projectileSpeed;
 	private PlayerWeaponMechanicTester _pwmTester;
+	private ReticalBehaviour _retical;
 	[SerializeField] private SweepBehaviour _slashPrefab;
 	[SerializeField] private SweepBehaviour _sweepPrefab;
 
-	public bool ProccessNode(float speed, float damage, int type, Node node)
+	public bool ProccessAttackNode(float speed, float damage, int type, Node node)
 	{
 		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
 		{
 			return false;
+		}
+		if (_retical.ActiveInput)
+		{
+			_animator.SetFloat("x", -Mathf.Cos(_retical.Angle * Mathf.Deg2Rad));
+			_animator.SetFloat("y", -Mathf.Sin(_retical.Angle * Mathf.Deg2Rad));
 		}
 		_animator.speed = speed;
 		switch (type)
@@ -72,8 +78,7 @@ public class PlayerAttackControl : MonoBehaviour
 		var direction = new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y"));
 		direction.Normalize();
 
-		var projectile = Instantiate<ProjectileBehaviour>(prefab, transform.position, new Quaternion());
-		projectile.GetComponent<Animator>().speed = speed;
+		var projectile = Instantiate(prefab, transform.position, new Quaternion());
 		projectile.MoveDir = direction * _projectileSpeed;
 		projectile.Damage = damage;
 		projectile.PWM_Tester = _pwmTester;
@@ -90,6 +95,7 @@ public class PlayerAttackControl : MonoBehaviour
 
 	private void Start()
 	{
+		_retical = FindObjectOfType<ReticalBehaviour>();
 		_animator = GetComponent<Animator>();
 		_pwmTester = GetComponent<PlayerWeaponMechanicTester>();
 	}
