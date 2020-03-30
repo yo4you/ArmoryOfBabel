@@ -121,12 +121,12 @@ public class DungeonGenerator : MonoBehaviour
 				bounds.extents = extends;
 				roomPop.Bounds = bounds;
 				roomPop.PathFinder = _pathFinder;
-				for (int j = 0; j < Random.Range(1, 3); j++)
-				{
-					var enemy = Instantiate(_enemyPrefabs[0], bounds.center + (Vector3)(Random.insideUnitCircle * Random.Range(0f, .4f)), new Quaternion());
-					roomPop.Enemies.Add(enemy.GetComponent<SAP2DAgent>());
-					enemy.SetActive(false);
-				}
+				// 				for (int j = 0; j < Random.Range(1, 3); j++)
+				// 				{
+				// 					var enemy = Instantiate(_enemyPrefabs[0], bounds.center + (Vector3)(Random.insideUnitCircle * Random.Range(0f, .4f)), new Quaternion());
+				// 					roomPop.Enemies.Add(enemy.GetComponent<SAP2DAgent>());
+				// 					enemy.SetActive(false);
+				// 				}
 
 				_roomGrid.Add(cursor, go);
 				if (!bounds.Contains(_player.transform.position))
