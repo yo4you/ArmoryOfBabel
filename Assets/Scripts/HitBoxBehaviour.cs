@@ -15,13 +15,13 @@ public abstract class HitBoxBehaviour : MonoBehaviour
 	{
 		if (collision.collider.gameObject.layer != 0)
 		{
-			PWM_Tester.CollisionCallback(GeneratingNode);
-
-			var health = collision.collider.gameObject.GetComponent<HealthComponent>();
-			if (health != null)
+			if (GeneratingNode != null)
 			{
-				health.Hit(Damage);
+				PWM_Tester.CollisionCallback(GeneratingNode);
 			}
+
+			var health = collision.collider.GetComponent<HealthComponent>();
+			health?.Hit(Damage);
 		}
 		Destroy(gameObject);
 	}

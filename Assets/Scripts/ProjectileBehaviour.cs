@@ -2,7 +2,19 @@
 
 public class ProjectileBehaviour : HitBoxBehaviour
 {
+	[SerializeField]
+	private float _damage;
+
 	public Vector3 MoveDir { get; set; }
+
+	private void Start()
+	{
+		// this is here because unity complains about serializing a field multiple times when using inheritance
+		if (Damage == 0)
+		{
+			Damage = _damage;
+		}
+	}
 
 	private void Update()
 	{

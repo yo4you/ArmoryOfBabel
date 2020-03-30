@@ -29,7 +29,8 @@ public class SpiderBehaviour : MonoBehaviour
 	public IEnumerator StartStrike(Vector3 strikeDir)
 	{
 		_striking = true;
-		_agent.CanMove = false;
+		var resetSpeed = _agent.MovementSpeed;
+		_agent.MovementSpeed = 0;
 		{
 			float inverseTime = 1f / _strikeTime;
 			float time = 0;
@@ -52,7 +53,7 @@ public class SpiderBehaviour : MonoBehaviour
 			} while (time != 1f);
 		}
 		_striking = false;
-		_agent.CanMove = true;
+		_agent.MovementSpeed = resetSpeed;
 	}
 
 	private void Start()

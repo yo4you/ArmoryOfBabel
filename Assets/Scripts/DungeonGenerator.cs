@@ -10,6 +10,12 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class DungeonGenerator : MonoBehaviour
 {
+	public IEnumerator StartColliderCalc()
+	{
+		yield return new WaitForFixedUpdate();
+		_pathFinder.CalculateColliders();
+	}
+
 	// direction offsets stored in NESW order
 	private Vector2Int[] _directions = new Vector2Int[] {
 		new Vector2Int(0,1),
@@ -41,11 +47,8 @@ public class DungeonGenerator : MonoBehaviour
 	// stores all the rooms we've already spawned
 	private Dictionary<Vector2Int, GameObject> _roomGrid = new Dictionary<Vector2Int, GameObject>();
 
-	public IEnumerator StartColliderCalc()
-	{
-		yield return new WaitForFixedUpdate();
-		_pathFinder.CalculateColliders();
-	}
+	[SerializeField]
+	private bool _spawnEnemies;
 
 	/// <summary>
 	/// Creates doorways connecting the adjacent rooms to the ones at the cursor position
@@ -121,12 +124,15 @@ public class DungeonGenerator : MonoBehaviour
 				bounds.extents = extends;
 				roomPop.Bounds = bounds;
 				roomPop.PathFinder = _pathFinder;
-				// 				for (int j = 0; j < Random.Range(1, 3); j++)
-				// 				{
-				// 					var enemy = Instantiate(_enemyPrefabs[0], bounds.center + (Vector3)(Random.insideUnitCircle * Random.Range(0f, .4f)), new Quaternion());
-				// 					roomPop.Enemies.Add(enemy.GetComponent<SAP2DAgent>());
-				// 					enemy.SetActive(false);
-				// 				}
+				if (_spawnEnemies)
+				{
+					for (int j = 0; j < Random.Range(1, 3); j++)
+					{
+						var enemy = Instantiate(_enemyPrefabs[0], bounds.center + (Vector3)(Random.insideUnitCircle * Random.Range(0f, .4f)), new Quaternion());
+						roomPop.Enemies.Add(enemy.GetComponent<SAP2DAgent>());
+						enemy.SetActive(false);
+					}
+				}
 
 				_roomGrid.Add(cursor, go);
 				if (!bounds.Contains(_player.transform.position))
