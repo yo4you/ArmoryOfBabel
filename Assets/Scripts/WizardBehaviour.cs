@@ -51,7 +51,11 @@ public class WizardBehaviour : MonoBehaviour
 
 	private void OnDisable()
 	{
-		_aimSymbol.SetActive(false);
+		if (_aimSymbol != null)
+		{
+			_aimSymbol.SetActive(false);
+		}
+
 		CancelInvoke();
 	}
 

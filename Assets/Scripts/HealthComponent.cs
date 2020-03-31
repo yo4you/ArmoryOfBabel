@@ -12,7 +12,13 @@ public class HealthComponent : MonoBehaviour
 	private float _startingHP;
 
 	private UIHealthBarManager _uiManager;
+
+	public delegate void HitEvent(float damage);
+
+	public event HitEvent OnHit;
+
 	public float HP { get; set; }
+	public bool Invulnearable { get => _invulnearable; set => _invulnearable = value; }
 	public bool IsPlayer => _isPlayer;
 	public float StartingHP => _startingHP;
 
@@ -28,6 +34,7 @@ public class HealthComponent : MonoBehaviour
 
 	internal void Hit(float damage)
 	{
+		OnHit?.Invoke(damage);
 		if (_invulnearable)
 		{
 			return;
@@ -85,7 +92,7 @@ public class HealthComponent : MonoBehaviour
 	{
 		if (IsPlayer)
 		{
-			// TODO
+			// TODO refactor player hp
 		}
 		else
 		{
