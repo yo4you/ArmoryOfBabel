@@ -14,7 +14,7 @@ public class BeeBehaviour : MonoBehaviour
 	[SerializeField]
 	private float _escapeRange;
 
-	private Vector3 _lastPos;
+	private Vector3 _lastPos = new Vector3();
 
 	private float _moveSpeed;
 	private Transform _player;
@@ -24,6 +24,8 @@ public class BeeBehaviour : MonoBehaviour
 
 	[SerializeField]
 	private float _projectileSpeed;
+
+	private RoomEvents _roomEvents;
 
 	[SerializeField]
 	private float _shootInterval;
@@ -39,12 +41,8 @@ public class BeeBehaviour : MonoBehaviour
 	[SerializeField]
 	private float _stallTime;
 
-	private GameObject _startAnchor;
-
 	[SerializeField]
 	private float _strikeCooldown;
-
-	private Transform _target;
 
 	private enum BehaviourState
 	{
@@ -52,11 +50,6 @@ public class BeeBehaviour : MonoBehaviour
 		HIT,
 		HITLOCK,
 		RETREAT
-	}
-
-	private void OnDestroy()
-	{
-		Destroy(_startAnchor);
 	}
 
 	private void Shoot()
@@ -69,12 +62,11 @@ public class BeeBehaviour : MonoBehaviour
 
 	private void Start()
 	{
+		_roomEvents = FindObjectOfType<RoomEvents>();
 		_sprite = GetComponent<SpriteRenderer>();
 		_agent = GetComponent<SAP2DAgent>();
-		_startAnchor = new GameObject();
-		_startAnchor.transform.position = transform.position;
-		_player = _agent.Target;
 		_moveSpeed = _agent.MovementSpeed;
+		_player = _agent.Target;
 	}
 
 	private IEnumerator StartShoot()
@@ -118,7 +110,8 @@ public class BeeBehaviour : MonoBehaviour
 	{
 		var pos = transform.position;
 		_sprite.flipX = _lastPos.x > pos.x;
-		var playerDistance = Vector3.Distance(_player.transform.position, pos);
+		Vector3 playerpos = _player.transform.position;
+		var playerDistance = Vector3.Distance(playerpos, pos);
 
 		switch (_curState)
 		{
@@ -134,8 +127,7 @@ public class BeeBehaviour : MonoBehaviour
 				{
 					StopAllCoroutines();
 					_curState = BehaviourState.RETREAT;
-					_agent.Target = _startAnchor.transform;
-					_agent.MovementSpeed = _moveSpeed;
+					_agent.MovementSpeed = -_moveSpeed;
 				}
 				break;
 
@@ -145,10 +137,9 @@ public class BeeBehaviour : MonoBehaviour
 			case BehaviourState.RETREAT:
 				if (playerDistance > _shootRange)
 				{
-					_agent.Target = _player;
 					_curState = BehaviourState.CHARGE;
+					_agent.MovementSpeed = _moveSpeed;
 				}
-
 				break;
 
 			default:

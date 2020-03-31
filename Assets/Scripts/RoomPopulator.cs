@@ -30,7 +30,6 @@ internal class RoomPopulator : MonoBehaviour
 		}
 
 		_finished = true;
-		PathFinder.CalculateColliders();
 		_roomEvents.DoorsOpened(this);
 	}
 
@@ -59,6 +58,7 @@ internal class RoomPopulator : MonoBehaviour
 				enemy.CanMove = true;
 				enemy.CanSearch = true;
 			}
+			_roomEvents.ActiveRoom = this;
 			_enemyCounter.SetVisible(true);
 			_enemyCounter.SetTally(Enemies.Count(e => e.gameObject.activeSelf), Enemies.Count);
 		}

@@ -6,6 +6,8 @@ public class RoomEvents : MonoBehaviour
 
 	internal event DoorsOpenHandle OnDoorsOpen;
 
+	internal RoomPopulator ActiveRoom { get; set; }
+
 	internal void DoorsOpened(RoomPopulator roomPopulator)
 	{
 		OnDoorsOpen?.Invoke(roomPopulator);

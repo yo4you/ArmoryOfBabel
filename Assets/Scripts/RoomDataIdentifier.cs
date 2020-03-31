@@ -23,6 +23,14 @@ public class RoomDataIdentifier : MonoBehaviour
 
 	public GameObject[] Doorways => _doorways;
 
+	public void FixDoors()
+	{
+		foreach (var door in _doorways)
+		{
+			door.GetComponent<Tilemap>().CompressBounds();
+		}
+	}
+
 	public Bounds GetBounds()
 	{
 		var tilemap = GetWalls();
