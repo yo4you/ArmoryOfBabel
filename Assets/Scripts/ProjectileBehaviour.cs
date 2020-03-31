@@ -7,6 +7,11 @@ public class ProjectileBehaviour : HitBoxBehaviour
 
 	public Vector3 MoveDir { get; set; }
 
+	public void Destroy_now()
+	{
+		Destroy(gameObject);
+	}
+
 	private void Start()
 	{
 		// this is here because unity complains about serializing a field multiple times when using inheritance

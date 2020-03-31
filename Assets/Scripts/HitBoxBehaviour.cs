@@ -2,6 +2,9 @@
 
 public abstract class HitBoxBehaviour : MonoBehaviour
 {
+	[SerializeField]
+	private bool _persistant;
+
 	public float Damage { get; internal set; }
 	public Node GeneratingNode { get; internal set; }
 	public PlayerWeaponMechanicTester PWM_Tester { get; set; }
@@ -23,6 +26,9 @@ public abstract class HitBoxBehaviour : MonoBehaviour
 			var health = collision.collider.GetComponent<HealthComponent>();
 			health?.Hit(Damage);
 		}
-		Destroy(gameObject);
+		if (!_persistant)
+		{
+			Destroy(gameObject);
+		}
 	}
 }
