@@ -33,12 +33,12 @@ public class PlayerMovement : MonoBehaviour
 		if (_animator.GetCurrentAnimatorStateInfo(0).IsName("dodge"))
 		{
 			gameObject.layer = 13;
-			_rigidBody.MovePosition(transform.position + _dodgeSpeed * Time.deltaTime * _dodgeOffset);
+			_rigidBody.MovePosition(transform.position + _dodgeSpeed * Time.fixedDeltaTime * _dodgeOffset);
 		}
 		else
 		{
 			gameObject.layer = 8;
-			_rigidBody.MovePosition(transform.position + _moveSpeed * Time.deltaTime * _moveOffset);
+			_rigidBody.MovePosition(transform.position + _moveSpeed * Time.fixedDeltaTime * _moveOffset);
 			_moveOffset = new Vector3();
 		}
 	}
