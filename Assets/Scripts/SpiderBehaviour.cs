@@ -41,6 +41,8 @@ public class SpiderBehaviour : MonoBehaviour
 				yield return new WaitForEndOfFrame();
 			} while (time != 1f);
 		}
+		gameObject.layer = 10;
+
 		_rb.AddForce(strikeDir * _force);
 		{
 			float inverseTime = 1f / _strikeCooldown;
@@ -52,6 +54,7 @@ public class SpiderBehaviour : MonoBehaviour
 				yield return new WaitForEndOfFrame();
 			} while (time != 1f);
 		}
+		gameObject.layer = 9;
 		_striking = false;
 		_agent.MovementSpeed = resetSpeed;
 	}
