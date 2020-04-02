@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class TurtleBehaviour : MonoBehaviour
+public class TurtleBehaviour : MonoBehaviour, IStunnable
 {
 	private SAP2DAgent _agent;
 	private bool _attackCommited;
@@ -29,8 +29,20 @@ public class TurtleBehaviour : MonoBehaviour
 
 	private SpriteRenderer _sprite;
 
+	private bool _stunned;
+
 	[SerializeField]
 	private float _vulnearableTime;
+
+	public void Stun()
+	{
+		_stunned = true;
+	}
+
+	public void UnStun()
+	{
+		_stunned = false;
+	}
 
 	private void _health_OnHit(float damage)
 	{
@@ -89,7 +101,7 @@ public class TurtleBehaviour : MonoBehaviour
 				_sprite.color = (time * _blinkCount % 1f) > 0.5f ? Color.white : Color.red;
 
 				yield return new WaitForEndOfFrame();
-			} while (time != 1f);
+			} while (time != 1f || _stunned);
 		}
 
 		_sprite.color = Color.white;

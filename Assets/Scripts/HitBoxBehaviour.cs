@@ -14,7 +14,7 @@ public abstract class HitBoxBehaviour : MonoBehaviour
 		Destroy(gameObject);
 	}
 
-	public void OnCollisionEnter2D(Collision2D collision)
+	public virtual void OnCollisionEnter2D(Collision2D collision)
 	{
 		if (collision.collider.gameObject.layer != 0)
 		{

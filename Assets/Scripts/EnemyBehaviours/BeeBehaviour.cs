@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class BeeBehaviour : MonoBehaviour
+public class BeeBehaviour : MonoBehaviour, IStunnable
 {
 	private SAP2DAgent _agent;
 
@@ -50,6 +50,20 @@ public class BeeBehaviour : MonoBehaviour
 		HIT,
 		HITLOCK,
 		RETREAT
+	}
+
+	public void Stun()
+	{
+		StopAllCoroutines();
+		_agent.MovementSpeed = 0;
+		_curState = BehaviourState.HITLOCK;
+		_sprite.color = Color.white;
+	}
+
+	public void UnStun()
+	{
+		_curState = BehaviourState.RETREAT;
+		_agent.MovementSpeed = _moveSpeed;
 	}
 
 	private void Shoot()

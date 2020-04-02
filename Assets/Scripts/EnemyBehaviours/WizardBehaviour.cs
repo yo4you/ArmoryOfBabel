@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class WizardBehaviour : MonoBehaviour
+public class WizardBehaviour : MonoBehaviour, IStunnable
 {
 	private SAP2DAgent _agent;
 
@@ -34,7 +34,18 @@ public class WizardBehaviour : MonoBehaviour
 	[SerializeField]
 	private float _randomTimeOffsetMax;
 
+	private bool _stunned;
 	private Transform _target;
+
+	public void Stun()
+	{
+		_stunned = true;
+	}
+
+	public void UnStun()
+	{
+		_stunned = false;
+	}
 
 	public void WizardLoop()
 	{
@@ -77,6 +88,7 @@ public class WizardBehaviour : MonoBehaviour
 	private IEnumerator StartWizardLoop()
 	{
 		yield return new WaitForSeconds(_idleTime);
+		yield return new WaitWhile(() => _stunned);
 		_nextTeleportPosition = _target.transform.position;
 		_aimSymbol.SetActive(true);
 		_aimSymbol.transform.position = new Vector3();
@@ -96,6 +108,7 @@ public class WizardBehaviour : MonoBehaviour
 		_aimSymbol.SetActive(false);
 		var explosion = Instantiate(_explosionPrefab, _aimSymbol.transform.position, new Quaternion());
 		yield return new WaitForSeconds(_cooldown);
+		yield return new WaitWhile(() => _stunned);
 		transform.position = _nextTeleportPosition;
 	}
 }

@@ -1,9 +1,11 @@
 ﻿using SAP2D;
 using UnityEngine;
 
-public class SlimeBehaviour : MonoBehaviour
+public class SlimeBehaviour : MonoBehaviour, IStunnable
 {
 	private SAP2DAgent _agent;
+
+	private float _moveSpeed;
 
 	[SerializeField]
 	private float _projectileSpeed;
@@ -16,18 +18,48 @@ public class SlimeBehaviour : MonoBehaviour
 	[SerializeField]
 	private ProjectileBehaviour _shot;
 
+	private bool _stunned;
+
 	[SerializeField]
 	private float _swirfAmplitude;
 
 	[SerializeField]
 	private float _swirfSpeed;
 
+	public void Stun()
+	{
+		_stunned = true;
+		_moveSpeed = _agent.MovementSpeed;
+		_agent.MovementSpeed = 0;
+		CancelInvoke();
+	}
+
+	public void UnStun()
+	{
+		_agent.MovementSpeed = _moveSpeed;
+		_stunned = false;
+		if (gameObject.activeSelf)
+		{
+			InvokeShooting();
+		}
+	}
+
 	private void FixedUpdate()
 	{
+		if (_stunned)
+		{
+			return;
+		}
+
 		var dist = (Vector2)(_agent.Target.position - transform.position);
 		var perp_dist = new Vector2(-dist.y, dist.x);
 		perp_dist *= Mathf.Sin(Time.fixedTime * _swirfSpeed) * _swirfAmplitude;
 		_rb.MovePosition(_rb.position + perp_dist * _agent.MovementSpeed * Time.fixedDeltaTime);
+	}
+
+	private void InvokeShooting()
+	{
+		InvokeRepeating("Shoot", Random.Range(0, _shootInterval), _shootInterval);
 	}
 
 	private void OnDisable()
@@ -37,7 +69,7 @@ public class SlimeBehaviour : MonoBehaviour
 
 	private void OnEnable()
 	{
-		InvokeRepeating("Shoot", Random.Range(0, _shootInterval), _shootInterval);
+		InvokeShooting();
 	}
 
 	private void Shoot()

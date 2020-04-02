@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EyeEnemyBehaviour : MonoBehaviour
+public class EyeEnemyBehaviour : MonoBehaviour, IStunnable
 {
 	private SAP2DAgent _agent;
 
@@ -54,6 +54,20 @@ public class EyeEnemyBehaviour : MonoBehaviour
 		WANDER,
 		APPROACH,
 		ATTACK
+	}
+
+	public void Stun()
+	{
+		StopAllCoroutines();
+		_curState = BehaviourState.WANDER;
+		_agent.MovementSpeed = 0;
+		_sprite.color = Color.white;
+	}
+
+	public void UnStun()
+	{
+		_agent.MovementSpeed = _moveSpeed;
+		_curState = BehaviourState.THINKING;
 	}
 
 	private void MakeDeciscion()

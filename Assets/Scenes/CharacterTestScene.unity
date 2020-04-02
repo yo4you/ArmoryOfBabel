@@ -1605,7 +1605,7 @@ MonoBehaviour:
   - {fileID: 1457137016570143828, guid: ac77a8fe0a58ff84f82f75062b3f0cb4, type: 3}
   - {fileID: 6797518596248789331, guid: 06c5ef6916d65964ca1d0f2be94fa3ab, type: 3}
   - {fileID: 8705945644725714379, guid: 9b507e34dadefc942ac398924461c7cb, type: 3}
-  _spawnEnemies: 0
+  _spawnEnemies: 1
 --- !u!114 &547511487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2153,9 +2153,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackDelay: 0.1
-  _dashAccelerate: 0.1
+  _dashAccelerate: 3
   _dodgeSpeed: 10
-  _moveSpeed: 5
+  _moveSpeed: 3
 --- !u!114 &698379463
 MonoBehaviour:
   m_ObjectHideFlags: 0

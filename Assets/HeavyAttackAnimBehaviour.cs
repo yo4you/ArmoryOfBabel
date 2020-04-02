@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HeavyAttackAnimBehaviour : StateMachineBehaviour
 {
-	private readonly static Lazy<PlayerAttackControl> _attackControl = new Lazy<PlayerAttackControl>(() => FindObjectOfType<PlayerAttackControl>());
+	private readonly Lazy<PlayerAttackControl> _attackControl = new Lazy<PlayerAttackControl>(() => FindObjectOfType<PlayerAttackControl>());
 
 	[SerializeField]
 	[Range(0f, 1f)]

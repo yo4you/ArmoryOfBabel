@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SpiderBehaviour : MonoBehaviour
+public class SpiderBehaviour : MonoBehaviour, IStunnable
 {
 	private SAP2DAgent _agent;
 
@@ -10,6 +10,7 @@ public class SpiderBehaviour : MonoBehaviour
 	private float _force;
 
 	private Vector3 _lastPos;
+	private float _moveSpeed;
 	private Rigidbody2D _rb;
 	private SpriteRenderer _sprite;
 
@@ -24,6 +25,7 @@ public class SpiderBehaviour : MonoBehaviour
 	[SerializeField]
 	private float _strikingDistance;
 
+	private bool _stunned;
 	private Transform _target;
 
 	public IEnumerator StartStrike(Vector3 strikeDir)
@@ -59,6 +61,22 @@ public class SpiderBehaviour : MonoBehaviour
 		_agent.MovementSpeed = resetSpeed;
 	}
 
+	public void Stun()
+	{
+		StopAllCoroutines();
+		_rb.velocity = new Vector2();
+		_moveSpeed = _agent.MovementSpeed;
+		_agent.MovementSpeed = 0;
+		_stunned = true;
+		_sprite.color = Color.white;
+	}
+
+	public void UnStun()
+	{
+		_agent.MovementSpeed = _moveSpeed;
+		_stunned = false;
+	}
+
 	private void Start()
 	{
 		_sprite = GetComponent<SpriteRenderer>();
@@ -69,7 +87,7 @@ public class SpiderBehaviour : MonoBehaviour
 
 	private void Update()
 	{
-		if (_striking)
+		if (_striking || _stunned)
 		{
 			return;
 		}

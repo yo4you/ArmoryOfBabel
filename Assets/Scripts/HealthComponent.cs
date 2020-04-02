@@ -6,6 +6,9 @@ public class HealthComponent : MonoBehaviour
 	private bool _invulnearable = false;
 
 	[SerializeField]
+	private float _invulTime = 0.1f;
+
+	[SerializeField]
 	private bool _isPlayer;
 
 	[SerializeField]
@@ -47,7 +50,7 @@ public class HealthComponent : MonoBehaviour
 		}
 		else
 		{
-			InvulnearableTimer(0.5f);
+			InvulnearableTimer(_invulTime);
 		}
 	}
 
