@@ -14,6 +14,11 @@ public class PlayerMovement : MonoBehaviour
 
 	private float _attackDelayTimer = 0f;
 
+	[SerializeField]
+	private float _dashAccelerate;
+
+	private float _dashAttack;
+	private float _dashAttackResetValue;
 	private Vector3 _dodgeOffset = new Vector3();
 
 	[SerializeField]
@@ -28,6 +33,20 @@ public class PlayerMovement : MonoBehaviour
 
 	private Rigidbody2D _rigidBody;
 
+	public float DashAttack
+	{
+		get => _dashAttack; internal set
+		{
+			_dashAttack = value;
+			_dashAttackResetValue = value;
+		}
+	}
+
+	public void ResetDashAttack()
+	{
+		_dashAttack = _dashAttackResetValue;
+	}
+
 	private void FixedUpdate()
 	{
 		if (_animator.GetCurrentAnimatorStateInfo(0).IsName("dodge"))
@@ -41,6 +60,19 @@ public class PlayerMovement : MonoBehaviour
 			_rigidBody.MovePosition(transform.position + _moveSpeed * Time.fixedDeltaTime * _moveOffset);
 			_moveOffset = new Vector3();
 		}
+		if (DashAttack > 0)
+		{
+			_rigidBody.MovePosition(transform.position + _moveSpeed * Time.fixedDeltaTime * GetMovementFromAnimator() * DashAttack);
+			_dashAttack -= Time.fixedDeltaTime * _dashAccelerate;
+		}
+	}
+
+	private Vector3 GetMovementFromAnimator()
+	{
+		return new Vector3(
+			_animator.GetFloat("x"),
+			_animator.GetFloat("y"),
+			0);
 	}
 
 	private void RegisterMovementToAnimator(Vector3 moveOffset)
@@ -68,7 +100,6 @@ public class PlayerMovement : MonoBehaviour
 		{
 			return;
 		}
-
 		RegisterMovementToAnimator(moveInput);
 
 		if (Input.GetButtonDown("Dodge"))
@@ -79,6 +110,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else
 		{
+			_dashAttack = -1f;
 			_moveOffset = moveInput;
 		}
 	}

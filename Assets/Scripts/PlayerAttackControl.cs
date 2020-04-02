@@ -7,6 +7,8 @@ using UnityEngine;
 public class PlayerAttackControl : MonoBehaviour
 {
 	private Animator _animator;
+	private int _attackDirToggle = 0;
+	private PlayerMovement _movement;
 	[SerializeField] private Vector3 _offset;
 	[SerializeField] private ProjectileBehaviour _projectilePrefab;
 	[SerializeField] private float _projectileSpeed;
@@ -14,17 +16,24 @@ public class PlayerAttackControl : MonoBehaviour
 	private ReticalBehaviour _retical;
 	[SerializeField] private SweepBehaviour _slashPrefab;
 	[SerializeField] private SweepBehaviour _sweepPrefab;
+	public bool CanQueue { get; internal set; }
 
 	public bool ProccessAttackNode(float speed, float damage, int type, Node node)
 	{
-		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !CanQueue)
 		{
 			return false;
 		}
-		if (_retical.ActiveInput)
+		if (CanQueue)
 		{
+			_movement.ResetDashAttack();
+		}
+		else if (_retical.ActiveInput)
+		{
+			var lastInput = new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y"));
 			_animator.SetFloat("x", -Mathf.Cos(_retical.Angle * Mathf.Deg2Rad));
 			_animator.SetFloat("y", -Mathf.Sin(_retical.Angle * Mathf.Deg2Rad));
+			_movement.DashAttack = Vector2.Dot(lastInput, new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y")));
 		}
 		_animator.speed = speed;
 		switch (type)
@@ -44,7 +53,8 @@ public class PlayerAttackControl : MonoBehaviour
 				break;
 
 			case 3:
-				_animator.Play("heavy_hit");
+				_attackDirToggle = 1 - _attackDirToggle;
+				_animator.Play("heavy_hit" + _attackDirToggle);
 				StartCoroutine(StartMeleeAttack(_sweepPrefab, speed, damage, node));
 				break;
 
@@ -63,9 +73,12 @@ public class PlayerAttackControl : MonoBehaviour
 
 		float angle = 180f + MathUtils.RoundAngleToDirection(Vector2.SignedAngle(Vector2.right, direction));
 		var quat = Quaternion.Euler(0, 0, angle);
-		var offset = quat * _offset;
-		var hitbox = Instantiate(prefab, transform.position + offset, quat);
+		//var offset = quat * _offset;
+		var hitbox = Instantiate(prefab, transform.position + _offset, quat);
+		hitbox.GetComponent<FollowPlayer>().Player = gameObject;
+		hitbox.transform.localPosition = new Vector3();
 		hitbox.GetComponent<Animator>().speed = speed;
+		hitbox.GetComponent<SpriteRenderer>().flipY = _attackDirToggle == 1;
 		hitbox.Damage = damage;
 		hitbox.PWM_Tester = _pwmTester;
 		hitbox.GeneratingNode = node;
@@ -98,5 +111,6 @@ public class PlayerAttackControl : MonoBehaviour
 		_retical = FindObjectOfType<ReticalBehaviour>();
 		_animator = GetComponent<Animator>();
 		_pwmTester = GetComponent<PlayerWeaponMechanicTester>();
+		_movement = GetComponent<PlayerMovement>();
 	}
 }
