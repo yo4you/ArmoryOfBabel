@@ -66,9 +66,10 @@ public class SpiderBehaviour : MonoBehaviour, IStunnable
 		StopAllCoroutines();
 		_rb.velocity = new Vector2();
 		_moveSpeed = _agent.MovementSpeed;
-		_agent.MovementSpeed = 0;
 		_stunned = true;
 		_sprite.color = Color.white;
+		gameObject.layer = 9;
+		_striking = false;
 	}
 
 	public void UnStun()

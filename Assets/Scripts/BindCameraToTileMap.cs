@@ -34,6 +34,38 @@ public class BindCameraToTileMap : MonoBehaviour
 		}
 	}
 
+	public void Step()
+	{
+		// recalculate the camera corners in world space if the camera's size changes
+		if (_cameraOrthoSize != _camera.orthographicSize)
+		{
+			_cameraOrthoSize = _camera.orthographicSize;
+			CalculateCamSize();
+		}
+		if (_tileMapsDirty)
+		{
+			RecalculateBounds();
+			_tileMapsDirty = false;
+		}
+		// we assign two corners relative to our target position
+		var cameraMin = Target_Position - _cameraSize;
+		var cameraMax = Target_Position + _cameraSize;
+		// set the future position to the target position then correct if it it's out of bound
+		var future_position = Target_Position;
+		for (int i = 0; i < 2; i++)
+		{
+			if (cameraMin[i] < _cameraMinBound[i])
+			{
+				future_position[i] = _cameraMinBound[i] + _cameraSize[i];
+			}
+			if (cameraMax[i] > _cameraMaxBound[i])
+			{
+				future_position[i] = _cameraMaxBound[i] - _cameraSize[i];
+			}
+		}
+		transform.position = future_position;
+	}
+
 	public void UpdateTileMaps()
 	{
 		TileMaps = new List<Tilemap>(FindObjectsOfType<Tilemap>());
@@ -85,37 +117,5 @@ public class BindCameraToTileMap : MonoBehaviour
 		_camera = Camera.main;
 		FindObjectOfType<RoomEvents>().OnDoorsOpen += BindCameraToTileMap_OnDoorsOpen; ;
 		UpdateTileMaps();
-	}
-
-	private void Update()
-	{
-		// recalculate the camera corners in world space if the camera's size changes
-		if (_cameraOrthoSize != _camera.orthographicSize)
-		{
-			_cameraOrthoSize = _camera.orthographicSize;
-			CalculateCamSize();
-		}
-		if (_tileMapsDirty)
-		{
-			RecalculateBounds();
-			_tileMapsDirty = false;
-		}
-		// we assign two corners relative to our target position
-		var cameraMin = Target_Position - _cameraSize;
-		var cameraMax = Target_Position + _cameraSize;
-		// set the future position to the target position then correct if it it's out of bound
-		var future_position = Target_Position;
-		for (int i = 0; i < 2; i++)
-		{
-			if (cameraMin[i] < _cameraMinBound[i])
-			{
-				future_position[i] = _cameraMinBound[i] + _cameraSize[i];
-			}
-			if (cameraMax[i] > _cameraMaxBound[i])
-			{
-				future_position[i] = _cameraMaxBound[i] - _cameraSize[i];
-			}
-		}
-		transform.position = future_position;
 	}
 }
