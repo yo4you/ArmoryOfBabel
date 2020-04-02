@@ -57,7 +57,37 @@ public class BindCameraToTileMap : MonoBehaviour
 		);
 	}
 
-	private void LateUpdate()
+	/// <summary>
+	/// calculate the bounds, a rectangle that's drawn tightly around the loaded tilemaps
+	/// </summary>
+	private void RecalculateBounds()
+	{
+		// lower left corners of the tilemaps
+		List<Vector3> minimums = new List<Vector3>();
+		// upper right corners of the tilemaps
+		List<Vector3> maximum = new List<Vector3>();
+
+		foreach (var tilemap in TileMaps)
+		{
+			// tilemaps come with a bunch of empty space, this will ensure the bounds we get are wrapped tightly
+			tilemap.CompressBounds();
+
+			minimums.Add(tilemap.CellToWorld(tilemap.cellBounds.min));
+			maximum.Add(tilemap.CellToWorld(tilemap.cellBounds.max));
+		}
+		// we only store the smallest values of minbound and the highest of maxbound
+		_cameraMinBound = MathUtils.MinBound(minimums.ToArray());
+		_cameraMaxBound = MathUtils.MaxBound(maximum.ToArray());
+	}
+
+	private void Start()
+	{
+		_camera = Camera.main;
+		FindObjectOfType<RoomEvents>().OnDoorsOpen += BindCameraToTileMap_OnDoorsOpen; ;
+		UpdateTileMaps();
+	}
+
+	private void Update()
 	{
 		// recalculate the camera corners in world space if the camera's size changes
 		if (_cameraOrthoSize != _camera.orthographicSize)
@@ -87,35 +117,5 @@ public class BindCameraToTileMap : MonoBehaviour
 			}
 		}
 		transform.position = future_position;
-	}
-
-	/// <summary>
-	/// calculate the bounds, a rectangle that's drawn tightly around the loaded tilemaps
-	/// </summary>
-	private void RecalculateBounds()
-	{
-		// lower left corners of the tilemaps
-		List<Vector3> minimums = new List<Vector3>();
-		// upper right corners of the tilemaps
-		List<Vector3> maximum = new List<Vector3>();
-
-		foreach (var tilemap in TileMaps)
-		{
-			// tilemaps come with a bunch of empty space, this will ensure the bounds we get are wrapped tightly
-			tilemap.CompressBounds();
-
-			minimums.Add(tilemap.CellToWorld(tilemap.cellBounds.min));
-			maximum.Add(tilemap.CellToWorld(tilemap.cellBounds.max));
-		}
-		// we only store the smallest values of minbound and the highest of maxbound
-		_cameraMinBound = MathUtils.MinBound(minimums.ToArray());
-		_cameraMaxBound = MathUtils.MaxBound(maximum.ToArray());
-	}
-
-	private void Start()
-	{
-		_camera = Camera.main;
-		FindObjectOfType<RoomEvents>().OnDoorsOpen += BindCameraToTileMap_OnDoorsOpen; ;
-		UpdateTileMaps();
 	}
 }
