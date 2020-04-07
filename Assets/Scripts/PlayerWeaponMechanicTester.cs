@@ -64,7 +64,10 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		_uiNodes = new List<Node>();
 		_uiNodeCaps = new Dictionary<Node, Node>();
 		_inputNodes = new Dictionary<string, Node>();
-
+		foreach (var ui in _uiBars)
+		{
+			ui.gameObject.SetActive(true);
+		}
 		var grammars = NodeGrammar.ImportGrammars(Application.streamingAssetsPath + "/Grammar/Node/" + _mechanicGrammarName + ".json");
 		var inputGraph = new NodeGraph();
 		inputGraph.AddNode(new Node()
@@ -115,6 +118,10 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 					break;
 			}
 		}
+		for (int Index = _uiBars.Count - 1; Index >= _uiNodes.Count; Index--)
+		{
+			_uiBars[Index].gameObject.SetActive(false);
+		}
 	}
 
 	private void SetNodeActivity(Node lastNode, Node node, bool state)
@@ -147,10 +154,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			}
 		}
 		LoadMechanicGraph();
-		for (int Index = _uiBars.Count - 1; Index >= _uiNodes.Count; Index--)
-		{
-			_uiBars[Index].gameObject.SetActive(false);
-		}
+
 		NodeBehaviour.PlayerAttacks = FindObjectOfType<PlayerAttackControl>();
 	}
 

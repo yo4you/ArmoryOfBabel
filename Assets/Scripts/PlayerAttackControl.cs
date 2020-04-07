@@ -17,6 +17,7 @@ public class PlayerAttackControl : MonoBehaviour
 	[SerializeField] private SweepBehaviour _slashPrefab;
 	[SerializeField] private SweepBehaviour _sweepPrefab;
 	public bool CanQueue { get; internal set; }
+	public bool Engaged { get; internal set; }
 
 	public bool ProccessAttackNode(float speed, float damage, int type, Node node)
 	{
@@ -48,6 +49,7 @@ public class PlayerAttackControl : MonoBehaviour
 			_movement.ResetDashAttack();
 		}
 		_animator.speed = speed;
+		Engaged = true;
 		switch (type)
 		{
 			case 0:
@@ -60,13 +62,12 @@ public class PlayerAttackControl : MonoBehaviour
 				break;
 
 			case 2:
-				_animator.Play("light_hit");
+				_animator.Play("light_hit" + _attackDirToggle);
 				StartCoroutine(StartMeleeAttack(_slashPrefab, speed, damage, node, direction));
 				break;
 
 			case 3:
 				_movement.DashAttack = Vector2.Dot(lastInput, new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y")));
-				_attackDirToggle = 1 - _attackDirToggle;
 				_animator.Play("heavy_hit" + _attackDirToggle);
 				StartCoroutine(StartMeleeAttack(_sweepPrefab, speed, damage, node, direction));
 				break;
@@ -79,15 +80,17 @@ public class PlayerAttackControl : MonoBehaviour
 
 	public IEnumerator StartMeleeAttack(SweepBehaviour prefab, float speed, float damage, Node node, Vector2 direction)
 	{
+		_attackDirToggle = 1 - _attackDirToggle;
 		yield return new WaitForFixedUpdate();
 		float angle = 180f + MathUtils.RoundAngleToDirection(Vector2.SignedAngle(Vector2.right, direction));
 		var quat = Quaternion.Euler(0, 0, angle);
-		//var offset = quat * _offset;
-		var hitbox = Instantiate(prefab, transform.position + _offset, quat);
-		hitbox.GetComponent<FollowPlayer>().Player = gameObject;
+		var hitbox = Instantiate(prefab, transform.position, quat);
+		var follow = hitbox.GetComponent<FollowPlayer>();
+		follow.Player = gameObject;
+		follow.Offset = _offset;
 		hitbox.transform.localPosition = new Vector3();
 		hitbox.GetComponent<Animator>().speed = speed;
-		hitbox.GetComponent<SpriteRenderer>().flipY = _attackDirToggle == 1;
+		hitbox.GetComponent<SpriteRenderer>().flipY = _attackDirToggle == 0;
 		hitbox.Damage = damage;
 		hitbox.PWM_Tester = _pwmTester;
 		hitbox.GeneratingNode = node;
@@ -108,6 +111,7 @@ public class PlayerAttackControl : MonoBehaviour
 		if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
 		{
 			_animator.speed = 1;
+			Engaged = false;
 		}
 	}
 

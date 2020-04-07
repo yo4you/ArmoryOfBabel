@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class HeavyAttackAnimBehaviour : StateMachineBehaviour
+public class InteruptableAnimation : StateMachineBehaviour
 {
 	private readonly Lazy<PlayerAttackControl> _attackControl = new Lazy<PlayerAttackControl>(() => FindObjectOfType<PlayerAttackControl>());
 
@@ -37,10 +37,4 @@ public class HeavyAttackAnimBehaviour : StateMachineBehaviour
 			}
 		}
 	}
-
-	// OnStateMove is called right after Animator.OnAnimatorMove()
-	//override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	//{
-	//    // Implement code that processes and affects root motion
-	//}
 }

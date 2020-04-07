@@ -129,7 +129,7 @@ public class DungeonGenerator : MonoBehaviour
 				bounds.extents = extends;
 				roomPop.Bounds = bounds;
 				roomPop.PathFinder = _pathFinder;
-				if (_spawnEnemies)
+				if (_spawnEnemies && i != 0)
 				{
 					for (int j = 0; j < Random.Range(1, _enemyMax); j++)
 					{

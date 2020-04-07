@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
 {
 	private Animator _animator;
 
+	private PlayerAttackControl _attackControl;
+
 	[SerializeField]
 	[Tooltip("the maximum time the player gets after attacking to change the direction")]
 	private float _attackDelay;
@@ -85,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		_animator = GetComponent<Animator>();
 		_rigidBody = GetComponent<Rigidbody2D>();
+		_attackControl = GetComponent<PlayerAttackControl>();
 	}
 
 	private void Update()
@@ -96,7 +99,7 @@ public class PlayerMovement : MonoBehaviour
 			moveInput.Normalize();
 		}
 
-		if ((!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement")) || _animator.speed != 1f)
+		if ((!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement")) || _attackControl.Engaged)
 		{
 			return;
 		}
