@@ -24,16 +24,28 @@ public class PlayerAttackControl : MonoBehaviour
 		{
 			return false;
 		}
-		if (CanQueue)
+		var lastInput = new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y"));
+		var direction = lastInput;
+
+		if (_retical.ActiveInput)
+		{
+			direction = new Vector2(
+				 -Mathf.Cos(_retical.Angle * Mathf.Deg2Rad),
+				 -Mathf.Sin(_retical.Angle * Mathf.Deg2Rad)
+				);
+			_animator.SetFloat("x", direction.x);
+			_animator.SetFloat("y", direction.y);
+			if (CanQueue)
+			{
+				if (Vector2.Dot(direction, lastInput) > 0.5f)
+				{
+					_movement.ResetDashAttack();
+				}
+			}
+		}
+		else if (CanQueue)
 		{
 			_movement.ResetDashAttack();
-		}
-		else if (_retical.ActiveInput)
-		{
-			var lastInput = new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y"));
-			_animator.SetFloat("x", -Mathf.Cos(_retical.Angle * Mathf.Deg2Rad));
-			_animator.SetFloat("y", -Mathf.Sin(_retical.Angle * Mathf.Deg2Rad));
-			_movement.DashAttack = Vector2.Dot(lastInput, new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y")));
 		}
 		_animator.speed = speed;
 		switch (type)
@@ -44,18 +56,19 @@ public class PlayerAttackControl : MonoBehaviour
 
 			case 1:
 				_animator.Play("light_hit");
-				StartCoroutine(StartProjectileAttack(_projectilePrefab, speed, damage, node));
+				StartCoroutine(StartProjectileAttack(_projectilePrefab, speed, damage, node, direction));
 				break;
 
 			case 2:
 				_animator.Play("light_hit");
-				StartCoroutine(StartMeleeAttack(_slashPrefab, speed, damage, node));
+				StartCoroutine(StartMeleeAttack(_slashPrefab, speed, damage, node, direction));
 				break;
 
 			case 3:
+				_movement.DashAttack = Vector2.Dot(lastInput, new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y")));
 				_attackDirToggle = 1 - _attackDirToggle;
 				_animator.Play("heavy_hit" + _attackDirToggle);
-				StartCoroutine(StartMeleeAttack(_sweepPrefab, speed, damage, node));
+				StartCoroutine(StartMeleeAttack(_sweepPrefab, speed, damage, node, direction));
 				break;
 
 			default:
@@ -64,13 +77,9 @@ public class PlayerAttackControl : MonoBehaviour
 		return true;
 	}
 
-	public IEnumerator StartMeleeAttack(SweepBehaviour prefab, float speed, float damage, Node node)
+	public IEnumerator StartMeleeAttack(SweepBehaviour prefab, float speed, float damage, Node node, Vector2 direction)
 	{
 		yield return new WaitForFixedUpdate();
-
-		var direction = new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y"));
-		direction.Normalize();
-
 		float angle = 180f + MathUtils.RoundAngleToDirection(Vector2.SignedAngle(Vector2.right, direction));
 		var quat = Quaternion.Euler(0, 0, angle);
 		//var offset = quat * _offset;
@@ -84,13 +93,9 @@ public class PlayerAttackControl : MonoBehaviour
 		hitbox.GeneratingNode = node;
 	}
 
-	public IEnumerator StartProjectileAttack(ProjectileBehaviour prefab, float speed, float damage, Node node)
+	public IEnumerator StartProjectileAttack(ProjectileBehaviour prefab, float speed, float damage, Node node, Vector2 direction)
 	{
 		yield return new WaitForFixedUpdate();
-
-		var direction = new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y"));
-		direction.Normalize();
-
 		var projectile = Instantiate(prefab, transform.position, new Quaternion());
 		projectile.MoveDir = direction * _projectileSpeed;
 		projectile.Damage = damage;

@@ -105,7 +105,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 4517d47bfb95eee44a1b033360f135ab, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 0.001
+    m_TimeScale: 0.01
     m_CycleOffset: 0
     m_DirectBlendParameter: x
     m_Mirror: 0
@@ -284,13 +284,13 @@ AnimatorStateTransition:
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 0}
   m_Solo: 0
-  m_Mute: 1
+  m_Mute: 0
   m_IsExit: 1
   serializedVersion: 3
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.2630059
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -903,7 +903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea97ee270b02f3468addb1ef3c34854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _queuePeriod: 0.473
+  _queuePeriod: 0.411
 --- !u!1101 &6550591667432670905
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -938,7 +938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea97ee270b02f3468addb1ef3c34854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _queuePeriod: 0.652
+  _queuePeriod: 0.422
 --- !u!1102 &7352241990218561199
 AnimatorState:
   serializedVersion: 5

@@ -144,8 +144,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _persistant: 1
-  _knockBackForce: 200
-  _stunTime: 0.2
+  _knockBackForce: 700
+  _stunTime: 0.3
 --- !u!114 &1294820881018761779
 MonoBehaviour:
   m_ObjectHideFlags: 0

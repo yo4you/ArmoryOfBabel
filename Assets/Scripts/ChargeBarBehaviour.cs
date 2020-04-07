@@ -17,7 +17,10 @@ public class ChargeBarBehaviour : MonoBehaviour
 			_progressPercentage = Mathf.Clamp(value, 0f, 100f);
 			var newpos = _bar.localPosition;
 			newpos.x = -_bar.rect.width * (100f - _progressPercentage) / 100f;
-			_bar.localPosition = newpos;
+			if (!float.IsNaN(newpos.x))
+			{
+				_bar.localPosition = newpos;
+			}
 		}
 	}
 

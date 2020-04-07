@@ -20,20 +20,7 @@ public class UIHealthBarManager : MonoBehaviour
 		_elements.Remove(healthComponent);
 	}
 
-	private void Start()
-	{
-		_healthBarPool.AddRange(GetComponentsInChildren<ChargeBarBehaviour>());
-		foreach (var item in _healthBarPool)
-		{
-			item.gameObject.SetActive(false);
-		}
-		_camera = Camera.main;
-
-		_offset.x *= _camera.pixelRect.width;
-		_offset.y *= _camera.pixelRect.height;
-	}
-
-	private void Update()
+	private void OnGUI()
 	{
 		int uiBarIndex = 0;
 		foreach (var element in _elements)
@@ -64,5 +51,18 @@ public class UIHealthBarManager : MonoBehaviour
 		{
 			_healthBarPool[i].gameObject.SetActive(false);
 		}
+	}
+
+	private void Start()
+	{
+		_healthBarPool.AddRange(GetComponentsInChildren<ChargeBarBehaviour>());
+		foreach (var item in _healthBarPool)
+		{
+			item.gameObject.SetActive(false);
+		}
+		_camera = Camera.main;
+
+		_offset.x *= _camera.pixelRect.width;
+		_offset.y *= _camera.pixelRect.height;
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -33,8 +32,6 @@ public class Node
 		_rect = new Rect(Pos.x, Pos.y, _nodeSize, _nodeSize);
 	}
 
-	public static Dictionary<string, Texture> IconTextures { get => _iconTextures ?? LoadTexture(); set => _iconTextures = value; }
-
 	public bool Active { get; internal set; }
 
 	/// <summary>
@@ -53,6 +50,8 @@ public class Node
 	public Vector2 Pos { get => _pos; set => _pos = value; }
 
 	public float Value { get => _value; set => _value = value; }
+#if UNITY_EDITOR
+	public static Dictionary<string, Texture> IconTextures { get => _iconTextures ?? LoadTexture(); set => _iconTextures = value; }
 
 	/// <summary>
 	/// draws the node upon the editor window
@@ -93,26 +92,26 @@ public class Node
 	private static Dictionary<string, Texture> LoadTexture()
 	{
 		_iconTextures = new Dictionary<string, Texture> {
-			{"backGround",  EditorGUIUtility.Load("simple.png") as Texture},
-			{"A",  EditorGUIUtility.Load("BtnA.png") as Texture},
-			{"B",  EditorGUIUtility.Load("BtnB.png") as Texture},
-			{"X",  EditorGUIUtility.Load("BtnX.png") as Texture},
-			{"R",  EditorGUIUtility.Load("BtnR.png") as Texture},
-			{"OUT",  EditorGUIUtility.Load("BtnOut.png") as Texture},
-			{"VAL",  EditorGUIUtility.Load("BtnVal.png") as Texture},
-			{"OR",  EditorGUIUtility.Load("BtnOR.png") as Texture},
-			{"AND",  EditorGUIUtility.Load("BtnAnd.png") as Texture},
-			{"NOT",  EditorGUIUtility.Load("BtnNot.png") as Texture},
-			{"UI",  EditorGUIUtility.Load("BtnUI.png") as Texture},
-			{"HIT",  EditorGUIUtility.Load("BtnHit.png") as Texture},
-			{"TYPE",  EditorGUIUtility.Load("Settings.png") as Texture},
-			{"SPD",  EditorGUIUtility.Load("menu.png") as Texture},
-			{"DMG",  EditorGUIUtility.Load("starRate.png") as Texture},
-			{"AH",  EditorGUIUtility.Load("BtnAh.png") as Texture},
-			{"BH",  EditorGUIUtility.Load("BtnBh.png") as Texture},
-			{"XH",  EditorGUIUtility.Load("BtnXh.png") as Texture},
-			{"UIC",  EditorGUIUtility.Load("BtnUIcap.png") as Texture},
-			{"DT",  EditorGUIUtility.Load("dt.png") as Texture},
+			{"backGround",  UnityEditor.EditorGUIUtility.Load("simple.png") as Texture},
+			{"A",   UnityEditor.EditorGUIUtility.Load("BtnA.png") as Texture},
+			{"B",   UnityEditor.EditorGUIUtility.Load("BtnB.png") as Texture},
+			{"X",   UnityEditor.EditorGUIUtility.Load("BtnX.png") as Texture},
+			{"R",   UnityEditor.EditorGUIUtility.Load("BtnR.png") as Texture},
+			{"OUT", UnityEditor.EditorGUIUtility.Load("BtnOut.png") as Texture},
+			{"VAL", UnityEditor.EditorGUIUtility.Load("BtnVal.png") as Texture},
+			{"OR",  UnityEditor.EditorGUIUtility.Load("BtnOR.png") as Texture},
+			{"AND", UnityEditor.EditorGUIUtility.Load("BtnAnd.png") as Texture},
+			{"NOT", UnityEditor.EditorGUIUtility.Load("BtnNot.png") as Texture},
+			{"UI",  UnityEditor.EditorGUIUtility.Load("BtnUI.png") as Texture},
+			{"HIT", UnityEditor.EditorGUIUtility.Load("BtnHit.png") as Texture},
+			{"TYPE",UnityEditor.EditorGUIUtility.Load("Settings.png") as Texture},
+			{"SPD", UnityEditor.EditorGUIUtility.Load("menu.png") as Texture},
+			{"DMG", UnityEditor.EditorGUIUtility.Load("starRate.png") as Texture},
+			{"AH",  UnityEditor.EditorGUIUtility.Load("BtnAh.png") as Texture},
+			{"BH",  UnityEditor.EditorGUIUtility.Load("BtnBh.png") as Texture},
+			{"XH",  UnityEditor.EditorGUIUtility.Load("BtnXh.png") as Texture},
+			{"UIC", UnityEditor.EditorGUIUtility.Load("BtnUIcap.png") as Texture},
+			{"DT",  UnityEditor.EditorGUIUtility.Load("dt.png") as Texture},
 		};
 		return _iconTextures;
 	}
@@ -124,4 +123,6 @@ public class Node
 		nodeStyle.wordWrap = true;
 		return nodeStyle;
 	}
+
+#endif
 }

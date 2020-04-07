@@ -31,7 +31,6 @@ public class SpiderBehaviour : MonoBehaviour, IStunnable
 	public IEnumerator StartStrike(Vector3 strikeDir)
 	{
 		_striking = true;
-		var resetSpeed = _agent.MovementSpeed;
 		_agent.MovementSpeed = 0;
 		{
 			float inverseTime = 1f / _strikeTime;
@@ -58,18 +57,17 @@ public class SpiderBehaviour : MonoBehaviour, IStunnable
 		}
 		gameObject.layer = 9;
 		_striking = false;
-		_agent.MovementSpeed = resetSpeed;
+		_agent.MovementSpeed = _moveSpeed;
 	}
 
 	public void Stun()
 	{
 		StopAllCoroutines();
 		_rb.velocity = new Vector2();
-		_moveSpeed = _agent.MovementSpeed;
+		_agent.MovementSpeed = 0;
 		_stunned = true;
 		_sprite.color = Color.white;
 		gameObject.layer = 9;
-		_striking = false;
 	}
 
 	public void UnStun()
@@ -84,6 +82,7 @@ public class SpiderBehaviour : MonoBehaviour, IStunnable
 		_agent = GetComponent<SAP2DAgent>();
 		_rb = GetComponent<Rigidbody2D>();
 		_target = _agent.Target;
+		_moveSpeed = _agent.MovementSpeed;
 	}
 
 	private void Update()

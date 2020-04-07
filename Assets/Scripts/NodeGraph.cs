@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
+
+//using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// a class used storing nodes and their relations as well as providing all neccesairy methods for controlling them from the editor window
+/// a class used storing nodes and their relations as well as providing all necessarily methods for controlling them from the editor window
 /// </summary>
 public class NodeGraph : ICloneable
 {
@@ -25,7 +26,7 @@ public class NodeGraph : ICloneable
 	private const int _nodeMargin = 6;
 
 	// size of the nodes
-	// TODO don't hardcode this
+	// TODO don't hard code this
 	private const int _nodeSize = 100;
 
 	public Dictionary<int, Node> NodeDict { get => _nodeDict; set => _nodeDict = value; }
@@ -46,7 +47,7 @@ public class NodeGraph : ICloneable
 	}
 
 	/// <summary>
-	/// adds the node to the nodegraph and returns it's assigned ID
+	/// adds the node to the node graph and returns it's assigned ID
 	/// </summary>
 	/// <param name="node"></param>
 	/// <returns></returns>
@@ -111,36 +112,20 @@ public class NodeGraph : ICloneable
 		}
 	}
 
-	/// <summary>
-	/// draws the nodes onto the editor window
-	/// </summary>
-	public void Draw(float scale)
-	{
-		// we draw the connections first so they render under the nodes
-		foreach (var item in NodeDict)
-		{
-			if (item.Value == null)
-			{
-				continue;
-			}
-			DrawConnections(item.Value, scale);
-		}
-
-		// then draw the nodes
-		foreach (var item in NodeDict)
-		{
-			if (item.Value == null)
-			{
-				continue;
-			}
-			item.Value.Draw(item.Key, scale);
-		}
-	}
-
 	public int GetIdFromNode(Node node0)
 	{
 		return NodeDict.FirstOrDefault(kv => kv.Value == node0).Key;
 	}
+
+	internal void Modify(int nodeID, string newName)
+	{
+		if (NodeDict.TryGetValue(nodeID, out Node node))
+		{
+			node.Node_text = newName;
+		}
+	}
+
+#if UNITY_EDITOR
 
 	/// <summary>
 	/// returns a node if one contains the specified position
@@ -177,11 +162,29 @@ public class NodeGraph : ICloneable
 		}
 	}
 
-	internal void Modify(int nodeID, string newName)
+	/// <summary>
+	/// draws the nodes onto the editor window
+	/// </summary>
+	public void Draw(float scale)
 	{
-		if (NodeDict.TryGetValue(nodeID, out Node node))
+		// we draw the connections first so they render under the nodes
+		foreach (var item in NodeDict)
 		{
-			node.Node_text = newName;
+			if (item.Value == null)
+			{
+				continue;
+			}
+			DrawConnections(item.Value, scale);
+		}
+
+		// then draw the nodes
+		foreach (var item in NodeDict)
+		{
+			if (item.Value == null)
+			{
+				continue;
+			}
+			item.Value.Draw(item.Key, scale);
 		}
 	}
 
@@ -199,7 +202,7 @@ public class NodeGraph : ICloneable
 				var start = (node.Pos + new Vector2(_nodeSize - _nodeMargin, _nodeSize * 0.5f)) * scale;
 				var end = (connectedNode.Pos + new Vector2(_nodeMargin, _nodeSize * 0.5f)) * scale;
 				Vector2 tangentCurve = (Vector2.left * 80 * scale);
-				Handles.DrawBezier(
+				UnityEditor.Handles.DrawBezier(
 					start,
 					end,
 					start - tangentCurve,
@@ -208,8 +211,10 @@ public class NodeGraph : ICloneable
 					texture: null,
 					_lineWidth
 					);
-				Handles.DrawSolidDisc(end, Vector3.forward, _ballSize * scale);
+				UnityEditor.Handles.DrawSolidDisc(end, Vector3.forward, _ballSize * scale);
 			}
 		}
 	}
+
+#endif
 }

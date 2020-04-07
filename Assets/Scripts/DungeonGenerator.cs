@@ -19,6 +19,9 @@ public class DungeonGenerator : MonoBehaviour
 	};
 
 	[SerializeField]
+	private int _enemyMax;
+
+	[SerializeField]
 	private GameObject[] _enemyPrefabs;
 
 	[SerializeField]
@@ -128,7 +131,7 @@ public class DungeonGenerator : MonoBehaviour
 				roomPop.PathFinder = _pathFinder;
 				if (_spawnEnemies)
 				{
-					for (int j = 0; j < Random.Range(1, 3); j++)
+					for (int j = 0; j < Random.Range(1, _enemyMax); j++)
 					{
 						var enemy = Instantiate(_enemyPrefabs[Random.Range(0, _enemyPrefabs.Length)], bounds.center + (Vector3)(Random.insideUnitCircle * Random.Range(0f, .4f)), new Quaternion());
 						roomPop.Enemies.Add(enemy.GetComponent<SAP2DAgent>());
