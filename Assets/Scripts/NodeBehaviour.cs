@@ -149,7 +149,7 @@ public static class NodeBehaviour
 			}
 			else
 			{
-				node.Value /= prevNode.Value;
+				node.Value /= nodeVal;
 			}
 		}
 	}

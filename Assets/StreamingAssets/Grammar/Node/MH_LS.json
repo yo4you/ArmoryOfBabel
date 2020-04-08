@@ -22,88 +22,107 @@
             "RightHand": {
                 "Keys": [
                     0,
-                    8,
+                    31,
                     2,
                     3,
                     4,
                     5,
                     6,
                     7,
-                    12,
-                    10,
-                    21,
+                    26,
+                    24,
+                    27,
                     19,
-                    15,
+                    23,
                     16,
                     17,
                     18,
-                    22
+                    25,
+                    28,
+                    29,
+                    30,
+                    32,
+                    33,
+                    34,
+                    35,
+                    36,
+                    37,
+                    38,
+                    39,
+                    41,
+                    42,
+                    43,
+                    44,
+                    45,
+                    46,
+                    47,
+                    48
                 ],
-                "lastID": 23,
+                "lastID": 49,
                 "Values": [
                     {
                         "_connectedNodes": [
-                            8
+                            31
                         ],
                         "_node_text": "A",
                         "_pos": {
-                            "x": -291.0,
-                            "y": 77.0
+                            "x": 376.0,
+                            "y": 101.0
                         },
                         "_value": 0.0
                     },
                     {
                         "_connectedNodes": [
-                            7
+                            32
                         ],
                         "_node_text": "OUT",
                         "_pos": {
-                            "x": -113.0,
-                            "y": 77.0
+                            "x": 565.0,
+                            "y": 106.0
                         },
                         "_value": 0.0
                     },
                     {
                         "_connectedNodes": [
-                            8
+                            31
                         ],
                         "_node_text": "DMG",
                         "_pos": {
-                            "x": -111.0,
-                            "y": -13.0
+                            "x": 677.0,
+                            "y": 16.0
                         },
                         "_value": 2.0
                     },
                     {
                         "_connectedNodes": [
-                            8
+                            31
                         ],
                         "_node_text": "SPD",
                         "_pos": {
-                            "x": -116.0,
-                            "y": -102.0
+                            "x": 672.0,
+                            "y": -73.0
                         },
                         "_value": 1.5
                     },
                     {
                         "_connectedNodes": [
-                            8
+                            31
                         ],
                         "_node_text": "TYPE",
                         "_pos": {
-                            "x": -119.0,
-                            "y": -189.0
+                            "x": 669.0,
+                            "y": -160.0
                         },
                         "_value": 2.0
                     },
                     {
                         "_connectedNodes": [
-                            21
+                            27
                         ],
                         "_node_text": "UI",
                         "_pos": {
-                            "x": 131.0,
-                            "y": 73.0
+                            "x": 919.0,
+                            "y": 102.0
                         },
                         "_value": 0.0
                     },
@@ -113,10 +132,10 @@
                         ],
                         "_node_text": "UIC",
                         "_pos": {
-                            "x": 132.0,
-                            "y": -20.0
+                            "x": 920.0,
+                            "y": 9.0
                         },
-                        "_value": 5.0
+                        "_value": 10.0
                     },
                     {
                         "_connectedNodes": [
@@ -124,41 +143,44 @@
                         ],
                         "_node_text": "VAL",
                         "_pos": {
-                            "x": 20.0,
-                            "y": 76.0
+                            "x": 795.0,
+                            "y": 91.0
                         },
-                        "_value": 1.0
+                        "_value": 2.0
                     },
                     {
                         "_connectedNodes": [
                             16
                         ],
-                        "_node_text": "X",
+                        "_node_text": "B",
                         "_pos": {
-                            "x": -300.0,
-                            "y": 451.0
-                        },
-                        "_value": 0.0
-                    },
-                    {
-                        "_connectedNodes": [],
-                        "_node_text": "UI",
-                        "_pos": {
-                            "x": 166.0,
-                            "y": 406.0
+                            "x": 488.0,
+                            "y": 498.0
                         },
                         "_value": 0.0
                     },
                     {
                         "_connectedNodes": [
-                            22
+                            25
                         ],
-                        "_node_text": "COPY",
+                        "_node_text": "DT",
                         "_pos": {
-                            "x": 134.0,
-                            "y": 169.0
+                            "x": 926.0,
+                            "y": 299.0
                         },
-                        "_value": 1.0
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            28,
+                            29
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 382.0,
+                            "y": 246.0
+                        },
+                        "_value": 7.0
                     },
                     {
                         "_connectedNodes": [
@@ -166,30 +188,30 @@
                         ],
                         "_node_text": "SPD",
                         "_pos": {
-                            "x": -117.0,
-                            "y": 189.0
+                            "x": 671.0,
+                            "y": 218.0
                         },
                         "_value": 1.0
                     },
                     {
                         "_connectedNodes": [
-                            10
+                            24
                         ],
-                        "_node_text": "UIC",
+                        "_node_text": "NOT",
                         "_pos": {
-                            "x": 41.0,
-                            "y": 437.0
+                            "x": 930.0,
+                            "y": 397.0
                         },
-                        "_value": 5.0
+                        "_value": 0.0
                     },
                     {
                         "_connectedNodes": [
-                            21
+                            29
                         ],
                         "_node_text": "OUT",
                         "_pos": {
-                            "x": -123.0,
-                            "y": 454.0
+                            "x": 665.0,
+                            "y": 483.0
                         },
                         "_value": 0.0
                     },
@@ -199,10 +221,10 @@
                         ],
                         "_node_text": "TYPE",
                         "_pos": {
-                            "x": -121.0,
-                            "y": 363.0
+                            "x": 672.0,
+                            "y": 393.0
                         },
-                        "_value": 4.0
+                        "_value": 3.0
                     },
                     {
                         "_connectedNodes": [
@@ -210,21 +232,238 @@
                         ],
                         "_node_text": "DMG",
                         "_pos": {
-                            "x": -115.0,
-                            "y": 279.0
+                            "x": 670.0,
+                            "y": 303.0
+                        },
+                        "_value": 5.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            5
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 922.0,
+                            "y": 206.0
+                        },
+                        "_value": -0.5
+                    },
+                    {
+                        "_connectedNodes": [
+                            18
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 522.0,
+                            "y": 263.0
+                        },
+                        "_value": 2.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            30,
+                            33
+                        ],
+                        "_node_text": "AND",
+                        "_pos": {
+                            "x": 814.0,
+                            "y": 479.0
                         },
                         "_value": 0.0
                     },
                     {
                         "_connectedNodes": [
-                            10
+                            5
                         ],
                         "_node_text": "VAL",
                         "_pos": {
-                            "x": 139.0,
-                            "y": 265.0
+                            "x": 963.0,
+                            "y": 482.0
+                        },
+                        "_value": -7.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            7
+                        ],
+                        "_node_text": "HIT",
+                        "_pos": {
+                            "x": 678.0,
+                            "y": 105.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            36
+                        ],
+                        "_node_text": "HIT",
+                        "_pos": {
+                            "x": 577.0,
+                            "y": 627.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            41,
+                            42,
+                            43,
+                            44
+                        ],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 583.0,
+                            "y": 815.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            34
+                        ],
+                        "_node_text": "UIC",
+                        "_pos": {
+                            "x": 582.0,
+                            "y": 907.0
+                        },
+                        "_value": 4.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            34
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 577.0,
+                            "y": 721.0
                         },
                         "_value": 1.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            39
+                        ],
+                        "_node_text": "NOT",
+                        "_pos": {
+                            "x": 183.0,
+                            "y": 795.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            34
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 410.0,
+                            "y": 799.0
+                        },
+                        "_value": -0.05000000074505806
+                    },
+                    {
+                        "_connectedNodes": [
+                            38
+                        ],
+                        "_node_text": "DT",
+                        "_pos": {
+                            "x": 294.0,
+                            "y": 798.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            45
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": -27.0,
+                            "y": 509.0
+                        },
+                        "_value": 0.5
+                    },
+                    {
+                        "_connectedNodes": [
+                            46
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 71.0,
+                            "y": 511.0
+                        },
+                        "_value": 1.5
+                    },
+                    {
+                        "_connectedNodes": [
+                            47
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 165.0,
+                            "y": 514.0
+                        },
+                        "_value": 2.5
+                    },
+                    {
+                        "_connectedNodes": [
+                            48
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 260.0,
+                            "y": 515.0
+                        },
+                        "_value": 3.5
+                    },
+                    {
+                        "_connectedNodes": [
+                            18,
+                            2
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": -31.0,
+                            "y": 409.0
+                        },
+                        "_value": 1.2999999523162842
+                    },
+                    {
+                        "_connectedNodes": [
+                            18,
+                            2
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 71.0,
+                            "y": 409.0
+                        },
+                        "_value": 1.2999999523162842
+                    },
+                    {
+                        "_connectedNodes": [
+                            18,
+                            2
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 169.0,
+                            "y": 415.0
+                        },
+                        "_value": 1.2999999523162842
+                    },
+                    {
+                        "_connectedNodes": [
+                            18,
+                            2
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 267.0,
+                            "y": 420.0
+                        },
+                        "_value": 1.2999999523162842
                     }
                 ]
             }
