@@ -112,6 +112,7 @@ public class Node
 			{"XH",  UnityEditor.EditorGUIUtility.Load("BtnXh.png") as Texture},
 			{"UIC", UnityEditor.EditorGUIUtility.Load("BtnUIcap.png") as Texture},
 			{"DT",  UnityEditor.EditorGUIUtility.Load("dt.png") as Texture},
+			{"COPY",  UnityEditor.EditorGUIUtility.Load("BtnCopy.png") as Texture},
 		};
 		return _iconTextures;
 	}

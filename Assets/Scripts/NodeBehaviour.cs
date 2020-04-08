@@ -44,7 +44,6 @@ public static class NodeBehaviour
 			{
 				Callbacks.Peek().Activatee = node;
 			}
-			//Debug.Log("created projectile callback");
 		}
 	}
 
@@ -82,7 +81,7 @@ public static class NodeBehaviour
 		}
 
 		// TODO check cooldowns
-		if (prevNode.Node_text == "VAL" || prevNode.Node_text == "DMG" || prevNode.Node_text == "SPD" || prevNode.Node_text == "TYPE")
+		if (prevNode.Node_text == "VAL" || prevNode.Node_text == "DMG" || prevNode.Node_text == "SPD" || prevNode.Node_text == "TYPE" || prevNode.Node_text == "COPY")
 		{
 			return;
 		}
@@ -121,7 +120,6 @@ public static class NodeBehaviour
 		{
 			Callbacks.Peek().Activator = node;
 		}
-		//Debug.Log($"pew projectile spd:{spd} dmg:{dmg} type:{type}");
 	}
 
 	public static void SetState_UINode(Node prevNode, Node node, ref NodeGraph graph, bool state)
@@ -138,16 +136,33 @@ public static class NodeBehaviour
 	{
 		node.Active = state;
 
-		if (prevNode.Node_text == "VAL" || prevNode.Node_text == "DT")
+		if (prevNode.Node_text == "VAL" || prevNode.Node_text == "DT" || prevNode.Node_text == "COPY")
 		{
+			var nodeVal = prevNode.Value;
+			if (nodeVal == 0f)
+			{
+				nodeVal = float.Epsilon;
+			}
 			if (state)
 			{
-				node.Value *= prevNode.Value;
+				node.Value *= nodeVal;
 			}
 			else
 			{
 				node.Value /= prevNode.Value;
 			}
+		}
+	}
+
+	internal static void SetState_CopyNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	{
+		if (prevNode.Node_text != "UI")
+		{
+			node.Active = state;
+		}
+		else
+		{
+			node.Value = (state && prevNode.Value != 0f) ? prevNode.Value : float.Epsilon;
 		}
 	}
 
