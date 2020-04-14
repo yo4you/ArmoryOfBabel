@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public static class NodeBehaviour
 {
 	public static Stack<NodeActivationCallBack> Callbacks { get; set; } = new Stack<NodeActivationCallBack>();
 	public static PlayerAttackControl PlayerAttacks { get; internal set; }
 
-	public static void SetState_AndNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	public static void SetState_AndNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
-		if (!state)
-		{
-			node.Active = false;
-			return;
-		}
 		node.Active = true;
 		int id = graph.GetIdFromNode(node);
 		foreach (var potentialConnection in graph.NodeDict)
@@ -27,12 +23,12 @@ public static class NodeBehaviour
 		}
 	}
 
-	public static void SetState_GenericNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	public static void SetState_GenericNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
 		node.Active = state;
 	}
 
-	public static void SetState_HitNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	public static void SetState_HitNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
 		if (prevNode == null)
 		{
@@ -47,7 +43,7 @@ public static class NodeBehaviour
 		}
 	}
 
-	public static void SetState_NotNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	public static void SetState_NotNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
 		if (prevNode == null)
 		{
@@ -59,7 +55,7 @@ public static class NodeBehaviour
 		}
 	}
 
-	public static void SetState_OrNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	public static void SetState_OrNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
 		node.Active = false;
 		foreach (var connection in node.ConnectedNodes)
@@ -72,15 +68,13 @@ public static class NodeBehaviour
 		}
 	}
 
-	public static void SetState_OutNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	public static void SetState_OutNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
-		if (!state)
+		if (node.Active)
 		{
-			node.Active = false;
 			return;
 		}
 
-		// TODO check cooldowns
 		if (prevNode.Node_text == "VAL" || prevNode.Node_text == "DMG" || prevNode.Node_text == "SPD" || prevNode.Node_text == "TYPE" || prevNode.Node_text == "COPY")
 		{
 			return;
@@ -115,6 +109,8 @@ public static class NodeBehaviour
 					continue;
 			}
 		}
+		Debug.Log($"damage outgoing at speed {spd} and dmg {dmg}");
+
 		node.Active = PlayerAttacks.ProccessAttackNode(spd, dmg, (int)type, node);
 		if (Callbacks.Peek().Activator == null)
 		{
@@ -122,39 +118,43 @@ public static class NodeBehaviour
 		}
 	}
 
-	public static void SetState_UINode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	public static void SetState_UINode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
-		node.Active = state;
-
-		if (state && prevNode.Node_text == "VAL")
+		if (prevNode == null)
+		{
+			node.Active = state;
+		}
+		else if (state && prevNode.Node_text == "VAL")
 		{
 			node.Value += prevNode.Value;
 		}
 	}
 
-	public static void SetState_ValNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	public static void SetState_ValNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
 		node.Active = state;
-
-		if (prevNode.Node_text == "VAL" || prevNode.Node_text == "DT" || prevNode.Node_text == "COPY")
+		int id = graph.GetIdFromNode(node);
+		if (IsValueHoldingNode(prevNode))
 		{
-			var nodeVal = prevNode.Value;
-			if (nodeVal == 0f)
+			node.Value = baseval;
+			foreach (var potentialAffector in graph.NodeDict)
 			{
-				nodeVal = float.Epsilon;
-			}
-			if (state)
-			{
+				if (!potentialAffector.Value.ConnectedNodes.Contains(id) || !IsValueHoldingNode(potentialAffector.Value) || !potentialAffector.Value.Active)
+				{
+					continue;
+				}
+
+				var nodeVal = potentialAffector.Value.Value;
+				if (nodeVal == 0f)
+				{
+					nodeVal = float.Epsilon;
+				}
 				node.Value *= nodeVal;
-			}
-			else
-			{
-				node.Value /= nodeVal;
 			}
 		}
 	}
 
-	internal static void SetState_CopyNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	internal static void SetState_CopyNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
 		if (prevNode.Node_text != "UI")
 		{
@@ -166,15 +166,21 @@ public static class NodeBehaviour
 		}
 	}
 
-	internal static void SetState_TreshNode(Node prevNode, Node node, ref NodeGraph graph, bool state)
+	internal static void SetState_TreshNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
+		if (prevNode == null)
+		{
+			node.Active = state;
+			return;
+		}
 		if (prevNode.Active)
 		{
 			node.Active = prevNode.Value >= node.Value;
 		}
-		else
-		{
-			node.Active = false;
-		}
+	}
+
+	private static bool IsValueHoldingNode(Node prevNode)
+	{
+		return prevNode != null && (prevNode.Node_text == "VAL" || prevNode.Node_text == "DT" || prevNode.Node_text == "COPY");
 	}
 }

@@ -36,15 +36,15 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private List<Node> _notNodes = new List<Node>();
 
+	private Dictionary<Node, float> _restoreState = new Dictionary<Node, float>();
 	private List<Node> _timeNodes = new List<Node>();
 
 	private List<ChargeBarBehaviour> _uiBars = new List<ChargeBarBehaviour>();
 
 	private Dictionary<Node, Node> _uiNodeCaps;
-
 	private List<Node> _uiNodes = new List<Node>();
 
-	private delegate void NodeHandleDelegate(Node prevNode, Node node, ref NodeGraph graph, bool state);
+	private delegate void NodeHandleDelegate(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseState);
 
 	internal void CollisionCallback(Node generatingNode)
 	{
@@ -65,6 +65,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		_uiNodes = new List<Node>();
 		_uiNodeCaps = new Dictionary<Node, Node>();
 		_inputNodes = new Dictionary<string, Node>();
+		_restoreState = new Dictionary<Node, float>();
 		foreach (var ui in _uiBars)
 		{
 			ui.gameObject.SetActive(true);
@@ -118,6 +119,8 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 					}
 					break;
 			}
+
+			_restoreState.Add(node.Value, node.Value.Value);
 		}
 		for (int Index = _uiBars.Count - 1; Index >= _uiNodes.Count; Index--)
 		{
@@ -125,22 +128,34 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		}
 	}
 
-	private void SetNodeActivity(Node lastNode, Node node, bool state)
+	private void SetNodeActivity(Node lastNode, Node node, bool state, List<Node> visited = default)
 	{
 		string node_function = node.Node_text;
 		if (!_nodeFunctions.ContainsKey(node.Node_text))
 		{
 			node_function = "GENERIC";
 		}
-		var changed = node.Active != state;
 
-		_nodeFunctions[node_function](lastNode, node, ref _mechanicGraph, state);
+		if (visited == default)
+		{
+			visited = new List<Node>();
+		}
+		if (visited.Contains(node))
+		{
+			return;
+		}
+		else if (node_function != "UI")
+		{
+			visited.Add(node);
+		}
 
-		if (node.Active == state && changed)
+		_nodeFunctions[node_function](lastNode, node, ref _mechanicGraph, state, _restoreState[node]);
+
+		if (node.Active == state)
 		{
 			foreach (var connection in node.ConnectedNodes)
 			{
-				SetNodeActivity(node, _mechanicGraph.NodeDict[connection], state);
+				SetNodeActivity(node, _mechanicGraph.NodeDict[connection], state, visited);
 			}
 		}
 	}
@@ -184,7 +199,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		for (int i = 0; i < _uiNodes.Count; i++)
 		{
 			Node uiNode = _uiNodes[i];
-			SetNodeActivity(uiNode, uiNode, true);
+			SetNodeActivity(null, uiNode, true);
 			float uicap = 100;
 			if (_uiNodeCaps.TryGetValue(uiNode, out Node cap))
 			{
@@ -217,24 +232,15 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 				NodeBehaviour.Callbacks.Pop();
 			}
 		}
-		foreach (var notNode in _notNodes)
-		{
-			SetNodeActivity(null, notNode, false);
-		}
 
-		foreach (var input in _inputNodes)
+		foreach (var node in _restoreState)
 		{
-			SetNodeActivity(null, input.Value, false);
-		}
+			node.Key.Active = false;
 
-		foreach (var callbackNodes in _callBackNodes)
-		{
-			SetNodeActivity(null, callbackNodes, false);
-		}
-
-		foreach (var uiNode in _uiNodes)
-		{
-			SetNodeActivity(uiNode, uiNode, false);
+			if (node.Key.Node_text != "UI")
+			{
+				node.Key.Value = node.Value;
+			}
 		}
 		_callBackNodes = new List<Node>();
 	}
