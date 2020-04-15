@@ -2323,7 +2323,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a678e9c36506a449bec83af640ad8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mechanicGrammarName: gun2
+  _mechanicGrammarName: Hold
+  _minButtonHoldTime: 0.25
 --- !u!114 &698379467
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class NodeGrammarExecutor : EditorWindow
 	// ratio * w = h
 	private const float _editorWHRatio = 0.75f;
 
-	// width * ratio = margin
+	// width * marginratio = margin
 	private const float _marginRatio = 0.02f;
 
 	private readonly float _editorHeightRatio = 0.5f;

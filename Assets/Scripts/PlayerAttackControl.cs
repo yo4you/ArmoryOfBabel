@@ -21,6 +21,7 @@ public class PlayerAttackControl : MonoBehaviour
 
 	public bool ProccessAttackNode(float speed, float damage, int type, Node node)
 	{
+		Debug.Log("damage:" + damage);
 		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !CanQueue)
 		{
 			return false;
@@ -82,6 +83,19 @@ public class PlayerAttackControl : MonoBehaviour
 	{
 		_attackDirToggle = 1 - _attackDirToggle;
 		yield return new WaitForFixedUpdate();
+		// get the amount of time the animation still has to play
+		float length = _animator.GetCurrentAnimatorStateInfo(0).length - _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+		float speedMult = 1f;
+		// correctively speed up the attack if the player holds the button slightly too long but not long enough to trigger a held attack
+		// this ensures that attacks land at a predictable interval
+		if (_pwmTester.LastAttackDelay != 0f)
+		{
+			speedMult = length / (length - _pwmTester.LastAttackDelay);
+			_pwmTester.LastAttackDelay = 0f;
+		}
+
+		_animator.speed *= speedMult;
+
 		float angle = 180f + MathUtils.RoundAngleToDirection(Vector2.SignedAngle(Vector2.right, direction));
 		var quat = Quaternion.Euler(0, 0, angle);
 		var hitbox = Instantiate(prefab, transform.position, quat);
@@ -89,7 +103,7 @@ public class PlayerAttackControl : MonoBehaviour
 		follow.Player = gameObject;
 		follow.Offset = _offset;
 		hitbox.transform.localPosition = new Vector3();
-		hitbox.GetComponent<Animator>().speed = speed;
+		hitbox.GetComponent<Animator>().speed = speed * speedMult;
 		hitbox.GetComponent<SpriteRenderer>().flipY = _attackDirToggle == 0;
 		hitbox.Damage = damage;
 		hitbox.PWM_Tester = _pwmTester;

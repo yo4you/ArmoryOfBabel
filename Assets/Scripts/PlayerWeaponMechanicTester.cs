@@ -10,6 +10,13 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{"X","Special"},
 	};
 
+	private readonly Dictionary<string, string> _inputHoldDefenitions = new Dictionary<string, string>
+	{
+		{"AH","Attack 1"},
+		{"BH","Attack 2" },
+		{"XH","Special"},
+	};
+
 	private readonly Dictionary<string, NodeHandleDelegate> _nodeFunctions = new Dictionary<string, NodeHandleDelegate>
 	{
 		{ "NOT",    NodeBehaviour.SetState_NotNode},
@@ -22,17 +29,20 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{ "DMG",    NodeBehaviour.SetState_ValNode},
 		{ "SPD",    NodeBehaviour.SetState_ValNode},
 		{ "TRESH",  NodeBehaviour.SetState_TreshNode},
-		{ "COPY",  NodeBehaviour.SetState_CopyNode},
+		{ "COPY",   NodeBehaviour.SetState_CopyNode},
 		{ "DT",     NodeBehaviour.SetState_ValNode},
 		{ "GENERIC",NodeBehaviour.SetState_GenericNode},
 	};
 
 	private List<Node> _callBackNodes = new List<Node>();
-	private Dictionary<string, Node> _inputNodes = new Dictionary<string, Node>();
+	private Dictionary<string, InputNode> _inputNodes = new Dictionary<string, InputNode>();
 
 	[SerializeField] private string _mechanicGrammarName;
 
 	private NodeGraph _mechanicGraph;
+
+	[SerializeField]
+	private float _minButtonHoldTime;
 
 	private List<Node> _notNodes = new List<Node>();
 
@@ -46,6 +56,8 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private delegate void NodeHandleDelegate(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseState);
 
+	public float LastAttackDelay { get; set; }
+
 	internal void CollisionCallback(Node generatingNode)
 	{
 		var list = new List<NodeActivationCallBack>(NodeBehaviour.Callbacks);
@@ -58,33 +70,20 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		NodeBehaviour.Callbacks = new Stack<NodeActivationCallBack>(list);
 	}
 
-	private void LoadMechanicGraph()
+	private void AnalyseMechanicNodes()
 	{
-		_notNodes = new List<Node>();
-		_timeNodes = new List<Node>();
-		_uiNodes = new List<Node>();
-		_uiNodeCaps = new Dictionary<Node, Node>();
-		_inputNodes = new Dictionary<string, Node>();
-		_restoreState = new Dictionary<Node, float>();
-		foreach (var ui in _uiBars)
-		{
-			ui.gameObject.SetActive(true);
-		}
-		var grammars = NodeGrammar.ImportGrammars(Application.streamingAssetsPath + "/Grammar/Node/" + _mechanicGrammarName + ".json");
-		var inputGraph = new NodeGraph();
-		inputGraph.AddNode(new Node()
-		{
-			Node_text = "S"
-		});
-
-		_mechanicGraph = GrammarUtils.ApplyNodeGrammars("S", ref grammars, inputGraph);
 		foreach (var node in _mechanicGraph.NodeDict)
 		{
 			var nodeText = node.Value.Node_text;
 			if (_inputDefenitions.TryGetValue(nodeText, out string keycode))
 			{
-				_inputNodes.Add(keycode, node.Value);
+				RegisterInput(keycode, node.Value);
 			}
+			if (_inputHoldDefenitions.TryGetValue(nodeText, out string keycode2))
+			{
+				RegisterHeldInput(keycode2, node.Value);
+			}
+
 			switch (nodeText)
 			{
 				case "NOT":
@@ -98,34 +97,113 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 				case "UI":
 					{
 						_uiNodes.Add(node.Value);
-						foreach (var connection in node.Value.ConnectedNodes)
-						{
-							if (_mechanicGraph.NodeDict[connection].Node_text == "VAL")
-							{
-								_mechanicGraph.NodeDict[connection].Node_text = "TRESH";
-							}
-						}
+						ConnectedValIntoTresh(node.Value);
 
 						break;
 					}
 				case "UIC":
-					foreach (var connectedNodeID in node.Value.ConnectedNodes)
-					{
-						var connectedNode = _mechanicGraph.NodeDict[connectedNodeID];
-						if (connectedNode.Node_text == "UI")
-						{
-							_uiNodeCaps.Add(connectedNode, node.Value);
-						}
-					}
+					RegisterUICap(node.Value);
+
 					break;
 			}
 
 			_restoreState.Add(node.Value, node.Value.Value);
 		}
+	}
+
+	private void ConnectedValIntoTresh(Node node)
+	{
+		foreach (var connection in node.ConnectedNodes)
+		{
+			if (_mechanicGraph.NodeDict[connection].Node_text == "VAL")
+			{
+				_mechanicGraph.NodeDict[connection].Node_text = "TRESH";
+			}
+		}
+	}
+
+	private void LoadMechanicGraph()
+	{
+		_notNodes = new List<Node>();
+		_timeNodes = new List<Node>();
+		_uiNodes = new List<Node>();
+		_uiNodeCaps = new Dictionary<Node, Node>();
+		_inputNodes = new Dictionary<string, InputNode>();
+		_restoreState = new Dictionary<Node, float>();
+		// enable the right visuals
+		foreach (var ui in _uiBars)
+		{
+			ui.gameObject.SetActive(true);
+		}
+		var grammars = NodeGrammar.ImportGrammars(Application.streamingAssetsPath + "/Grammar/Node/" + _mechanicGrammarName + ".json");
+		// generate a simple left hand side for now
+		var inputGraph = new NodeGraph();
+		inputGraph.AddNode(new Node()
+		{
+			Node_text = "S"
+		});
+
+		_mechanicGraph = GrammarUtils.ApplyNodeGrammars("S", ref grammars, inputGraph);
+		AnalyseMechanicNodes();
+		// turn off extra visuals, used only when reloading mechanics
 		for (int Index = _uiBars.Count - 1; Index >= _uiNodes.Count; Index--)
 		{
 			_uiBars[Index].gameObject.SetActive(false);
 		}
+	}
+
+	private void RegisterHeldInput(string keycode, Node node)
+	{
+		if (_inputNodes.TryGetValue(keycode, out InputNode inputentry))
+		{
+			inputentry.InputHeld = node;
+		}
+		else
+		{
+			_inputNodes.Add(keycode, new InputNode() { InputHeld = node });
+		}
+	}
+
+	private void RegisterInput(string keycode, Node node)
+	{
+		if (_inputNodes.TryGetValue(keycode, out InputNode inputentry))
+		{
+			inputentry.Input = node;
+		}
+		else
+		{
+			_inputNodes.Add(keycode, new InputNode() { Input = node });
+		}
+	}
+
+	private void RegisterUICap(Node node)
+	{
+		foreach (var connectedNodeID in node.ConnectedNodes)
+		{
+			var connectedNode = _mechanicGraph.NodeDict[connectedNodeID];
+			if (connectedNode.Node_text == "UI")
+			{
+				_uiNodeCaps.Add(connectedNode, node);
+			}
+		}
+	}
+
+	/// <summary>
+	/// restore the node graph to it's "stateless" activation state
+	/// </summary>
+	private void RestoreNodeGraphState()
+	{
+		foreach (var node in _restoreState)
+		{
+			node.Key.Active = false;
+
+			// only UI nodes retain their value
+			if (node.Key.Node_text != "UI")
+			{
+				node.Key.Value = node.Value;
+			}
+		}
+		_callBackNodes = new List<Node>();
 	}
 
 	private void SetNodeActivity(Node lastNode, Node node, bool state, List<Node> visited = default)
@@ -176,26 +254,106 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private void Update()
 	{
+		// reload mechanic for debugging
 		if (Input.GetKeyDown(KeyCode.F5))
 		{
 			LoadMechanicGraph();
 		}
 
+		UpdateNodegraphState();
+		RestoreNodeGraphState();
+	}
+
+	private void UpdateInputNodeState()
+	{
+		foreach (var input in _inputNodes)
+		{
+			// we push a new callback associated with this input
+			NodeBehaviour.Callbacks.Push(new NodeActivationCallBack(null, null));
+
+			if (input.Value.Held)
+			{
+				bool heldInput = Time.time - input.Value.InstigationTime > _minButtonHoldTime;
+				if (Input.GetButtonDown(input.Key))
+				{
+					input.Value.InstigationTime = Time.time;
+				}
+				if (Input.GetButton(input.Key) && heldInput)
+				{
+					SetNodeActivity(null, input.Value.InputHeld, true);
+				}
+				if (Input.GetButtonUp(input.Key))
+				{
+					if (heldInput)
+					{
+						input.Value.InstigationTime = float.MaxValue;
+					}
+					else
+					{
+						LastAttackDelay = Time.time - input.Value.InstigationTime;
+					}
+					SetNodeActivity(null, input.Value.Input, true);
+				}
+			}
+			else
+			{
+				if (Input.GetButtonDown(input.Key))
+				{
+					SetNodeActivity(null, input.Value.Input, true);
+				}
+			}
+
+			var callback = NodeBehaviour.Callbacks.Peek();
+			// if we hit a hit response node we've new callback
+			if (callback.Activatee == null || callback.Activator == null)
+			{
+				NodeBehaviour.Callbacks.Pop();
+			}
+		}
+	}
+
+	/// <summary>
+	/// Update the state of the mechanic node graph
+	/// </summary>
+	private void UpdateNodegraphState()
+	{
+		// update the delta time nodes in the graph each frame
 		foreach (var dtNode in _timeNodes)
 		{
 			dtNode.Value = Time.deltaTime;
 		}
 
+		// NOT nodes are going to be true by default so they can be flipped when activated
 		foreach (var notNode in _notNodes)
 		{
 			notNode.Active = true;
 		}
 
+		// Resolve the callbacks we've had between last update and this
 		foreach (var callbackNodes in _callBackNodes)
 		{
 			SetNodeActivity(null, callbackNodes, true);
 		}
 
+		// we update the UI nodes first so that the thresholds represent accurate values
+		UpdateUINodeState();
+
+		// call for all the not nodes that weren't flipped
+		foreach (var notNode in _notNodes)
+		{
+			if (notNode.Active)
+			{
+				notNode.Active = false;
+				SetNodeActivity(null, notNode, true);
+			}
+		}
+
+		// parse trough the player input
+		UpdateInputNodeState();
+	}
+
+	private void UpdateUINodeState()
+	{
 		for (int i = 0; i < _uiNodes.Count; i++)
 		{
 			Node uiNode = _uiNodes[i];
@@ -209,39 +367,5 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			uiNode.Value = Mathf.Clamp(uiNode.Value, 0f, uicap);
 			_uiBars[i].ProgressPercentage = uiNode.Value * 100f / uicap;
 		}
-
-		foreach (var notNode in _notNodes)
-		{
-			if (notNode.Active)
-			{
-				notNode.Active = false;
-				SetNodeActivity(null, notNode, true);
-			}
-		}
-
-		foreach (var input in _inputNodes)
-		{
-			NodeBehaviour.Callbacks.Push(new NodeActivationCallBack(null, null));
-			if (Input.GetButtonDown(input.Key))
-			{
-				SetNodeActivity(null, input.Value, true);
-			}
-			var callback = NodeBehaviour.Callbacks.Peek();
-			if (callback.Activatee == null || callback.Activator == null)
-			{
-				NodeBehaviour.Callbacks.Pop();
-			}
-		}
-
-		foreach (var node in _restoreState)
-		{
-			node.Key.Active = false;
-
-			if (node.Key.Node_text != "UI")
-			{
-				node.Key.Value = node.Value;
-			}
-		}
-		_callBackNodes = new List<Node>();
 	}
 }

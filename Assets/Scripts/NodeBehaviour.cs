@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 public static class NodeBehaviour
 {
@@ -109,7 +108,6 @@ public static class NodeBehaviour
 					continue;
 			}
 		}
-		Debug.Log($"damage outgoing at speed {spd} and dmg {dmg}");
 
 		node.Active = PlayerAttacks.ProccessAttackNode(spd, dmg, (int)type, node);
 		if (Callbacks.Peek().Activator == null)
