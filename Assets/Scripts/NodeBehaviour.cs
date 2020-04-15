@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public static class NodeBehaviour
 {
@@ -81,8 +82,8 @@ public static class NodeBehaviour
 		node.Active = state;
 
 		int id = graph.GetIdFromNode(node);
-		var spd = 1f;
-		var dmg = 1f;
+		var spd = .1f;
+		var dmg = .1f;
 		var type = 0f;
 		foreach (var potentialAffector in graph.NodeDict)
 		{
@@ -93,11 +94,11 @@ public static class NodeBehaviour
 			switch (potentialAffector.Value.Node_text)
 			{
 				case "DMG":
-					dmg = potentialAffector.Value.Value;
+					dmg = Mathf.Max(dmg, potentialAffector.Value.Value);
 					continue;
 
 				case "SPD":
-					spd = potentialAffector.Value.Value;
+					spd = Mathf.Max(spd, potentialAffector.Value.Value);
 					continue;
 
 				case "TYPE":
