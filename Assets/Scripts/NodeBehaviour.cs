@@ -7,6 +7,7 @@ public static class NodeBehaviour
 	public static string[] ValueHoldingNodes = { "VAL", "DMG", "SPD", "TYPE", "COPY", "DT", "SUM" };
 	public static Stack<NodeActivationCallBack> Callbacks { get; set; } = new Stack<NodeActivationCallBack>();
 	public static PlayerAttackControl PlayerAttacks { get; internal set; }
+	public static PlayerMovement PlayerMovement { get; internal set; }
 
 	public static void SetState_AndNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
@@ -175,6 +176,30 @@ public static class NodeBehaviour
 		{
 			node.Value = (state && prevNode.Value != 0f) ? prevNode.Value : float.Epsilon;
 		}
+	}
+
+	internal static void SetState_MoveNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseState)
+	{
+		if (prevNode == null)
+		{
+			node.Active = state;
+		}
+
+		int id = graph.GetIdFromNode(node);
+		var spd = 1f;
+		foreach (var potentialAffector in graph.NodeDict)
+		{
+			if (!potentialAffector.Value.ConnectedNodes.Contains(id))
+			{
+				continue;
+			}
+			if (potentialAffector.Value.Node_text == "SPD")
+			{
+				spd = potentialAffector.Value.Value;
+			}
+		}
+
+		PlayerMovement.SpeedMultiplier = spd;
 	}
 
 	internal static void SetState_SumNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)

@@ -19,6 +19,7 @@ public class NodeEditorWindow : EditorWindow
 		{ "Output/ Property Damage", "DMG"},
 		{ "Output/ Property Speed", "SPD"},
 		{ "Output/ Property Type", "TYPE"},
+		{ "Output/ Movement", "MOV"},
 		{ "Hit Response", "HIT"},
 		{ "Logic Gate/ And", "AND"},
 		{ "Logic Gate/ Or", "OR"},

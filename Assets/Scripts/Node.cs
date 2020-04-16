@@ -114,6 +114,7 @@ public class Node
 			{"DT",  UnityEditor.EditorGUIUtility.Load("dt.png") as Texture},
 			{"COPY",UnityEditor.EditorGUIUtility.Load("BtnCopy.png") as Texture},
 			{"SUM", UnityEditor.EditorGUIUtility.Load("BtnSUM.png") as Texture},
+			{"MOV", UnityEditor.EditorGUIUtility.Load("knob.png") as Texture},
 		};
 		return _iconTextures;
 	}

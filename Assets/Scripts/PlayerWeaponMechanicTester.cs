@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerWeaponMechanicTester : MonoBehaviour
 {
+	public bool MovedLastFrame;
+
 	private readonly Dictionary<string, string> _inputDefenitions = new Dictionary<string, string>
 	{
 		{"A","Attack 1"},
@@ -25,6 +27,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{ "VAL",    NodeBehaviour.SetState_ValNode},
 		{ "UI",     NodeBehaviour.SetState_UINode},
 		{ "OUT",    NodeBehaviour.SetState_OutNode},
+		{ "MOV",    NodeBehaviour.SetState_MoveNode},
 		{ "HIT",    NodeBehaviour.SetState_HitNode},
 		{ "DMG",    NodeBehaviour.SetState_ValNode},
 		{ "SPD",    NodeBehaviour.SetState_ValNode},
@@ -45,6 +48,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	[SerializeField]
 	private float _minButtonHoldTime;
 
+	private List<Node> _moveNodes = new List<Node>();
 	private List<Node> _notNodes = new List<Node>();
 
 	private Dictionary<Node, float> _restoreState = new Dictionary<Node, float>();
@@ -102,6 +106,10 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 						break;
 					}
+				case "MOV":
+					_moveNodes.Add(node.Value);
+					break;
+
 				case "UIC":
 					RegisterUICap(node.Value);
 
@@ -128,6 +136,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		_notNodes = new List<Node>();
 		_timeNodes = new List<Node>();
 		_uiNodes = new List<Node>();
+		_moveNodes = new List<Node>();
 		_uiNodeCaps = new Dictionary<Node, Node>();
 		_inputNodes = new Dictionary<string, InputNode>();
 		_restoreState = new Dictionary<Node, float>();
@@ -150,6 +159,41 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		for (int Index = _uiBars.Count - 1; Index >= _uiNodes.Count; Index--)
 		{
 			_uiBars[Index].gameObject.SetActive(false);
+		}
+	}
+
+	private void ProccesInputNode(InputNode input, string button)
+	{
+		if (input.Held)
+		{
+			bool heldInput = Time.time - input.InstigationTime > _minButtonHoldTime;
+			if (Input.GetButtonDown(button))
+			{
+				input.InstigationTime = Time.time;
+			}
+			if (Input.GetButton(button) && heldInput)
+			{
+				SetNodeActivity(null, input.InputHeld, true);
+			}
+			if (Input.GetButtonUp(button))
+			{
+				if (heldInput)
+				{
+					input.InstigationTime = float.MaxValue;
+				}
+				else
+				{
+					LastAttackDelay = Time.time - input.InstigationTime;
+				}
+				SetNodeActivity(null, input.Input, true);
+			}
+		}
+		else
+		{
+			if (Input.GetButtonDown(button))
+			{
+				SetNodeActivity(null, input.Input, true);
+			}
 		}
 	}
 
@@ -251,6 +295,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		LoadMechanicGraph();
 
 		NodeBehaviour.PlayerAttacks = FindObjectOfType<PlayerAttackControl>();
+		NodeBehaviour.PlayerMovement = FindObjectOfType<PlayerMovement>();
 	}
 
 	private void Update()
@@ -267,42 +312,20 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private void UpdateInputNodeState()
 	{
+		if (MovedLastFrame)
+		{
+			MovedLastFrame = false;
+			foreach (var moveNode in _moveNodes)
+			{
+				SetNodeActivity(null, moveNode, true);
+			}
+		}
+
 		foreach (var input in _inputNodes)
 		{
 			// we push a new callback associated with this input
 			NodeBehaviour.Callbacks.Push(new NodeActivationCallBack(null, null));
-
-			if (input.Value.Held)
-			{
-				bool heldInput = Time.time - input.Value.InstigationTime > _minButtonHoldTime;
-				if (Input.GetButtonDown(input.Key))
-				{
-					input.Value.InstigationTime = Time.time;
-				}
-				if (Input.GetButton(input.Key) && heldInput)
-				{
-					SetNodeActivity(null, input.Value.InputHeld, true);
-				}
-				if (Input.GetButtonUp(input.Key))
-				{
-					if (heldInput)
-					{
-						input.Value.InstigationTime = float.MaxValue;
-					}
-					else
-					{
-						LastAttackDelay = Time.time - input.Value.InstigationTime;
-					}
-					SetNodeActivity(null, input.Value.Input, true);
-				}
-			}
-			else
-			{
-				if (Input.GetButtonDown(input.Key))
-				{
-					SetNodeActivity(null, input.Value.Input, true);
-				}
-			}
+			ProccesInputNode(input.Value, input.Key);
 
 			var callback = NodeBehaviour.Callbacks.Peek();
 			// if we hit a hit response node we've new callback

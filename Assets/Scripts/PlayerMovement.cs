@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
 	[Tooltip("the speed at which the player moves")]
 	private float _moveSpeed;
 
+	private PlayerWeaponMechanicTester _pwm;
 	private Rigidbody2D _rigidBody;
 
 	public float DashAttack
@@ -43,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
 			_dashAttackResetValue = value;
 		}
 	}
+
+	public float SpeedMultiplier { get; internal set; } = 1f;
 
 	public void ResetDashAttack()
 	{
@@ -59,12 +62,12 @@ public class PlayerMovement : MonoBehaviour
 		else
 		{
 			gameObject.layer = 8;
-			_rigidBody.MovePosition(transform.position + _moveSpeed * Time.fixedDeltaTime * _moveOffset);
+			_rigidBody.MovePosition(transform.position + _moveSpeed * SpeedMultiplier * Time.fixedDeltaTime * _moveOffset);
 			_moveOffset = new Vector3();
 		}
 		if (DashAttack > 0)
 		{
-			_rigidBody.MovePosition(transform.position + _moveSpeed * Time.fixedDeltaTime * GetMovementFromAnimator() * DashAttack);
+			_rigidBody.MovePosition(transform.position + _moveSpeed * SpeedMultiplier * Time.fixedDeltaTime * GetMovementFromAnimator() * DashAttack);
 			_dashAttack -= Time.fixedDeltaTime * _dashAccelerate;
 		}
 	}
@@ -88,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
 		_animator = GetComponent<Animator>();
 		_rigidBody = GetComponent<Rigidbody2D>();
 		_attackControl = GetComponent<PlayerAttackControl>();
+		_pwm = GetComponent<PlayerWeaponMechanicTester>();
 	}
 
 	private void Update()
@@ -115,6 +119,10 @@ public class PlayerMovement : MonoBehaviour
 		{
 			_dashAttack = -1f;
 			_moveOffset = moveInput;
+		}
+		if (_moveOffset != Vector3.zero)
+		{
+			_pwm.MovedLastFrame = true;
 		}
 	}
 }
