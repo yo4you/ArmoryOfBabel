@@ -35,7 +35,7 @@ public class Node
 	public bool Active { get; internal set; }
 
 	/// <summary>
-	/// Ids of the corresponding connections in the nodegraph
+	/// Ids of the corresponding connections in the node graph
 	/// </summary>
 	public List<int> ConnectedNodes { get => _connectedNodes; set => _connectedNodes = value; }
 
@@ -112,7 +112,8 @@ public class Node
 			{"XH",  UnityEditor.EditorGUIUtility.Load("BtnXh.png") as Texture},
 			{"UIC", UnityEditor.EditorGUIUtility.Load("BtnUIcap.png") as Texture},
 			{"DT",  UnityEditor.EditorGUIUtility.Load("dt.png") as Texture},
-			{"COPY",  UnityEditor.EditorGUIUtility.Load("BtnCopy.png") as Texture},
+			{"COPY",UnityEditor.EditorGUIUtility.Load("BtnCopy.png") as Texture},
+			{"SUM", UnityEditor.EditorGUIUtility.Load("BtnSUM.png") as Texture},
 		};
 		return _iconTextures;
 	}

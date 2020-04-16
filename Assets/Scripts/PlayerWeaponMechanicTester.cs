@@ -32,6 +32,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{ "COPY",   NodeBehaviour.SetState_CopyNode},
 		{ "DT",     NodeBehaviour.SetState_ValNode},
 		{ "GENERIC",NodeBehaviour.SetState_GenericNode},
+		{ "SUM",    NodeBehaviour.SetState_SumNode},
 	};
 
 	private List<Node> _callBackNodes = new List<Node>();

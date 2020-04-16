@@ -28,6 +28,7 @@ public class NodeEditorWindow : EditorWindow
 		{ "UI/ Treshold Input", "VAL"},
 		{ "UI/ Value Copy", "COPY"},
 		{ "Addition Multiplication Value", "VAL"},
+		{ "Summation Value", "SUM"},
 		{ "Delta Time Value", "DT"},
 	};
 

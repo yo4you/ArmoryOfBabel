@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class NodeBehaviour
 {
+	public static string[] ValueHoldingNodes = { "VAL", "DMG", "SPD", "TYPE", "COPY", "DT", "SUM" };
 	public static Stack<NodeActivationCallBack> Callbacks { get; set; } = new Stack<NodeActivationCallBack>();
 	public static PlayerAttackControl PlayerAttacks { get; internal set; }
 
@@ -75,7 +77,7 @@ public static class NodeBehaviour
 			return;
 		}
 
-		if (prevNode.Node_text == "VAL" || prevNode.Node_text == "DMG" || prevNode.Node_text == "SPD" || prevNode.Node_text == "TYPE" || prevNode.Node_text == "COPY")
+		if (IsValueHoldingNode(prevNode))
 		{
 			return;
 		}
@@ -131,6 +133,11 @@ public static class NodeBehaviour
 
 	public static void SetState_ValNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
 	{
+		CombineChildValues(prevNode, node, ref graph, state, baseval, false);
+	}
+
+	internal static void CombineChildValues(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval, bool addition)
+	{
 		node.Active = state;
 		int id = graph.GetIdFromNode(node);
 		if (IsValueHoldingNode(prevNode))
@@ -142,13 +149,18 @@ public static class NodeBehaviour
 				{
 					continue;
 				}
-
 				var nodeVal = potentialAffector.Value.Value;
-				if (nodeVal == 0f)
+
+				if (addition)
 				{
-					nodeVal = float.Epsilon;
+					// addition
+					node.Value += nodeVal;
 				}
-				node.Value *= nodeVal;
+				else
+				{
+					// multiplication
+					node.Value *= nodeVal;
+				}
 			}
 		}
 	}
@@ -163,6 +175,11 @@ public static class NodeBehaviour
 		{
 			node.Value = (state && prevNode.Value != 0f) ? prevNode.Value : float.Epsilon;
 		}
+	}
+
+	internal static void SetState_SumNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
+	{
+		CombineChildValues(prevNode, node, ref graph, state, baseval, true);
 	}
 
 	internal static void SetState_TreshNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
@@ -180,6 +197,6 @@ public static class NodeBehaviour
 
 	private static bool IsValueHoldingNode(Node prevNode)
 	{
-		return prevNode != null && (prevNode.Node_text == "VAL" || prevNode.Node_text == "DT" || prevNode.Node_text == "COPY");
+		return prevNode != null && ValueHoldingNodes.Contains(prevNode.Node_text);
 	}
 }
