@@ -1,18 +1,10 @@
-﻿using SAP2D;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
-public class SpiderBehaviour : MonoBehaviour, IStunnable
+public class SpiderBehaviour : Enemy
 {
-	private SAP2DAgent _agent;
-
 	[SerializeField]
 	private float _force;
-
-	private Vector3 _lastPos;
-	private float _moveSpeed;
-	private Rigidbody2D _rb;
-	private SpriteRenderer _sprite;
 
 	[SerializeField]
 	private float _strikeCooldown;
@@ -25,82 +17,50 @@ public class SpiderBehaviour : MonoBehaviour, IStunnable
 	[SerializeField]
 	private float _strikingDistance;
 
-	private bool _stunned;
-	private Transform _target;
-
 	public IEnumerator StartStrike(Vector3 strikeDir)
 	{
 		_striking = true;
 		_agent.MovementSpeed = 0;
-		{
-			float inverseTime = 1f / _strikeTime;
-			float time = 0;
-			do
-			{
-				time = Mathf.Clamp01(time + Time.deltaTime * inverseTime);
-				_sprite.color = Color.Lerp(Color.white, Color.red, time);
-				yield return new WaitForEndOfFrame();
-			} while (time != 1f);
-		}
+		yield return CoroutineUtils.Interpolate((time) => _sprite.color = Color.Lerp(Color.white, Color.red, time), _strikeTime);
 		gameObject.layer = 10;
-
 		_rb.AddForce(strikeDir * _force);
-		{
-			float inverseTime = 1f / _strikeCooldown;
-			float time = 0;
-			do
-			{
-				time = Mathf.Clamp01(time + Time.deltaTime * inverseTime);
-				_sprite.color = Color.Lerp(Color.red, Color.white, time);
-				yield return new WaitForEndOfFrame();
-			} while (time != 1f);
-		}
+		yield return CoroutineUtils.Interpolate((time) => _sprite.color = Color.Lerp(Color.red, Color.white, time), _strikeCooldown);
 		gameObject.layer = 9;
 		_striking = false;
 		_agent.MovementSpeed = _moveSpeed;
 	}
 
-	public void Stun()
+	public override void Stun()
 	{
+		base.Stun();
 		StopAllCoroutines();
 		_rb.velocity = new Vector2();
 		_agent.MovementSpeed = 0;
-		_stunned = true;
+		_striking = false;
 		_sprite.color = Color.white;
 		gameObject.layer = 9;
 	}
 
-	public void UnStun()
+	public override void UnStun()
 	{
+		base.UnStun();
 		_agent.MovementSpeed = _moveSpeed;
-		_stunned = false;
 	}
 
-	private void Start()
+	protected override void Update()
 	{
-		_sprite = GetComponent<SpriteRenderer>();
-		_agent = GetComponent<SAP2DAgent>();
-		_rb = GetComponent<Rigidbody2D>();
-		_target = _agent.Target;
-		_moveSpeed = _agent.MovementSpeed;
-	}
+		base.Update();
 
-	private void Update()
-	{
 		if (_striking || _stunned)
 		{
 			return;
 		}
 
-		var pos = transform.position;
-		_sprite.flipX = _lastPos.x > pos.x;
-
 		var targetpos = _target.transform.position;
-		if (Vector2.Distance(pos, targetpos) < _strikingDistance)
+		Vector3 position = transform.position;
+		if (Vector2.Distance(position, targetpos) < _strikingDistance)
 		{
-			StartCoroutine(StartStrike((targetpos - transform.position).normalized));
+			StartCoroutine(StartStrike((targetpos - position).normalized));
 		}
-
-		_lastPos = pos;
 	}
 }

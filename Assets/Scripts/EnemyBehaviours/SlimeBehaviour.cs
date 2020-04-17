@@ -1,16 +1,9 @@
-﻿using SAP2D;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SlimeBehaviour : MonoBehaviour, IStunnable
+public class SlimeBehaviour : Enemy
 {
-	private SAP2DAgent _agent;
-
-	private float _moveSpeed;
-
 	[SerializeField]
 	private float _projectileSpeed;
-
-	private Rigidbody2D _rb;
 
 	[SerializeField]
 	private float _shootInterval;
@@ -18,24 +11,24 @@ public class SlimeBehaviour : MonoBehaviour, IStunnable
 	[SerializeField]
 	private ProjectileBehaviour _shot;
 
-	private bool _stunned;
-
 	[SerializeField]
 	private float _swirfAmplitude;
 
 	[SerializeField]
 	private float _swirfSpeed;
 
-	public void Stun()
+	public override void Stun()
 	{
-		_stunned = true;
+		base.Stun();
 		_moveSpeed = _agent.MovementSpeed;
 		_agent.MovementSpeed = 0;
 		CancelInvoke();
 	}
 
-	public void UnStun()
+	public override void UnStun()
 	{
+		base.UnStun();
+
 		_agent.MovementSpeed = _moveSpeed;
 		_stunned = false;
 		if (gameObject.activeSelf)
@@ -78,11 +71,5 @@ public class SlimeBehaviour : MonoBehaviour, IStunnable
 		var dir = (_agent.Target.position - pos).normalized;
 		var projectile = Instantiate(_shot, pos, Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir)));
 		projectile.MoveDir = Vector2.right * _projectileSpeed;
-	}
-
-	private void Start()
-	{
-		_agent = GetComponent<SAP2DAgent>();
-		_rb = GetComponent<Rigidbody2D>();
 	}
 }

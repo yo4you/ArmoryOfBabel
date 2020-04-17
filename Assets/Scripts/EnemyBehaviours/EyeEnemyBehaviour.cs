@@ -1,12 +1,9 @@
-﻿using SAP2D;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EyeEnemyBehaviour : MonoBehaviour, IStunnable
+public class EyeEnemyBehaviour : Enemy
 {
-	private SAP2DAgent _agent;
-
 	[SerializeField]
 	private float _attackChargeup;
 
@@ -27,10 +24,6 @@ public class EyeEnemyBehaviour : MonoBehaviour, IStunnable
 	[SerializeField]
 	private float _decisionInterval;
 
-	private Vector3 _lastPos;
-
-	private float _moveSpeed;
-
 	[SerializeField]
 	private ProjectileBehaviour _prefabColor0;
 
@@ -40,12 +33,9 @@ public class EyeEnemyBehaviour : MonoBehaviour, IStunnable
 	[SerializeField]
 	private float _projectileVelocity;
 
-	private Rigidbody2D _rb;
-
 	[SerializeField]
 	private float _shotTimeInterval;
 
-	private SpriteRenderer _sprite;
 	private Vector2 _wanderDir;
 
 	private enum BehaviourState
@@ -56,7 +46,7 @@ public class EyeEnemyBehaviour : MonoBehaviour, IStunnable
 		ATTACK
 	}
 
-	public void Stun()
+	public override void Stun()
 	{
 		StopAllCoroutines();
 		_curState = BehaviourState.WANDER;
@@ -64,10 +54,20 @@ public class EyeEnemyBehaviour : MonoBehaviour, IStunnable
 		_sprite.color = Color.white;
 	}
 
-	public void UnStun()
+	public override void UnStun()
 	{
 		_agent.MovementSpeed = _moveSpeed;
 		_curState = BehaviourState.THINKING;
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
+		if (_curState == BehaviourState.THINKING)
+		{
+			MakeDeciscion();
+		}
 	}
 
 	private void MakeDeciscion()
@@ -95,14 +95,6 @@ public class EyeEnemyBehaviour : MonoBehaviour, IStunnable
 		}
 	}
 
-	private void Start()
-	{
-		_sprite = GetComponent<SpriteRenderer>();
-		_agent = GetComponent<SAP2DAgent>();
-		_rb = GetComponent<Rigidbody2D>();
-		_moveSpeed = _agent.MovementSpeed;
-	}
-
 	private IEnumerator StartApproach()
 	{
 		_agent.MovementSpeed = _moveSpeed;
@@ -124,14 +116,7 @@ public class EyeEnemyBehaviour : MonoBehaviour, IStunnable
 		foreach (var attack in attacks)
 		{
 			{
-				float inverseTime = 1f / _attackChargeup;
-				float time = 0;
-				do
-				{
-					time = Mathf.Clamp01(time + Time.deltaTime * inverseTime);
-					_sprite.color = Color.Lerp(Color.white, attack ? _color0 : _color1, time);
-					yield return new WaitForEndOfFrame();
-				} while (time != 1f);
+				yield return CoroutineUtils.Interpolate((time) => _sprite.color = Color.Lerp(Color.white, attack ? _color0 : _color1, time), _attackChargeup);
 				_sprite.color = Color.white;
 			}
 		}
@@ -159,29 +144,8 @@ public class EyeEnemyBehaviour : MonoBehaviour, IStunnable
 	{
 		_wanderDir = Random.insideUnitCircle;
 
-		{
-			float inverseTime = 1f / _decisionInterval;
-			float time = 0;
-			do
-			{
-				time = Mathf.Clamp01(time + Time.fixedDeltaTime * inverseTime);
-				_rb.MovePosition(_rb.position + _moveSpeed * _wanderDir * Time.fixedDeltaTime);
-				yield return new WaitForFixedUpdate();
-			} while (time != 1f);
-		}
+		yield return CoroutineUtils.Interpolate((time) => _rb.MovePosition(_rb.position + _moveSpeed * _wanderDir * Time.fixedDeltaTime), _decisionInterval, true);
 		yield return new WaitForSeconds(_decisionInterval);
 		_curState = BehaviourState.THINKING;
-	}
-
-	private void Update()
-	{
-		var pos = transform.position;
-		_sprite.flipX = _lastPos.x > pos.x;
-
-		if (_curState == BehaviourState.THINKING)
-		{
-			MakeDeciscion();
-		}
-		_lastPos = pos;
 	}
 }

@@ -1,11 +1,8 @@
-﻿using SAP2D;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
-public class WizardBehaviour : MonoBehaviour, IStunnable
+public class WizardBehaviour : Enemy
 {
-	private SAP2DAgent _agent;
-
 	[SerializeField]
 	private GameObject _aimPrefab;
 
@@ -34,22 +31,17 @@ public class WizardBehaviour : MonoBehaviour, IStunnable
 	[SerializeField]
 	private float _randomTimeOffsetMax;
 
-	private bool _stunned;
-	private Transform _target;
-
-	public void Stun()
-	{
-		_stunned = true;
-	}
-
-	public void UnStun()
-	{
-		_stunned = false;
-	}
-
 	public void WizardLoop()
 	{
 		StartCoroutine(StartWizardLoop());
+	}
+
+	protected override void Start()
+	{
+		base.Start();
+		_agent.enabled = false;
+		_aimSymbol = Instantiate(_aimPrefab);
+		_aimSymbol.SetActive(false);
 	}
 
 	private void OnDestroy()
@@ -76,15 +68,6 @@ public class WizardBehaviour : MonoBehaviour, IStunnable
 		InvokeRepeating("WizardLoop", Random.Range(0, _randomTimeOffsetMax), time);
 	}
 
-	private void Start()
-	{
-		_agent = GetComponent<SAP2DAgent>();
-		_target = _agent.Target;
-		_agent.enabled = false;
-		_aimSymbol = Instantiate(_aimPrefab);
-		_aimSymbol.SetActive(false);
-	}
-
 	private IEnumerator StartWizardLoop()
 	{
 		yield return new WaitForSeconds(_idleTime);
@@ -95,16 +78,8 @@ public class WizardBehaviour : MonoBehaviour, IStunnable
 		_aimSymbol.transform.SetParent(_target.transform, false);
 		yield return new WaitForSeconds(_aimTime);
 		_aimSymbol.transform.parent = null;
-		{
-			float inverseTime = 1f / _explosionDelay;
-			float time = 0;
-			do
-			{
-				time = Mathf.Clamp01(time + Time.deltaTime * inverseTime);
-				_aimSymbol.SetActive((time * _flickerCount % 1f) > 0.5f);
-				yield return new WaitForEndOfFrame();
-			} while (time != 1f);
-		}
+		yield return CoroutineUtils.Interpolate(
+			(time) => _aimSymbol.SetActive((time * _flickerCount % 1f) > 0.5f), _explosionDelay);
 		_aimSymbol.SetActive(false);
 		var explosion = Instantiate(_explosionPrefab, _aimSymbol.transform.position, new Quaternion());
 		yield return new WaitForSeconds(_cooldown);
