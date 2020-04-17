@@ -15,11 +15,12 @@ public class PlayerAttackControl : MonoBehaviour
 	private PlayerWeaponMechanicTester _pwmTester;
 	private ReticalBehaviour _retical;
 	[SerializeField] private SweepBehaviour _slashPrefab;
+	private StatusEffectManager _statusManager;
 	[SerializeField] private SweepBehaviour _sweepPrefab;
 	public bool CanQueue { get; internal set; }
 	public bool Engaged { get; internal set; }
 
-	public bool ProccessAttackNode(float speed, float damage, int type, Node node)
+	public bool ProccessAttackNode(float speed, float damage, int type, Node node, int status = -1)
 	{
 		//Debug.Log("damage:" + damage);
 		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !CanQueue)
@@ -59,18 +60,18 @@ public class PlayerAttackControl : MonoBehaviour
 
 			case 1:
 				_animator.Play("light_hit");
-				StartCoroutine(StartProjectileAttack(_projectilePrefab, speed, damage, node, direction));
+				StartCoroutine(StartProjectileAttack(_projectilePrefab, speed, damage, node, direction, status));
 				break;
 
 			case 2:
 				_animator.Play("light_hit" + _attackDirToggle);
-				StartCoroutine(StartMeleeAttack(_slashPrefab, speed, damage, node, direction));
+				StartCoroutine(StartMeleeAttack(_slashPrefab, speed, damage, node, direction, status));
 				break;
 
 			case 3:
 				_movement.DashAttack = Vector2.Dot(lastInput, new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y")));
 				_animator.Play("heavy_hit" + _attackDirToggle);
-				StartCoroutine(StartMeleeAttack(_sweepPrefab, speed, damage, node, direction));
+				StartCoroutine(StartMeleeAttack(_sweepPrefab, speed, damage, node, direction, status));
 				break;
 
 			default:
@@ -79,7 +80,7 @@ public class PlayerAttackControl : MonoBehaviour
 		return true;
 	}
 
-	public IEnumerator StartMeleeAttack(SweepBehaviour prefab, float speed, float damage, Node node, Vector2 direction)
+	public IEnumerator StartMeleeAttack(SweepBehaviour prefab, float speed, float damage, Node node, Vector2 direction, int status)
 	{
 		_attackDirToggle = 1 - _attackDirToggle;
 		yield return new WaitForFixedUpdate();
@@ -105,15 +106,18 @@ public class PlayerAttackControl : MonoBehaviour
 		hitbox.transform.localPosition = new Vector3();
 		hitbox.GetComponent<Animator>().speed = speed * speedMult;
 		hitbox.GetComponent<SpriteRenderer>().flipY = _attackDirToggle == 0;
+		hitbox.Status = status;
 		hitbox.Damage = damage;
+		hitbox.StatusManager = _statusManager;
 		hitbox.PWM_Tester = _pwmTester;
 		hitbox.GeneratingNode = node;
 	}
 
-	public IEnumerator StartProjectileAttack(ProjectileBehaviour prefab, float speed, float damage, Node node, Vector2 direction)
+	public IEnumerator StartProjectileAttack(ProjectileBehaviour prefab, float speed, float damage, Node node, Vector2 direction, int status)
 	{
 		yield return new WaitForFixedUpdate();
 		var projectile = Instantiate(prefab, transform.position, new Quaternion());
+		projectile.Status = status;
 		projectile.MoveDir = direction * _projectileSpeed;
 		projectile.Damage = damage;
 		projectile.PWM_Tester = _pwmTester;
@@ -135,5 +139,6 @@ public class PlayerAttackControl : MonoBehaviour
 		_animator = GetComponent<Animator>();
 		_pwmTester = GetComponent<PlayerWeaponMechanicTester>();
 		_movement = GetComponent<PlayerMovement>();
+		_statusManager = FindObjectOfType<StatusEffectManager>();
 	}
 }

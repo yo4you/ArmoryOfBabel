@@ -31,6 +31,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{ "HIT",    NodeBehaviour.SetState_HitNode},
 		{ "DMG",    NodeBehaviour.SetState_ValNode},
 		{ "SPD",    NodeBehaviour.SetState_ValNode},
+		{ "STAT",    NodeBehaviour.SetState_ValNode},
 		{ "TRESH",  NodeBehaviour.SetState_TreshNode},
 		{ "COPY",   NodeBehaviour.SetState_CopyNode},
 		{ "DT",     NodeBehaviour.SetState_ValNode},

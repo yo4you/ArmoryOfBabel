@@ -27,8 +27,8 @@ public class TurtleBehaviour : Enemy
 	{
 		base.Start();
 
-		_health.OnHit += _health_OnHit;
-		_health.Invulnearable = true;
+		Health.OnHit += _health_OnHit;
+		Health.Invulnearable = true;
 	}
 
 	protected override void Update()
@@ -43,7 +43,7 @@ public class TurtleBehaviour : Enemy
 
 	private void _health_OnHit(float damage)
 	{
-		if (_health.Invulnearable && (!_attackCommited))
+		if (Health.Invulnearable && (!_attackCommited))
 		{
 			StopAllCoroutines();
 			StartCoroutine(StartAggro());
@@ -64,7 +64,7 @@ public class TurtleBehaviour : Enemy
 		}, _chargeUpTime);
 		transform.position = pos;
 		Instantiate(_explosionPrefab, transform.position, new Quaternion());
-		_health.Invulnearable = false;
+		Health.Invulnearable = false;
 		{
 			float inverseTime = 1f / _vulnearableTime;
 			float time = 0;
@@ -79,7 +79,7 @@ public class TurtleBehaviour : Enemy
 
 		_sprite.color = Color.white;
 
-		_health.Invulnearable = true;
+		Health.Invulnearable = true;
 		_agent.MovementSpeed = _moveSpeed;
 		_attackCommited = false;
 	}

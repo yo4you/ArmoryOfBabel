@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class NodeBehaviour
 {
-	public static string[] ValueHoldingNodes = { "VAL", "DMG", "SPD", "TYPE", "COPY", "DT", "SUM" };
+	public static string[] ValueHoldingNodes = { "VAL", "DMG", "SPD", "TYPE", "COPY", "DT", "SUM", "STAT" };
 	public static Stack<NodeActivationCallBack> Callbacks { get; set; } = new Stack<NodeActivationCallBack>();
 	public static PlayerAttackControl PlayerAttacks { get; internal set; }
 	public static PlayerMovement PlayerMovement { get; internal set; }
@@ -88,6 +88,7 @@ public static class NodeBehaviour
 		var spd = .1f;
 		var dmg = .1f;
 		var type = 0f;
+		var status = 1f;
 		foreach (var potentialAffector in graph.NodeDict)
 		{
 			if (!potentialAffector.Value.ConnectedNodes.Contains(id))
@@ -107,13 +108,16 @@ public static class NodeBehaviour
 				case "TYPE":
 					type = potentialAffector.Value.Value;
 					continue;
+				case "STAT":
+					status = potentialAffector.Value.Value;
+					break;
 
 				default:
 					continue;
 			}
 		}
 
-		node.Active = PlayerAttacks.ProccessAttackNode(spd, dmg, (int)type, node);
+		node.Active = PlayerAttacks.ProccessAttackNode(spd, dmg, (int)type, node, (int)status);
 		if (Callbacks.Peek().Activator == null)
 		{
 			Callbacks.Peek().Activator = node;

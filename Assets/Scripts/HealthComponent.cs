@@ -29,18 +29,21 @@ public class HealthComponent : MonoBehaviour
 	{
 		if (_invulnearable)
 		{
-			StopAllCoroutines();
+			//StopAllCoroutines();
 		}
 
 		StartCoroutine(StartInvulnearableTimer(time));
 	}
 
-	internal void Hit(float damage)
+	internal void Hit(float damage, bool dot = false)
 	{
-		OnHit?.Invoke(damage);
-		if (_invulnearable)
+		if (!dot)
 		{
-			return;
+			OnHit?.Invoke(damage);
+			if (_invulnearable)
+			{
+				return;
+			}
 		}
 
 		HP -= damage;
@@ -50,7 +53,10 @@ public class HealthComponent : MonoBehaviour
 		}
 		else
 		{
-			InvulnearableTimer(_invulTime);
+			if (!dot)
+			{
+				InvulnearableTimer(_invulTime);
+			}
 		}
 	}
 

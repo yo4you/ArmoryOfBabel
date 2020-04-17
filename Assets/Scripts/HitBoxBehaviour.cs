@@ -8,6 +8,8 @@ public abstract class HitBoxBehaviour : MonoBehaviour
 	public float Damage { get; internal set; }
 	public Node GeneratingNode { get; internal set; }
 	public PlayerWeaponMechanicTester PWM_Tester { get; set; }
+	public int Status { get; set; }
+	public StatusEffectManager StatusManager { get; set; }
 
 	public void AnimationOver()
 	{
@@ -22,7 +24,7 @@ public abstract class HitBoxBehaviour : MonoBehaviour
 			{
 				PWM_Tester.CollisionCallback(GeneratingNode);
 			}
-
+			StatusManager?.ApplyStatus(collision.collider.gameObject, Status);
 			var health = collision.collider.GetComponent<HealthComponent>();
 			health?.Hit(Damage);
 		}
