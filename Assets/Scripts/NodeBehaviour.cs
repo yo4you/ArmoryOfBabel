@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,6 +7,7 @@ public static class NodeBehaviour
 	public static string[] ValueHoldingNodes = { "VAL", "DMG", "SPD", "TYPE", "COPY", "DT", "SUM", "STAT" };
 	public static Stack<NodeActivationCallBack> Callbacks { get; set; } = new Stack<NodeActivationCallBack>();
 	public static PlayerAttackControl PlayerAttacks { get; internal set; }
+	public static HealthComponent PlayerHealth { get; internal set; }
 	public static PlayerMovement PlayerMovement { get; internal set; }
 
 	public static void SetState_AndNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseval)
@@ -181,11 +181,6 @@ public static class NodeBehaviour
 		{
 			node.Value = (state && prevNode.Value != 0f) ? prevNode.Value : float.Epsilon;
 		}
-	}
-
-	internal static void SetState_HpNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseState)
-	{
-		throw new NotImplementedException();
 	}
 
 	internal static void SetState_MoveNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseState)

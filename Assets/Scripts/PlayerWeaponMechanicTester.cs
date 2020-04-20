@@ -25,6 +25,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	};
 
 	private List<Node> _callBackNodes = new List<Node>();
+	private List<Node> _healthNodes;
 	private Dictionary<string, InputNode> _inputNodes = new Dictionary<string, InputNode>();
 
 	[SerializeField] private string _mechanicGrammarName;
@@ -84,18 +85,22 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 					break;
 
 				case "UI":
-					{
-						_uiNodes.Add(node.Value);
-						ConnectedValIntoTresh(node.Value);
-						break;
-					}
+					_uiNodes.Add(node.Value);
+					ConnectedValIntoTresh(node.Value);
+					break;
+
 				case "MOV":
 					_moveNodes.Add(node.Value);
 					break;
 
 				case "UIC":
 					RegisterUICap(node.Value);
+					break;
 
+				case "HP":
+					_healthNodes.Add(node.Value);
+					node.Value.Value = NodeBehaviour.PlayerHealth.HP;
+					ConnectedValIntoTresh(node.Value);
 					break;
 			}
 
@@ -120,9 +125,11 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		_timeNodes = new List<Node>();
 		_uiNodes = new List<Node>();
 		_moveNodes = new List<Node>();
+		_healthNodes = new List<Node>();
 		_uiNodeCaps = new Dictionary<Node, Node>();
 		_inputNodes = new Dictionary<string, InputNode>();
 		_restoreState = new Dictionary<Node, float>();
+
 		// enable the right visuals
 		foreach (var ui in _uiBars)
 		{
@@ -226,7 +233,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			node.Key.Active = false;
 
 			// only UI nodes retain their value
-			if (node.Key.Node_text != "UI")
+			if (node.Key.Node_text != "UI" && node.Key.Node_text != "HP")
 			{
 				node.Key.Value = node.Value;
 			}
@@ -236,26 +243,21 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private void SetNodeActivity(Node lastNode, Node node, bool state, List<Node> visited = default)
 	{
-		string node_function = node.Node_text;
-		if (!_nodeFunctions.ContainsKey(node.Node_text))
+		if (!_nodeFunctions.TryGetValue(node.Node_text, out NodeType.NodeHandleDelegate nodeFunction))
 		{
-			node_function = "GENERIC";
+			nodeFunction = NodeBehaviour.SetState_GenericNode;
 		}
-
-		if (visited == default)
-		{
-			visited = new List<Node>();
-		}
+		visited = visited ?? new List<Node>();
 		if (visited.Contains(node))
 		{
 			return;
 		}
-		else if (node_function != "UI")
+		else if (nodeFunction != NodeBehaviour.SetState_UINode)
 		{
 			visited.Add(node);
 		}
 
-		_nodeFunctions[node_function](lastNode, node, ref _mechanicGraph, state, _restoreState[node]);
+		nodeFunction(lastNode, node, ref _mechanicGraph, state, _restoreState[node]);
 
 		if (node.Active == state)
 		{
@@ -280,10 +282,12 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 				_uiBars.Add(chargebar);
 			}
 		}
-		LoadMechanicGraph();
 
 		NodeBehaviour.PlayerAttacks = FindObjectOfType<PlayerAttackControl>();
-		NodeBehaviour.PlayerMovement = FindObjectOfType<PlayerMovement>();
+		var player = NodeBehaviour.PlayerAttacks.gameObject;
+		NodeBehaviour.PlayerMovement = player.GetComponent<PlayerMovement>();
+		NodeBehaviour.PlayerHealth = player.GetComponent<HealthComponent>();
+		LoadMechanicGraph();
 	}
 
 	private void Update()
@@ -378,6 +382,11 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 			uiNode.Value = Mathf.Clamp(uiNode.Value, 0f, uicap);
 			_uiBars[i].ProgressPercentage = uiNode.Value * 100f / uicap;
+		}
+		foreach (var uiNode in _healthNodes)
+		{
+			SetNodeActivity(null, uiNode, true);
+			NodeBehaviour.PlayerHealth.HP = Mathf.Clamp(uiNode.Value, 0, NodeBehaviour.PlayerHealth.StartingHP);
 		}
 	}
 }

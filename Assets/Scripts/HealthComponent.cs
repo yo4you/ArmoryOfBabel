@@ -5,6 +5,8 @@ public class HealthComponent : MonoBehaviour
 {
 	private bool _invulnearable = false;
 
+	private Coroutine _invulRoutine;
+
 	[SerializeField]
 	private float _invulTime = 0.1f;
 
@@ -29,10 +31,10 @@ public class HealthComponent : MonoBehaviour
 	{
 		if (_invulnearable)
 		{
-			//StopAllCoroutines();
+			StopCoroutine(_invulRoutine);
 		}
 
-		StartCoroutine(StartInvulnearableTimer(time));
+		_invulRoutine = StartCoroutine(StartInvulnearableTimer(time));
 	}
 
 	internal void Hit(float damage, bool dot = false)
