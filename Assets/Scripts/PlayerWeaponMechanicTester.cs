@@ -19,24 +19,9 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{"XH","Special"},
 	};
 
-	private readonly Dictionary<string, NodeHandleDelegate> _nodeFunctions = new Dictionary<string, NodeHandleDelegate>
+	private readonly Dictionary<string, NodeType.NodeHandleDelegate> _nodeFunctions = new Dictionary<string, NodeType.NodeHandleDelegate>
 	{
-		{ "NOT",    NodeBehaviour.SetState_NotNode},
-		{ "AND",    NodeBehaviour.SetState_AndNode},
-		{ "OR",     NodeBehaviour.SetState_OrNode},
-		{ "VAL",    NodeBehaviour.SetState_ValNode},
-		{ "UI",     NodeBehaviour.SetState_UINode},
-		{ "OUT",    NodeBehaviour.SetState_OutNode},
-		{ "MOV",    NodeBehaviour.SetState_MoveNode},
-		{ "HIT",    NodeBehaviour.SetState_HitNode},
-		{ "DMG",    NodeBehaviour.SetState_ValNode},
-		{ "SPD",    NodeBehaviour.SetState_ValNode},
-		{ "STAT",    NodeBehaviour.SetState_ValNode},
-		{ "TRESH",  NodeBehaviour.SetState_TreshNode},
-		{ "COPY",   NodeBehaviour.SetState_CopyNode},
-		{ "DT",     NodeBehaviour.SetState_ValNode},
 		{ "GENERIC",NodeBehaviour.SetState_GenericNode},
-		{ "SUM",    NodeBehaviour.SetState_SumNode},
 	};
 
 	private List<Node> _callBackNodes = new List<Node>();
@@ -59,8 +44,6 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private Dictionary<Node, Node> _uiNodeCaps;
 	private List<Node> _uiNodes = new List<Node>();
-
-	private delegate void NodeHandleDelegate(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseState);
 
 	public float LastAttackDelay { get; set; }
 
@@ -104,7 +87,6 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 					{
 						_uiNodes.Add(node.Value);
 						ConnectedValIntoTresh(node.Value);
-
 						break;
 					}
 				case "MOV":
@@ -286,6 +268,11 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private void Start()
 	{
+		foreach (var nodeType in NodeTypes.Types)
+		{
+			_nodeFunctions.Add(nodeType.Tag, nodeType.ExecutionFunction);
+		}
+
 		foreach (var chargebar in FindObjectsOfType<ChargeBarBehaviour>())
 		{
 			if (chargebar.UsedForWeaponMechanics)

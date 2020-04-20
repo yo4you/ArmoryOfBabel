@@ -93,30 +93,14 @@ public class Node
 	{
 		_iconTextures = new Dictionary<string, Texture> {
 			{"backGround",  UnityEditor.EditorGUIUtility.Load("simple.png") as Texture},
-			{"A",   UnityEditor.EditorGUIUtility.Load("BtnA.png") as Texture},
-			{"B",   UnityEditor.EditorGUIUtility.Load("BtnB.png") as Texture},
-			{"X",   UnityEditor.EditorGUIUtility.Load("BtnX.png") as Texture},
-			{"R",   UnityEditor.EditorGUIUtility.Load("BtnR.png") as Texture},
-			{"OUT", UnityEditor.EditorGUIUtility.Load("BtnOut.png") as Texture},
-			{"VAL", UnityEditor.EditorGUIUtility.Load("BtnVal.png") as Texture},
-			{"OR",  UnityEditor.EditorGUIUtility.Load("BtnOR.png") as Texture},
-			{"AND", UnityEditor.EditorGUIUtility.Load("BtnAnd.png") as Texture},
-			{"NOT", UnityEditor.EditorGUIUtility.Load("BtnNot.png") as Texture},
-			{"UI",  UnityEditor.EditorGUIUtility.Load("BtnUI.png") as Texture},
-			{"HIT", UnityEditor.EditorGUIUtility.Load("BtnHit.png") as Texture},
-			{"TYPE",UnityEditor.EditorGUIUtility.Load("Settings.png") as Texture},
-			{"SPD", UnityEditor.EditorGUIUtility.Load("menu.png") as Texture},
-			{"DMG", UnityEditor.EditorGUIUtility.Load("starRate.png") as Texture},
-			{"AH",  UnityEditor.EditorGUIUtility.Load("BtnAh.png") as Texture},
-			{"BH",  UnityEditor.EditorGUIUtility.Load("BtnBh.png") as Texture},
-			{"XH",  UnityEditor.EditorGUIUtility.Load("BtnXh.png") as Texture},
-			{"UIC", UnityEditor.EditorGUIUtility.Load("BtnUIcap.png") as Texture},
-			{"DT",  UnityEditor.EditorGUIUtility.Load("dt.png") as Texture},
-			{"COPY",UnityEditor.EditorGUIUtility.Load("BtnCopy.png") as Texture},
-			{"SUM", UnityEditor.EditorGUIUtility.Load("BtnSUM.png") as Texture},
-			{"MOV", UnityEditor.EditorGUIUtility.Load("knob.png") as Texture},
-			{"STAT", UnityEditor.EditorGUIUtility.Load("stat.png") as Texture},
 		};
+		foreach (var nodetype in NodeTypes.Types)
+		{
+			if (nodetype.EditorImage != null)
+			{
+				_iconTextures.Add(nodetype.Tag, UnityEditor.EditorGUIUtility.Load(nodetype.EditorImage) as Texture);
+			}
+		}
 		return _iconTextures;
 	}
 

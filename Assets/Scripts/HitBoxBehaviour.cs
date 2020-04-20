@@ -24,7 +24,11 @@ public abstract class HitBoxBehaviour : MonoBehaviour
 			{
 				PWM_Tester.CollisionCallback(GeneratingNode);
 			}
-			StatusManager?.ApplyStatus(collision.collider.gameObject, Status);
+			if (Status != -1)
+			{
+				StatusManager?.ApplyStatus(collision.collider.gameObject, Status);
+			}
+
 			var health = collision.collider.GetComponent<HealthComponent>();
 			health?.Hit(Damage);
 		}

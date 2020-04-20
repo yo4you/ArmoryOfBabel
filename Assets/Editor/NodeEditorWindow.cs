@@ -7,35 +7,11 @@ using UnityEngine;
 /// </summary>
 public class NodeEditorWindow : EditorWindow
 {
-	private readonly Dictionary<string, string> _addNodeOptions = new Dictionary<string, string>()
-	{
-		{ "Input/ A Button", "A"},
-		{ "Input/ B Button", "B"},
-		{ "Input/ X Button", "X"},
-		{ "Input/ Hold A Button", "AH"},
-		{ "Input/ Hold B Button", "BH"},
-		{ "Input/ Hold X Button", "XH"},
-		{ "Output/ Activator", "OUT"},
-		{ "Output/ Property Damage", "DMG"},
-		{ "Output/ Property Speed", "SPD"},
-		{ "Output/ Property Type", "TYPE"},
-		{ "Output/ Movement", "MOV"},
-		{ "Output/ Status Effect", "STAT"},
-		{ "Hit Response", "HIT"},
-		{ "Logic Gate/ And", "AND"},
-		{ "Logic Gate/ Or", "OR"},
-		{ "Logic Gate/ Not", "NOT"},
-		{ "UI/ Element", "UI"},
-		{ "UI/ Element Capacity", "UIC"},
-		{ "UI/ Treshold Input", "VAL"},
-		{ "UI/ Value Copy", "COPY"},
-		{ "Addition Multiplication Value", "VAL"},
-		{ "Summation Value", "SUM"},
-		{ "Delta Time Value", "DT"},
-	};
-
 	private readonly float _zoomMax = 10f;
+
 	private readonly float _zoomSpeed = 0.1f;
+
+	private Dictionary<string, string> _addNodeOptions = new Dictionary<string, string>();
 	private WindowState _currentState = WindowState.SELECTED;
 	private NodeGraph _nodegraph;
 	private bool _repaint;
@@ -141,6 +117,17 @@ public class NodeEditorWindow : EditorWindow
 			Pos = mousePosition,
 			Node_text = text
 		});
+	}
+
+	private void OnEnable()
+	{
+		foreach (var nodetype in NodeTypes.Types)
+		{
+			if (nodetype.Menu != null)
+			{
+				_addNodeOptions.Add(nodetype.Menu, nodetype.Tag);
+			}
+		}
 	}
 
 	private void OnGUI()

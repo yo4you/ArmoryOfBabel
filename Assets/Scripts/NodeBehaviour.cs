@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -88,7 +89,7 @@ public static class NodeBehaviour
 		var spd = .1f;
 		var dmg = .1f;
 		var type = 0f;
-		var status = 1f;
+		var status = -1f;
 		foreach (var potentialAffector in graph.NodeDict)
 		{
 			if (!potentialAffector.Value.ConnectedNodes.Contains(id))
@@ -116,7 +117,7 @@ public static class NodeBehaviour
 					continue;
 			}
 		}
-
+		//Debug.Log(dmg);
 		node.Active = PlayerAttacks.ProccessAttackNode(spd, dmg, (int)type, node, (int)status);
 		if (Callbacks.Peek().Activator == null)
 		{
@@ -180,6 +181,11 @@ public static class NodeBehaviour
 		{
 			node.Value = (state && prevNode.Value != 0f) ? prevNode.Value : float.Epsilon;
 		}
+	}
+
+	internal static void SetState_HpNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseState)
+	{
+		throw new NotImplementedException();
 	}
 
 	internal static void SetState_MoveNode(Node prevNode, Node node, ref NodeGraph graph, bool state, float baseState)
