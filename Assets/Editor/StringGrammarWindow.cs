@@ -56,6 +56,18 @@ public class StringGrammarWindow : EditorWindow
 		GetWindow<StringGrammarWindow>(false, "String Grammars", true);
 	}
 
+	public void Reset()
+	{
+		_chance = 0;
+		_directory = "";
+		_exportName = "";
+		_grammarListScroll = new Vector2();
+		_grammars = new List<StringGrammarRule>();
+		_leftHandString = "";
+		_removedEntryIndex = -1;
+		_rightHandString = "";
+	}
+
 	private void GrammarAddition()
 	{
 		EditorGUILayout.LabelField("Add string grammar");
@@ -86,6 +98,11 @@ public class StringGrammarWindow : EditorWindow
 
 	private void GrammarDisplay()
 	{
+		if (_grammars == null)
+		{
+			return;
+		}
+
 		_grammarListScroll = EditorGUILayout.BeginScrollView(_grammarListScroll);
 		for (int i = 0; i < _grammars.Count; i++)
 		{
@@ -148,6 +165,10 @@ public class StringGrammarWindow : EditorWindow
 		}
 
 		SaveAndLoadDisplay();
+		if (GUILayout.Button("reset"))
+		{
+			Reset();
+		}
 	}
 
 	private void SaveAndLoadDisplay()
@@ -156,7 +177,7 @@ public class StringGrammarWindow : EditorWindow
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("import"))
 		{
-			_grammars = ImportGrammars(_directory + _exportName + ".json");
+			_grammars = ImportGrammars(_directory + _exportName + ".json") ?? new List<StringGrammarRule>();
 		}
 		if (GUILayout.Button("export"))
 		{

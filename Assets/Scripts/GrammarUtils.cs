@@ -52,9 +52,9 @@ public static class GrammarUtils
 			if (randWeight < 0)
 			{
 				// check if the grammar is applicable to the string
-				if (start_string.Contains(grammar.LeftHand))
+				if (StringUtils.ContainsGeneralization(start_string, grammar.LeftHand))
 				{
-					start_string = StringUtils.ReplaceFirst(start_string, grammar.LeftHand, grammar.RightHand);
+					start_string = StringUtils.GeneralizedReplaceFirst(start_string, grammar.LeftHand, grammar.RightHand);
 					// apply the grammar and reset the cycle
 					goto string_changed;
 				}
