@@ -4,7 +4,6 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IStunnable
 {
 	protected SAP2DAgent _agent;
-	protected Vector3 _lastPos;
 	protected float _moveSpeed;
 	protected Rigidbody2D _rb;
 	protected SpriteRenderer _sprite;
@@ -46,7 +45,6 @@ public class Enemy : MonoBehaviour, IStunnable
 	protected virtual void Update()
 	{
 		var pos = transform.position;
-		_sprite.flipX = _lastPos.x > pos.x;
-		_lastPos = pos;
+		_sprite.flipX = pos.x > _agent.Target.position.x;
 	}
 }

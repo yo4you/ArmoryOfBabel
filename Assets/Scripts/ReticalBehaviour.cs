@@ -8,6 +8,9 @@ public class ReticalBehaviour : MonoBehaviour
 	private float _deadZone = 0.3f;
 	private SpriteMask _mask;
 
+	[SerializeField]
+	private float _smoothing;
+
 	public bool ActiveInput => _activeInput = true;
 	public float Angle => _angle;
 
@@ -32,6 +35,6 @@ public class ReticalBehaviour : MonoBehaviour
 			_mask.gameObject.SetActive(_activeInput);
 			_angle = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg;
 		}
-		_mask.transform.rotation = Quaternion.Euler(0, 0, _angle + 90f);
+		_mask.transform.rotation = Quaternion.Slerp(_mask.transform.rotation, Quaternion.Euler(0, 0, _angle + 90f), _smoothing * Time.deltaTime);
 	}
 }
