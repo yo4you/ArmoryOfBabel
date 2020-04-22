@@ -40,6 +40,7 @@ public class PlayerAttackControl : MonoBehaviour
 			_animator.SetFloat("y", direction.y);
 			if (CanQueue)
 			{
+				// a dot product of 0.5 means you're pointing the control stick in the same 90 degree quarter as your movement
 				if (Vector2.Dot(direction, lastInput) > 0.5f)
 				{
 					_movement.ResetDashAttack();

@@ -15,7 +15,7 @@ internal static class StringUtils
 	public static bool CompareGeneralizedString(string lh, string rh)
 	{
 		string[] validCharacters = SplitGeneralization(lh);
-		return validCharacters.Contains(rh);
+		return validCharacters.Contains("*") || validCharacters.Contains(rh);
 	}
 
 	public static bool ContainsGeneralization(string text, string lh)
@@ -39,6 +39,34 @@ internal static class StringUtils
 		return text;
 	}
 
+	public static bool MatchComparators(string lh, int rhNumber)
+	{
+		var matchOperator = Regex.Match(lh, @"[\<\>\=]");
+		var matchNum = Regex.Match(lh, @"\d+");
+		if ((!matchOperator.Success) || (!matchNum.Success))
+		{
+			return true;
+		}
+		if (!int.TryParse(matchNum.Value, out int lhNumber))
+		{
+			return true;
+		}
+		switch (matchOperator.Value[0])
+		{
+			case '<':
+				return rhNumber < lhNumber;
+
+			case '>':
+				return rhNumber > lhNumber;
+
+			case '=':
+				return rhNumber == lhNumber;
+
+			default:
+				return true;
+		}
+	}
+
 	/// <summary>
 	/// returns a string where a pattern is replaced only once according to the provided parameters
 	/// </summary>
@@ -58,6 +86,12 @@ internal static class StringUtils
 
 	public static string[] SplitGeneralization(string lh)
 	{
-		return Regex.Split(lh, @"\|");
+		var match = Regex.Matches(lh, @"[^\|\<\>\=\d]+");
+		string[] outp = new string[match.Count];
+		for (int i = 0; i < match.Count; i++)
+		{
+			outp[i] = match[i].Value;
+		}
+		return outp;
 	}
 }

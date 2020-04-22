@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class PlayerWeaponMechanicTester : MonoBehaviour
 {
-	public bool MovedLastFrame;
-
 	private readonly Dictionary<string, string> _inputDefenitions = new Dictionary<string, string>
 	{
 		{"A","Attack 1"},
@@ -27,9 +25,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	private List<Node> _callBackNodes = new List<Node>();
 	private List<Node> _healthNodes;
 	private Dictionary<string, InputNode> _inputNodes = new Dictionary<string, InputNode>();
-
 	[SerializeField] private string _mechanicGrammarName;
-
 	private NodeGraph _mechanicGraph;
 
 	[SerializeField]
@@ -37,16 +33,14 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private List<Node> _moveNodes = new List<Node>();
 	private List<Node> _notNodes = new List<Node>();
-
 	private Dictionary<Node, float> _restoreState = new Dictionary<Node, float>();
 	private List<Node> _timeNodes = new List<Node>();
-
 	private List<ChargeBarBehaviour> _uiBars = new List<ChargeBarBehaviour>();
-
 	private Dictionary<Node, Node> _uiNodeCaps;
 	private List<Node> _uiNodes = new List<Node>();
-
+	private bool movedLastFrame;
 	public float LastAttackDelay { get; set; }
+	public bool MovedLastFrame { get => movedLastFrame; set => movedLastFrame = value; }
 
 	internal void CollisionCallback(Node generatingNode)
 	{
