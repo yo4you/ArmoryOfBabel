@@ -73,25 +73,40 @@ public static class GrammarUtils
 		return start_string;
 	}
 
+	/// <summary>
+	/// applies the applicable node grammars from <paramref name="nodeGrammars"/> in the sequence described by the string <paramref name="ruleSequence"/> onto the graph <paramref name="nodeGraph"/> example sequence : "ABC" will transform the nodegraph according to the rules labeled "A" then "B" then "C" if they exist withing the supplied grammar rules
+	/// </summary>
+	/// <param name="ruleSequence">sequence of rules to apply</param>
+	/// <param name="nodeGrammars">all possible rules to apply</param>
+	/// <param name="nodeGraph">the graph to be cloned and transformed</param>
+	/// <returns>the transformed node graph</returns>
 	public static NodeGraph ApplyNodeGrammars(string ruleSequence, ref List<NodeGrammar> nodeGrammars, NodeGraph nodeGraph)
 	{
 		if (ruleSequence == null)
 		{
 			return nodeGraph;
 		}
+
 		NodeGraph output = (NodeGraph)nodeGraph.Clone();
-		for (int i = 0; i < ruleSequence.Length; i++)
+
+		// TODO : make it possible for rules to have a label of more than one character
+		for (int ruleIndex = 0; ruleIndex < ruleSequence.Length; ruleIndex++)
 		{
-			string rule_name = ruleSequence[i].ToString();
-			var rules = nodeGrammars.Where((NodeGrammar gram) => gram.Name == rule_name);
+			string ruleLabel = ruleSequence[ruleIndex].ToString();
+			// collect all the rules with the right label
+			var rules = nodeGrammars.Where((NodeGrammar gram) => gram.Name == ruleLabel);
 			if (rules.Count() == 0)
 			{
+				// no rules match this label
 				continue;
 			}
+			// try all the applicable rules
 			foreach (var rule in rules)
 			{
-				if (IsNodeRoleApplicable(rule, ref output, out OrderedDictionary<int, int> translationTable))
+				if (IsGrammarApplicable(rule, ref output, out OrderedDictionary<int, int> translationTable))
 				{
+					// if the grammar is applicable we get a valid translation table back, this table will give  us translations for which IDs in the graph match which IDs in the left hand side of the grammar rule
+					// we found one that works, apply it and go to the next step in the sequence
 					ApplyNodeRule(rule, ref output, ref translationTable);
 					break;
 				}
@@ -100,23 +115,29 @@ public static class GrammarUtils
 		return output;
 	}
 
+	/// <summary>
+	/// determines which nodes exist on the right hand side of the grammar but not on the left hand and ads them to the translation table
+	/// </summary>
+	/// <param name="rule"></param>
+	/// <param name="nodeGraph"></param>
+	/// <param name="translationTable"></param>
 	private static void AddMissingNodes(NodeGrammar rule, ref NodeGraph nodeGraph, ref OrderedDictionary<int, int> translationTable)
 	{
-		// we use the first node as a refrence point to offset the positions
-		Node node0RH = rule.RightHand.NodeDict.First().Value;
-		Node node0Graph = nodeGraph.NodeDict[translationTable.First().Value];
+		// we use the first node as a reference point to offset the positions
+		var rightHandPosition = rule.RightHand.NodeDict.First().Value.Pos;
+		var graphPosition = nodeGraph.NodeDict[translationTable.First().Value].Pos;
 		// add all new nodes created by the rule and give them the proper index
 		foreach (var rhNode in rule.RightHand.NodeDict)
 		{
+			// if the node exists on the right hand but no the left hand it's a missing node and we add it
 			if (!rule.LeftHand.NodeDict.ContainsKey(rhNode.Key))
 			{
 				var newNode = new Node()
 				{
 					Node_text = rhNode.Value.Node_text,
-					Value = rhNode.Value.Value
+					Value = rhNode.Value.Value,
+					Pos = graphPosition + rhNode.Value.Pos - rightHandPosition
 				};
-
-				newNode.Pos = node0Graph.Pos + rhNode.Value.Pos - node0RH.Pos;
 
 				var newIndex = nodeGraph.AddNode(newNode);
 				translationTable.Add(rhNode.Key, newIndex);
@@ -124,18 +145,32 @@ public static class GrammarUtils
 		}
 	}
 
+	/// <summary>
+	/// applies a single node graph translation where a matching precept from the left hand side, found in the graph <paramref name="nodeGraph"/> is applied according to the <paramref name="nodeGraph"/> e.g.  the tranlsation table has an entry [1,5] thus the node with ID 5 in <paramref name="nodeGraph"/> matches ID 1 in <paramref name="rule"/>.LeftHand and will thus be replace by the node linked to by ID 5 of <paramref name="rule"/>.RightHand
+	/// </summary>
+	/// <param name="rule"></param>
+	/// <param name="nodeGraph"></param>
+	/// <param name="translationTable"></param>
 	private static void ApplyNodeRule(NodeGrammar rule, ref NodeGraph nodeGraph, ref OrderedDictionary<int, int> translationTable)
 	{
+		// nodes existing in the replacement but not in the translation table are added
 		AddMissingNodes(rule, ref nodeGraph, ref translationTable);
 
 		foreach (var translation in translationTable)
 		{
+			// the node that is to be transformed
 			var node = nodeGraph.NodeDict[translation.Value];
+			// the Key indicates the LeftHand node that matched with this one, we thus want the matching righthand to replace it
 			if (rule.RightHand.NodeDict.TryGetValue(translation.Key, out Node replacementNode))
 			{
-				node.Node_text = replacementNode.Node_text;
-				node.Value = replacementNode.Value;
+				// * nodes won't have their values changed, only their connections are modified
+				if (replacementNode.Node_text != "*")
+				{
+					node.Node_text = replacementNode.Node_text;
+					node.Value = replacementNode.Value;
+				}
 				List<int> newConnections = new List<int>();
+				// maintain the connections this node had and translate them to the new IDs
 				foreach (var connection in node.ConnectedNodes)
 				{
 					if (!translationTable.Values.Contains(connection))
@@ -143,6 +178,7 @@ public static class GrammarUtils
 						newConnections.Add(connection);
 					}
 				}
+				// add new connections as described in the grammar
 				foreach (var connection in replacementNode.ConnectedNodes)
 				{
 					if (translationTable.TryGetValue(connection, out int index))
@@ -154,92 +190,139 @@ public static class GrammarUtils
 			}
 			else
 			{
+				// this node doesn't exist in the righthand thus is indicates a deletion
 				nodeGraph.Delete(node);
 			}
 		}
 	}
 
-	private static bool CheckNodeValidity(
-		ref OrderedDictionary<int, int> translationTable,
-		ref Dictionary<int, Node> patternDict,
-		ref Dictionary<int, Node> graph,
+	/// <summary>
+	/// returns true if the grammar rule <paramref name="rule"/> has a left hand side that is a subgraph of <paramref name="nodeGraph"/>,
+	/// </summary>
+	/// <param name="rule">the rule containing the subgraph to match against</param>
+	/// <param name="nodeGraph">the supergraph</param>
+	/// <param name="translationTable">the IDs of the subgraph as they corrolate to IDs on the supergraph</param>
+	/// <returns></returns>
+	private static bool IsGrammarApplicable(NodeGrammar rule, ref NodeGraph nodeGraph, out OrderedDictionary<int, int> translationTable)
+	{
+		translationTable = null;
+		var subgraphDict = rule.LeftHand.NodeDict;
+		var firstSubgraphID = subgraphDict.Keys.Min();
+		var firstSubgraphNode = subgraphDict[firstSubgraphID].Node_text;
+		// we brute force check all the nodes in the super graph to see if we can start inserting the subgraph there
+		foreach (var superGraphNode in nodeGraph.NodeDict)
+		{
+			if (IsSubGraphIsomorphicAtPosition(firstSubgraphID, superGraphNode.Key, ref subgraphDict, nodeGraph.NodeDict, out OrderedDictionary<int, int> translation))
+			{
+				// we found the subgraph in the supergraph so we store the translations
+				translationTable = translation;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static bool IsIsomorphicSubGraph(
+		ref OrderedDictionary<int, int> internalTranslationTable,
+		ref Dictionary<int, Node> subgraph,
+		ref Dictionary<int, Node> supergraph,
 		ref OrderedDictionary<int, int> indextranslation
 		)
 	{
-		var lastTableEntry = translationTable.Last();
-		var patternNode = patternDict[lastTableEntry.Key];
-		var graphNode = graph[lastTableEntry.Value];
+		var lastTranslation = internalTranslationTable.Last();
+		var subgraphNode = subgraph[lastTranslation.Key];
+		var superGraphNode = supergraph[lastTranslation.Value];
 
-		if (patternNode.Node_text != graphNode.Node_text)
+		//if (subgraphNode.Node_text != superGraphNode.Node_text)
+		if (!StringUtils.CompareGeneralizedString(subgraphNode.Node_text, superGraphNode.Node_text) || !StringUtils.MatchComparators(subgraphNode.Node_text, subgraphNode.ConnectedNodes.Count))
 		{
+			// these nodes are dissimilars so this isn't a valid subgraph
 			return false;
 		}
 
-		foreach (var patternConnection in patternNode.ConnectedNodes)
+		foreach (var subgraphNodeConnectedID in subgraphNode.ConnectedNodes)
 		{
 			// if this node is cyclic
-			if (translationTable.TryGetValue(patternConnection, out int preexistingGraphConneciton))
+			if (internalTranslationTable.TryGetValue(subgraphNodeConnectedID, out int preexistingConnecting))
 			{
-				if (!graphNode.ConnectedNodes.Contains(preexistingGraphConneciton))
+				// if one of the connected nodes is on the translation table, the translation must match the connections of the node in the supergraph, if we don't do this our subgraph could have connections that don't match the ones described in the left hand grammar
+				if (superGraphNode.ConnectedNodes.Contains(preexistingConnecting))
 				{
-					return false;
+					// this connection is expected to exist
+					continue;
 				}
 				else
 				{
-					continue;
+					// this one is extra thus the match is invalid
+					return false;
 				}
 			}
-
-			foreach (var graphConnection in graphNode.ConnectedNodes)
+			// the connection is not in the translation table so we check the supergraph
+			foreach (var supergraphNodeConnectedID in superGraphNode.ConnectedNodes)
 			{
-				var cloned = new OrderedDictionary<int, int>(translationTable)
+				// we assume this connection is valid and add it to the dictionary
+				var cloned = new OrderedDictionary<int, int>(internalTranslationTable)
 				{
-					{ patternConnection, graphConnection }
+					{ subgraphNodeConnectedID, supergraphNodeConnectedID }
 				};
-				if (CheckNodeValidity(ref cloned, ref patternDict, ref graph, ref indextranslation))
+				// check recursively
+				if (IsIsomorphicSubGraph(ref cloned, ref subgraph, ref supergraph, ref indextranslation))
 				{
 					goto possibleMatch;
 				}
 			}
+			// the necessarily connection is not found so this match is invalid
 			return false;
 
 		possibleMatch:;
 		}
+
+		// at this point we've confirmed the forward lookup but we need to make sure the incoming connections match up as well
 		// reverse lookup
+
 		List<int> taggedIndices = new List<int>();
 
-		foreach (var pattern in patternDict)
+		// brute force trough all the nodes
+		foreach (var potentionSubgraphConnectedNode in subgraph)
 		{
-			if (!pattern.Value.ConnectedNodes.Contains(lastTableEntry.Key))
+			// filter out all the nodes that aren't connected
+			if (!potentionSubgraphConnectedNode.Value.ConnectedNodes.Contains(lastTranslation.Key))
 			{
 				continue;
 			}
-			if (translationTable.ContainsKey(pattern.Key))
+			// filter out nodes we've already added to the translation table
+			if (internalTranslationTable.ContainsKey(potentionSubgraphConnectedNode.Key))
 			{
 				continue;
 			}
-			foreach (var unconnectednode in graph.Where(i => i.Value.ConnectedNodes.Contains(lastTableEntry.Value)))
+			// parse trough the connections that exist in the supergraph
+			foreach (var unconnectedSuperGraphNode in supergraph.Where(i => i.Value.ConnectedNodes.Contains(lastTranslation.Value)))
 			{
-				if (taggedIndices.Contains(unconnectednode.Key))
+				// avoid double checking across multiple nodes
+				if (taggedIndices.Contains(unconnectedSuperGraphNode.Key))
 				{
 					continue;
 				}
-				var cloned = new OrderedDictionary<int, int>(translationTable)
+				// assume a reverse connection exists
+				var cloned = new OrderedDictionary<int, int>(internalTranslationTable)
 				{
-					{ pattern.Key, unconnectednode.Key }
+					{ potentionSubgraphConnectedNode.Key, unconnectedSuperGraphNode.Key }
 				};
-				if (CheckNodeValidity(ref cloned, ref patternDict, ref graph, ref indextranslation))
+				// check recursively
+				if (IsIsomorphicSubGraph(ref cloned, ref subgraph, ref supergraph, ref indextranslation))
 				{
-					taggedIndices.Add(unconnectednode.Key);
+					taggedIndices.Add(unconnectedSuperGraphNode.Key);
 					goto possibleMatch;
 				}
 			}
+			// we've found a node that is supposed to be connected in the subgraph but isn't connected in the supergraph thus the match failed
 			return false;
 
 		possibleMatch:;
 		}
 
-		foreach (var clone in translationTable)
+		// if we succeed we can add these values as an output dictionary
+		foreach (var clone in internalTranslationTable)
 		{
 			if (!indextranslation.ContainsKey(clone.Key))
 			{
@@ -249,41 +332,35 @@ public static class GrammarUtils
 		return true;
 	}
 
-	private static bool IsNodeRoleApplicable(NodeGrammar rule, ref NodeGraph nodeGraph, out OrderedDictionary<int, int> translationTable)
-	{
-		var match_dict = rule.LeftHand.NodeDict;
-		var smallest_index = match_dict.Keys.Min();
-		var first_node = match_dict[smallest_index].Node_text;
-		translationTable = null;
-		foreach (var match in nodeGraph.NodeDict)
-		{
-			if (MatchNodeGraphInsert(smallest_index, match.Key, ref match_dict, nodeGraph.NodeDict, out OrderedDictionary<int, int> translation))
-			{
-				translationTable = translation;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static bool MatchNodeGraphInsert(
-		int patternGraphIndex,
-		int graphIndex,
-		ref Dictionary<int, Node> patternDict,
-		Dictionary<int, Node> graph,
+	/// <summary>
+	/// returns true if the <paramref name="superGraph"/> is isomorphic to the <paramref name="superGraph"/> with the assumption that the node in the subgraph with ID <paramref name="subgraphID"/> matches the node in the supergraph with ID <paramref name="superGraphID"/>
+	/// outputs the translation of the IDs from the subgraph to the supergraph
+	/// </summary>
+	/// <param name="subgraphID"></param>
+	/// <param name="superGraphID"></param>
+	/// <param name="subGraph"></param>
+	/// <param name="superGraph"></param>
+	/// <param name="indexTranslation"></param>
+	/// <returns></returns>
+	private static bool IsSubGraphIsomorphicAtPosition(
+		int subgraphID,
+		int superGraphID,
+		ref Dictionary<int, Node> subGraph,
+		Dictionary<int, Node> superGraph,
 		out OrderedDictionary<int, int> indexTranslation)
 	{
 		indexTranslation = new OrderedDictionary<int, int>();
-		if (patternDict[patternGraphIndex].Node_text != graph[graphIndex].Node_text)
+
+		if (!StringUtils.CompareGeneralizedString(subGraph[subgraphID].Node_text, superGraph[superGraphID].Node_text) || !StringUtils.MatchComparators(subGraph[subgraphID].Node_text, superGraph[superGraphID].ConnectedNodes.Count))
 		{
 			return false;
 		}
 
 		var translationTable = new OrderedDictionary<int, int>
 		{
-			{ patternGraphIndex, graphIndex }
+			{ subgraphID, superGraphID }
 		};
 
-		return CheckNodeValidity(ref translationTable, ref patternDict, ref graph, ref indexTranslation);
+		return IsIsomorphicSubGraph(ref translationTable, ref subGraph, ref superGraph, ref indexTranslation);
 	}
 }

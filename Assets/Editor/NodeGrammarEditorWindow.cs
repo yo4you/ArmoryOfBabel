@@ -84,6 +84,11 @@ public class NodeGrammarEditorWindow : EditorWindow
 	{
 		GUILayout.BeginHorizontal();
 		EditorGUILayout.LabelField("Grammar Name");
+		if (_grammarSelectedIndex > _grammars.Count)
+		{
+			GUILayout.EndHorizontal();
+			return;
+		}
 		var current_grammar = _grammars[_grammarSelectedIndex];
 		current_grammar.Name = GUILayout.TextField(_grammars[_grammarSelectedIndex].Name);
 		_grammars[_grammarSelectedIndex] = current_grammar;
@@ -141,7 +146,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 
 	private void LoadGrammar(int grammarIndex)
 	{
-		if (_grammars.Count == 0)
+		if (_grammars.Count < grammarIndex)
 		{
 			return;
 		}
@@ -237,7 +242,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 
 	private void SaveGrammar(int grammarIndex)
 	{
-		if (_grammars.Count == 0)
+		if (_grammars.Count < grammarIndex)
 		{
 			return;
 		}
