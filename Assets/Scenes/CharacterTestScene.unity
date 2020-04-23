@@ -2369,9 +2369,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a678e9c36506a449bec83af640ad8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovedLastFrame: 0
-  _mechanicGrammarName: Hold
+  _inputString: ZS
   _minButtonHoldTime: 0.25
+  _nodeGrammars:
+  - Basic_Inputs
+  _randomString: 0
+  _seed: 123
+  _stringGrammar: ABC_inputs
 --- !u!114 &698379467
 MonoBehaviour:
   m_ObjectHideFlags: 0

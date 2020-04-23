@@ -25,15 +25,33 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	private List<Node> _callBackNodes = new List<Node>();
 	private List<Node> _healthNodes;
 	private Dictionary<string, InputNode> _inputNodes = new Dictionary<string, InputNode>();
-	[SerializeField] private string _mechanicGrammarName;
+
+	[SerializeField]
+	private string _inputString = "";
+
 	private NodeGraph _mechanicGraph;
 
 	[SerializeField]
 	private float _minButtonHoldTime;
 
 	private List<Node> _moveNodes = new List<Node>();
+
+	[SerializeField]
+	private List<string> _nodeGrammars = new List<string>();
+
 	private List<Node> _notNodes = new List<Node>();
+
+	[SerializeField]
+	private bool _randomString = false;
+
 	private Dictionary<Node, float> _restoreState = new Dictionary<Node, float>();
+
+	[SerializeField]
+	private int _seed = 0;
+
+	[SerializeField]
+	private string _stringGrammar;
+
 	private List<Node> _timeNodes = new List<Node>();
 	private List<ChargeBarBehaviour> _uiBars = new List<ChargeBarBehaviour>();
 	private Dictionary<Node, Node> _uiNodeCaps;
@@ -129,7 +147,12 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{
 			ui.gameObject.SetActive(true);
 		}
-		var grammars = NodeGrammar.ImportGrammars(Application.streamingAssetsPath + "/Grammar/Node/" + _mechanicGrammarName + ".json");
+		List<NodeGrammar> grammars = new List<NodeGrammar>();
+		foreach (var grammar in _nodeGrammars)
+		{
+			grammars.AddRange(NodeGrammar.ImportGrammars(Application.streamingAssetsPath + "/Grammar/Node/" + grammar + ".json"));
+		}
+
 		// generate a simple left hand side for now
 		var inputGraph = new NodeGraph();
 		inputGraph.AddNode(new Node()
@@ -137,7 +160,11 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			Node_text = "S"
 		});
 
-		_mechanicGraph = GrammarUtils.ApplyNodeGrammars("S", ref grammars, inputGraph);
+		var stringgrams = GrammarUtils.ImportGrammars(Application.streamingAssetsPath + "/Grammar/String/" + _stringGrammar + ".json");
+		var inputString = GrammarUtils.ApplyGrammars(ref stringgrams, _inputString, _randomString ? Random.Range(0, 1000) : _seed);
+		Debug.Log("mechanic generated with input string " + inputString);
+
+		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph);
 		AnalyseMechanicNodes();
 		// turn off extra visuals, used only when reloading mechanics
 		for (int Index = _uiBars.Count - 1; Index >= _uiNodes.Count; Index--)

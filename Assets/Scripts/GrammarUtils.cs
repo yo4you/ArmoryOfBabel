@@ -1,5 +1,6 @@
 ﻿using mattmc3.Common.Collections.Generic;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -113,6 +114,25 @@ public static class GrammarUtils
 			}
 		}
 		return output;
+	}
+
+	public static List<StringGrammarRule> ImportGrammars(string fileDir)
+	{
+		// TODO throw exception
+		try
+		{
+			StreamReader reader = new StreamReader(fileDir);
+			var jsonString = reader.ReadToEnd();
+			var Output = JsonUtility.FromJson<SerializableGrammars>(jsonString).Values;
+			reader.Close();
+			reader.Dispose();
+			return Output;
+		}
+		catch (FileNotFoundException ex)
+		{
+			Debug.LogError(ex.ToString());
+			return null;
+		}
 	}
 
 	/// <summary>

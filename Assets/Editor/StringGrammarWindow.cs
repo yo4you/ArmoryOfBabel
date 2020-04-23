@@ -31,25 +31,6 @@ public class StringGrammarWindow : EditorWindow
 		writer.Dispose();
 	}
 
-	public static List<StringGrammarRule> ImportGrammars(string fileDir)
-	{
-		// TODO throw exception
-		try
-		{
-			StreamReader reader = new StreamReader(fileDir);
-			var jsonString = reader.ReadToEnd();
-			var Output = JsonUtility.FromJson<SerializableGrammars>(jsonString).Values;
-			reader.Close();
-			reader.Dispose();
-			return Output;
-		}
-		catch (FileNotFoundException ex)
-		{
-			Debug.LogError(ex.ToString());
-			return null;
-		}
-	}
-
 	[MenuItem("Custom/StringGrammarWindow")]
 	public static void ShowWindow()
 	{
@@ -177,7 +158,7 @@ public class StringGrammarWindow : EditorWindow
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("import"))
 		{
-			_grammars = ImportGrammars(_directory + _exportName + ".json") ?? new List<StringGrammarRule>();
+			_grammars = GrammarUtils.ImportGrammars(_directory + _exportName + ".json") ?? new List<StringGrammarRule>();
 		}
 		if (GUILayout.Button("export"))
 		{

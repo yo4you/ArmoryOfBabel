@@ -117,7 +117,6 @@ public static class NodeBehaviour
 					continue;
 			}
 		}
-		//Debug.Log(dmg);
 		node.Active = PlayerAttacks.ProccessAttackNode(spd, dmg, (int)type, node, (int)status);
 		if (Callbacks.Peek().Activator == null)
 		{

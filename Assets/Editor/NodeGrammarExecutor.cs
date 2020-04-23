@@ -146,7 +146,7 @@ public class NodeGrammarExecutor : EditorWindow
 
 		if (_stringGrammarDirty)
 		{
-			_stringgrammars = StringGrammarWindow.ImportGrammars(_stringDirectory + StringGrammarName + ".json");
+			_stringgrammars = GrammarUtils.ImportGrammars(_stringDirectory + StringGrammarName + ".json");
 			_stringGrammarDirty = false;
 		}
 		if (_inputDirty)
