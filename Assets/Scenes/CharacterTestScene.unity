@@ -2373,8 +2373,8 @@ MonoBehaviour:
   _minButtonHoldTime: 0.25
   _nodeGrammars:
   - Basic_Inputs
-  _randomString: 0
-  _seed: 123
+  _randomString: 1
+  _seed: 0
   _stringGrammar: ABC_inputs
 --- !u!114 &698379467
 MonoBehaviour:

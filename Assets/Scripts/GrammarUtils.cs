@@ -210,7 +210,7 @@ public static class GrammarUtils
 			}
 			else
 			{
-				// this node doesn't exist in the righthand thus is indicates a deletion
+				// this node doesn't exist in the right hand thus is indicates a deletion
 				nodeGraph.Delete(node);
 			}
 		}
@@ -230,11 +230,11 @@ public static class GrammarUtils
 		var firstSubgraphID = subgraphDict.Keys.Min();
 		var firstSubgraphNode = subgraphDict[firstSubgraphID].Node_text;
 		// we brute force check all the nodes in the super graph to see if we can start inserting the subgraph there
+		//OrderedDictionary<int, int> translation = new OrderedDictionary<int, int>();
 		foreach (var superGraphNode in nodeGraph.NodeDict)
 		{
-			if (IsSubGraphIsomorphicAtPosition(firstSubgraphID, superGraphNode.Key, ref subgraphDict, nodeGraph.NodeDict, out OrderedDictionary<int, int> translation))
+			if (IsPlacementValid(new OrderedDictionary<int, int>(), firstSubgraphID, superGraphNode.Key, ref subgraphDict, nodeGraph.NodeDict, out OrderedDictionary<int, int> translation))
 			{
-				// we found the subgraph in the supergraph so we store the translations
 				translationTable = translation;
 				return true;
 			}
@@ -288,6 +288,13 @@ public static class GrammarUtils
 				// check recursively
 				if (IsIsomorphicSubGraph(ref cloned, ref subgraph, ref supergraph, ref indextranslation))
 				{
+					foreach (var clone in cloned)
+					{
+						if (!internalTranslationTable.ContainsKey(clone.Key))
+						{
+							internalTranslationTable.Add(clone.Key, clone.Value);
+						}
+					}
 					goto possibleMatch;
 				}
 			}
@@ -316,10 +323,16 @@ public static class GrammarUtils
 				continue;
 			}
 			// parse trough the connections that exist in the supergraph
-			foreach (var unconnectedSuperGraphNode in supergraph.Where(i => i.Value.ConnectedNodes.Contains(lastTranslation.Value)))
+
+			var unconnectedSuperGraphNodes = from keyval in supergraph
+											 where keyval.Value.ConnectedNodes.Contains(lastTranslation.Value)
+											 && !taggedIndices.Contains(keyval.Key)
+											 select keyval;
+
+			foreach (var unconnectedSuperGraphNode in unconnectedSuperGraphNodes)
 			{
 				// avoid double checking across multiple nodes
-				if (taggedIndices.Contains(unconnectedSuperGraphNode.Key))
+				if (internalTranslationTable.ContainsValue(unconnectedSuperGraphNode.Key))
 				{
 					continue;
 				}
@@ -332,6 +345,14 @@ public static class GrammarUtils
 				if (IsIsomorphicSubGraph(ref cloned, ref subgraph, ref supergraph, ref indextranslation))
 				{
 					taggedIndices.Add(unconnectedSuperGraphNode.Key);
+
+					foreach (var clone in cloned)
+					{
+						if (!internalTranslationTable.ContainsKey(clone.Key))
+						{
+							internalTranslationTable.Add(clone.Key, clone.Value);
+						}
+					}
 					goto possibleMatch;
 				}
 			}
@@ -342,14 +363,41 @@ public static class GrammarUtils
 		}
 
 		// if we succeed we can add these values as an output dictionary
-		foreach (var clone in internalTranslationTable)
+		// 		foreach (var clone in internalTranslationTable)
+		// 		{
+		// 			if (!indextranslation.ContainsKey(clone.Key))
+		// 			{
+		// 				indextranslation.Add(clone.Key, clone.Value);
+		// 			}
+		// 		}
+		indextranslation = new OrderedDictionary<int, int>(internalTranslationTable);
+		return true;
+	}
+
+	private static bool IsPlacementValid(OrderedDictionary<int, int> input_translation, int subgraphID, int superGraphID, ref Dictionary<int, Node> subgraphDict, Dictionary<int, Node> superGraph, out OrderedDictionary<int, int> translation)
+	{
+		//IsSubGraphIsomorphicAtPosition(firstSubgraphID, superGraphNode.Key, ref subgraphDict, nodeGraph.NodeDict, ref translation)
+		translation = null;
+		var tempTranslation = new OrderedDictionary<int, int>(input_translation);
+		if (IsSubGraphIsomorphicAtPosition(subgraphID, superGraphID, ref subgraphDict, superGraph, ref tempTranslation))
 		{
-			if (!indextranslation.ContainsKey(clone.Key))
+			var missingNode = subgraphDict.FirstOrDefault((kv) => !tempTranslation.ContainsKey(kv.Key));
+			if (missingNode.Value == null)
 			{
-				indextranslation.Add(clone.Key, clone.Value);
+				translation = tempTranslation;
+				return true;
+			}
+
+			foreach (var super in superGraph)
+			{
+				if (IsPlacementValid(tempTranslation, missingNode.Key, super.Key, ref subgraphDict, superGraph, out OrderedDictionary<int, int> finalTranslation))
+				{
+					translation = finalTranslation;
+					return true;
+				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	/// <summary>
@@ -367,16 +415,16 @@ public static class GrammarUtils
 		int superGraphID,
 		ref Dictionary<int, Node> subGraph,
 		Dictionary<int, Node> superGraph,
-		out OrderedDictionary<int, int> indexTranslation)
+		ref OrderedDictionary<int, int> indexTranslation)
 	{
-		indexTranslation = new OrderedDictionary<int, int>();
+		//indexTranslation = new OrderedDictionary<int, int>();
 
 		if (!StringUtils.CompareGeneralizedString(subGraph[subgraphID].Node_text, superGraph[superGraphID].Node_text) || !StringUtils.MatchComparators(subGraph[subgraphID].Node_text, superGraph[superGraphID].ConnectedNodes.Count))
 		{
 			return false;
 		}
 
-		var translationTable = new OrderedDictionary<int, int>
+		var translationTable = new OrderedDictionary<int, int>(indexTranslation)
 		{
 			{ subgraphID, superGraphID }
 		};
