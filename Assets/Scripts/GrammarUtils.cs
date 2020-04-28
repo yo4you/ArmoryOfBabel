@@ -310,6 +310,7 @@ public static class GrammarUtils
 		List<int> taggedIndices = new List<int>();
 
 		// brute force trough all the nodes
+
 		foreach (var potentionSubgraphConnectedNode in subgraph)
 		{
 			// filter out all the nodes that aren't connected
@@ -361,15 +362,6 @@ public static class GrammarUtils
 
 		possibleMatch:;
 		}
-
-		// if we succeed we can add these values as an output dictionary
-		// 		foreach (var clone in internalTranslationTable)
-		// 		{
-		// 			if (!indextranslation.ContainsKey(clone.Key))
-		// 			{
-		// 				indextranslation.Add(clone.Key, clone.Value);
-		// 			}
-		// 		}
 		indextranslation = new OrderedDictionary<int, int>(internalTranslationTable);
 		return true;
 	}
@@ -387,8 +379,10 @@ public static class GrammarUtils
 				translation = tempTranslation;
 				return true;
 			}
-
-			foreach (var super in superGraph)
+			var collection = from kv in superGraph
+							 where !tempTranslation.Values.Contains(kv.Key)
+							 select kv;
+			foreach (var super in collection)
 			{
 				if (IsPlacementValid(tempTranslation, missingNode.Key, super.Key, ref subgraphDict, superGraph, out OrderedDictionary<int, int> finalTranslation))
 				{
@@ -417,8 +411,6 @@ public static class GrammarUtils
 		Dictionary<int, Node> superGraph,
 		ref OrderedDictionary<int, int> indexTranslation)
 	{
-		//indexTranslation = new OrderedDictionary<int, int>();
-
 		if (!StringUtils.CompareGeneralizedString(subGraph[subgraphID].Node_text, superGraph[superGraphID].Node_text) || !StringUtils.MatchComparators(subGraph[subgraphID].Node_text, superGraph[superGraphID].ConnectedNodes.Count))
 		{
 			return false;
