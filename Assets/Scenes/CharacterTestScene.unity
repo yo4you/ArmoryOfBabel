@@ -2369,13 +2369,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a678e9c36506a449bec83af640ad8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputString: ZS
+  _inputString: S
   _minButtonHoldTime: 0.25
   _nodeGrammars:
-  - Basic_Inputs
+  - synargy_test
+  - synargy_test2
   _randomString: 1
   _seed: 0
-  _stringGrammar: ABC_inputs
+  _stringGrammar: synargy_test_string
 --- !u!114 &698379467
 MonoBehaviour:
   m_ObjectHideFlags: 0

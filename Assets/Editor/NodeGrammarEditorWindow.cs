@@ -49,17 +49,17 @@ public class NodeGrammarEditorWindow : EditorWindow
 		}
 	}
 
+	private void DrawResetButton()
+	{
+		if (GUILayout.Button("New Grammar"))
+		{
+			Reset();
+		}
+	}
+
 	private void EnableProperly()
 	{
-		_grammars = new List<NodeGrammar>
-		{
-			new NodeGrammar
-			{
-				Name = "New Grammar",
-				LeftHand = new NodeGraph(),
-				RightHand = new NodeGraph()
-			}
-		};
+		ResetGrammars();
 		GenerateEditorWindows();
 		_selected = true;
 	}
@@ -89,6 +89,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 			GUILayout.EndHorizontal();
 			return;
 		}
+		// TODO check why this can be null
 		var current_grammar = _grammars[_grammarSelectedIndex];
 		current_grammar.Name = GUILayout.TextField(_grammars[_grammarSelectedIndex].Name);
 		_grammars[_grammarSelectedIndex] = current_grammar;
@@ -102,6 +103,10 @@ public class NodeGrammarEditorWindow : EditorWindow
 		if (GUILayout.Button("import"))
 		{
 			_grammars = NodeGrammar.ImportGrammars(_directory + _exportName + ".json");
+			if (_grammars == default)
+			{
+				Reset();
+			}
 			LoadGrammar(_grammarSelectedIndex);
 		}
 		if (GUILayout.Button("export"))
@@ -146,7 +151,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 
 	private void LoadGrammar(int grammarIndex)
 	{
-		if (_grammars.Count < grammarIndex)
+		if (_grammars.Count <= grammarIndex)
 		{
 			return;
 		}
@@ -213,6 +218,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 		GrammarNameOptions();
 
 		GrammarSaveAndLoad();
+		DrawResetButton();
 
 		if (_selected)
 		{
@@ -238,6 +244,27 @@ public class NodeGrammarEditorWindow : EditorWindow
 				_nodeEditorWindows[i].Close();
 			}
 		}
+	}
+
+	private void Reset()
+	{
+		_grammarSelectedIndex = 0;
+		_scrollPos = new Vector2();
+		_grammars = new List<NodeGrammar>();
+		ResetGrammars();
+	}
+
+	private void ResetGrammars()
+	{
+		_grammars = new List<NodeGrammar>
+		{
+			new NodeGrammar
+			{
+				Name = "New Grammar",
+				LeftHand = new NodeGraph(),
+				RightHand = new NodeGraph()
+			}
+		};
 	}
 
 	private void SaveGrammar(int grammarIndex)

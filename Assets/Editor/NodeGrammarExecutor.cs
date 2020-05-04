@@ -131,6 +131,15 @@ public class NodeGrammarExecutor : EditorWindow
 		}
 	}
 
+	private void DrawResetButtom()
+	{
+		if (GUILayout.Button("Refresh"))
+		{
+			_stringGrammarDirty = true;
+			_nodeGrammarDirty = true;
+		}
+	}
+
 	private void DrawStringGrammarOptions()
 	{
 		EditorGUILayout.BeginHorizontal();
@@ -229,6 +238,7 @@ public class NodeGrammarExecutor : EditorWindow
 		ResetWindowButton();
 		DrawStringGrammarOptions();
 		DrawNodeOptions();
+		DrawResetButtom();
 		if (_selected)
 		{
 			DrawEditorWindows();

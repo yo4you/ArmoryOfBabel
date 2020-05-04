@@ -22,12 +22,20 @@ public struct NodeGrammar
 
 	public static List<NodeGrammar> ImportGrammars(string directory)
 	{
-		StreamReader reader = new StreamReader(directory);
-		var jsonString = reader.ReadToEnd();
-		var outp = SerializableNodeGrammars_Converter.FromJson(jsonString);
-		reader.Close();
-		reader.Dispose();
-		return outp;
+		try
+		{
+			StreamReader reader = new StreamReader(directory);
+			var jsonString = reader.ReadToEnd();
+			var outp = SerializableNodeGrammars_Converter.FromJson(jsonString);
+			reader.Close();
+			reader.Dispose();
+			return outp;
+		}
+		catch (FileNotFoundException ex)
+		{
+			Debug.LogError(ex.ToString());
+			return null;
+		}
 	}
 }
 

@@ -354,6 +354,10 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	/// </summary>
 	private void UpdateNodegraphState()
 	{
+		foreach (var uiNode in _healthNodes)
+		{
+			uiNode.Value = NodeBehaviour.PlayerHealth.HP;
+		}
 		// update the delta time nodes in the graph each frame
 		foreach (var dtNode in _timeNodes)
 		{

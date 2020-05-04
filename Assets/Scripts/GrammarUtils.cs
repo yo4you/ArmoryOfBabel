@@ -130,7 +130,7 @@ public static class GrammarUtils
 		}
 		catch (FileNotFoundException ex)
 		{
-			Debug.LogError(ex.ToString());
+			//Debug.LogError(ex.ToString());
 			return null;
 		}
 	}
