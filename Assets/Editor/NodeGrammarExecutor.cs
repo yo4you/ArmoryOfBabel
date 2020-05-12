@@ -126,7 +126,7 @@ public class NodeGrammarExecutor : EditorWindow
 			_nodeGrammarDirty = false;
 			_nodeEditorWindows[0].Changed = false;
 			_nodegraphs[0] = _nodeEditorWindows[0].Nodegraph;
-			_nodegraphs[1] = GrammarUtils.ApplyNodeGrammars(_outputString, ref _nodeGrammars, _nodegraphs[0]);
+			_nodegraphs[1] = GrammarUtils.ApplyNodeGrammars(_outputString, ref _nodeGrammars, _nodegraphs[0], Seed);
 			_nodeEditorWindows[1].Nodegraph = _nodegraphs[1];
 		}
 	}

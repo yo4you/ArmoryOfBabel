@@ -164,7 +164,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		var inputString = GrammarUtils.ApplyGrammars(ref stringgrams, _inputString, _randomString ? Random.Range(0, 1000) : _seed);
 		Debug.Log("mechanic generated with input string " + inputString);
 
-		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph);
+		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph, _seed);
 		AnalyseMechanicNodes();
 		// turn off extra visuals, used only when reloading mechanics
 		for (int Index = _uiBars.Count - 1; Index >= _uiNodes.Count; Index--)

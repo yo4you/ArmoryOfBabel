@@ -46,6 +46,11 @@ public static class SerializableNodeGrammars_Converter
 		var outp = new List<NodeGrammar>();
 
 		var data = JsonUtility.FromJson<Serializable_Grammars>(json);
+		if (data == null)
+		{
+			return outp;
+		}
+
 		foreach (var gram in data.Values)
 		{
 			outp.Add((NodeGrammar)gram);

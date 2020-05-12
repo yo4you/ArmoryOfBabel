@@ -198,7 +198,7 @@ public class NodeEditorWindow : EditorWindow
 		}
 	}
 
-	private void RightClick(Node clicked_object, Vector2 mousePosition)
+	private void RightClick(Node clickedObject, Vector2 mousePosition)
 	{
 		if (!Editable)
 		{
@@ -208,7 +208,7 @@ public class NodeEditorWindow : EditorWindow
 		if (_selectedObject != null && _currentState == WindowState.RIGHT_CLICKED)
 		{
 			Changed = true;
-			Nodegraph.Connect(_selectedObject, clicked_object);
+			Nodegraph.Connect(_selectedObject, clickedObject);
 			_currentState = WindowState.SELECTED;
 			_selectedObject = null;
 			GUI.changed = true;
@@ -217,21 +217,28 @@ public class NodeEditorWindow : EditorWindow
 		{
 			GenericMenu emptyClickMenu = new GenericMenu();
 
-			if (clicked_object != null)
+			if (clickedObject != null)
 			{
 				emptyClickMenu.AddItem(new GUIContent("Remove node"), false, () =>
 				{
 					Changed = true;
-					_nodegraph.Delete(clicked_object);
-					clicked_object = null;
+					_nodegraph.Delete(clickedObject);
+					clickedObject = null;
 				});
 
 				emptyClickMenu.AddItem(new GUIContent("Connect"), false, () =>
 				{
 					Changed = true;
-					_selectedObject = clicked_object;
+					_selectedObject = clickedObject;
 					_currentState = WindowState.RIGHT_CLICKED;
 				});
+
+				emptyClickMenu.AddItem(new GUIContent("Disconnect"), false, () =>
+				 {
+					 Changed = true;
+					 clickedObject.ConnectedNodes = new List<int>();
+					 clickedObject = null;
+				 });
 			}
 			else
 			{

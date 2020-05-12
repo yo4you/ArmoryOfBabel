@@ -21,6 +21,11 @@ internal static class StringUtils
 	public static bool ContainsGeneralization(string text, string lh)
 	{
 		string[] validCharacters = SplitGeneralization(lh);
+		if (text == null)
+		{
+			return false;
+		}
+
 		return validCharacters.Any((c) => text.Contains(c));
 	}
 

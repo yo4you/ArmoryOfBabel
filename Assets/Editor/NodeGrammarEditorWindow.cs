@@ -136,7 +136,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 		{
 			_grammars.Add(new NodeGrammar
 			{
-				Name = "New Grammar",
+				Name = "S",
 				LeftHand = new NodeGraph(),
 				RightHand = new NodeGraph()
 			});
@@ -251,6 +251,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 		_grammarSelectedIndex = 0;
 		_scrollPos = new Vector2();
 		_grammars = new List<NodeGrammar>();
+		_exportName = "";
 		ResetGrammars();
 	}
 

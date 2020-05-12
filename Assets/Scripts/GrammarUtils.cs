@@ -81,7 +81,7 @@ public static class GrammarUtils
 	/// <param name="nodeGrammars">all possible rules to apply</param>
 	/// <param name="nodeGraph">the graph to be cloned and transformed</param>
 	/// <returns>the transformed node graph</returns>
-	public static NodeGraph ApplyNodeGrammars(string ruleSequence, ref List<NodeGrammar> nodeGrammars, NodeGraph nodeGraph)
+	public static NodeGraph ApplyNodeGrammars(string ruleSequence, ref List<NodeGrammar> nodeGrammars, NodeGraph nodeGraph, int seed)
 	{
 		if (ruleSequence == null)
 		{
@@ -104,7 +104,7 @@ public static class GrammarUtils
 			// try all the applicable rules
 			foreach (var rule in rules)
 			{
-				if (IsGrammarApplicable(rule, ref output, out OrderedDictionary<int, int> translationTable))
+				if (IsGrammarApplicable(rule, ref output, out OrderedDictionary<int, int> translationTable, seed))
 				{
 					// if the grammar is applicable we get a valid translation table back, this table will give  us translations for which IDs in the graph match which IDs in the left hand side of the grammar rule
 					// we found one that works, apply it and go to the next step in the sequence
@@ -128,7 +128,7 @@ public static class GrammarUtils
 			reader.Dispose();
 			return Output;
 		}
-		catch (FileNotFoundException ex)
+		catch (FileNotFoundException)
 		{
 			//Debug.LogError(ex.ToString());
 			return null;
@@ -223,15 +223,15 @@ public static class GrammarUtils
 	/// <param name="nodeGraph">the supergraph</param>
 	/// <param name="translationTable">the IDs of the subgraph as they corrolate to IDs on the supergraph</param>
 	/// <returns></returns>
-	private static bool IsGrammarApplicable(NodeGrammar rule, ref NodeGraph nodeGraph, out OrderedDictionary<int, int> translationTable)
+	private static bool IsGrammarApplicable(NodeGrammar rule, ref NodeGraph nodeGraph, out OrderedDictionary<int, int> translationTable, int seed)
 	{
 		translationTable = null;
 		var subgraphDict = rule.LeftHand.NodeDict;
 		var firstSubgraphID = subgraphDict.Keys.Min();
 		var firstSubgraphNode = subgraphDict[firstSubgraphID].Node_text;
 		// we brute force check all the nodes in the super graph to see if we can start inserting the subgraph there
-		//OrderedDictionary<int, int> translation = new OrderedDictionary<int, int>();
-		foreach (var superGraphNode in nodeGraph.NodeDict)
+
+		foreach (var superGraphNode in ShuffleDictionary(nodeGraph.NodeDict, seed))
 		{
 			if (IsPlacementValid(new OrderedDictionary<int, int>(), firstSubgraphID, superGraphNode.Key, ref subgraphDict, nodeGraph.NodeDict, out OrderedDictionary<int, int> translation))
 			{
@@ -422,5 +422,20 @@ public static class GrammarUtils
 		};
 
 		return IsIsomorphicSubGraph(ref translationTable, ref subGraph, ref superGraph, ref indexTranslation);
+	}
+
+	private static IEnumerable<KeyValuePair<T, U>> ShuffleDictionary<T, U>(Dictionary<T, U> dict, int seed)
+	{
+		var state = Random.state;
+		//Random.InitState(seed);
+		var randomOffset = Random.Range(0, dict.Count);
+		var dictvals = dict.Keys.ToArray();
+
+		for (int i = 0; i < dict.Count; i++)
+		{
+			var key = dictvals[(i + randomOffset) % dict.Count];
+			var val = dict[key];
+			yield return new KeyValuePair<T, U>(key, val);
+		}
 	}
 }
