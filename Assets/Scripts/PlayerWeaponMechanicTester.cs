@@ -160,9 +160,11 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			Node_text = "S"
 		});
 
+		var seed = _randomString ? Random.Range(0, 1000) : _seed;
 		var stringgrams = GrammarUtils.ImportGrammars(Application.streamingAssetsPath + "/Grammar/String/" + _stringGrammar + ".json");
-		var inputString = GrammarUtils.ApplyGrammars(ref stringgrams, _inputString, _randomString ? Random.Range(0, 1000) : _seed);
+		var inputString = GrammarUtils.ApplyGrammars(ref stringgrams, _inputString, seed);
 		Debug.Log("mechanic generated with input string " + inputString);
+		Debug.Log("Seed: " + seed);
 
 		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph, _seed);
 		AnalyseMechanicNodes();

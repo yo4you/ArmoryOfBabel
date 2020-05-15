@@ -51,7 +51,7 @@ public class NodeGrammarEditorWindow : EditorWindow
 
 	private void DrawResetButton()
 	{
-		if (GUILayout.Button("New Grammar"))
+		if (GUILayout.Button("New Grammar Set"))
 		{
 			Reset();
 		}

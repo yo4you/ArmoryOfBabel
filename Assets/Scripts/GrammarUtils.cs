@@ -143,6 +143,7 @@ public static class GrammarUtils
 	/// <param name="translationTable"></param>
 	private static void AddMissingNodes(NodeGrammar rule, ref NodeGraph nodeGraph, ref OrderedDictionary<int, int> translationTable)
 	{
+		if (rule.RightHand.NodeDict.Count == 0) { return; }
 		// we use the first node as a reference point to offset the positions
 		var rightHandPosition = rule.RightHand.NodeDict.First().Value.Pos;
 		var graphPosition = nodeGraph.NodeDict[translationTable.First().Value].Pos;
@@ -427,8 +428,9 @@ public static class GrammarUtils
 	private static IEnumerable<KeyValuePair<T, U>> ShuffleDictionary<T, U>(Dictionary<T, U> dict, int seed)
 	{
 		var state = Random.state;
-		//Random.InitState(seed);
+		Random.InitState(seed);
 		var randomOffset = Random.Range(0, dict.Count);
+		Random.state = state;
 		var dictvals = dict.Keys.ToArray();
 
 		for (int i = 0; i < dict.Count; i++)

@@ -606,6 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _statuses:
   - {fileID: 4656039207245015568, guid: 83ebdf6ae8d835f4abb19285bdea695d, type: 3}
+  - {fileID: 4656039207245015568, guid: 83ebdf6ae8d835f4abb19285bdea695d, type: 3}
   - {fileID: 4464973648429395642, guid: 5931fb8d20ec4174a8429e2e844ff6d5, type: 3}
 --- !u!4 &223974228
 Transform:
@@ -2372,13 +2373,11 @@ MonoBehaviour:
   _inputString: S
   _minButtonHoldTime: 0.25
   _nodeGrammars:
-  - synargy_test
-  - synargy_test2
-  - synargy_test3
-  - synargy_test4
+  - mechanic_test
+  - mechanic_testf
   _randomString: 1
   _seed: 0
-  _stringGrammar: synargy_test_string
+  _stringGrammar: mechanic_test
 --- !u!114 &698379467
 MonoBehaviour:
   m_ObjectHideFlags: 0

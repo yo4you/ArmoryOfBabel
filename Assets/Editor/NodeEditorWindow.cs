@@ -102,10 +102,8 @@ public class NodeEditorWindow : EditorWindow
 
 	private void LeftClick(Node clicked_object)
 	{
-		if (Editable)
-		{
-			_selectedObject = clicked_object;
-		}
+		_selectedObject = clicked_object;
+
 		_currentState = WindowState.CLICKED;
 	}
 
