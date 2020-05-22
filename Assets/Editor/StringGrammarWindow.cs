@@ -10,6 +10,8 @@ public class StringGrammarWindow : EditorWindow
 	private float _buttonWidth = 40;
 	private int _chance;
 	private string _directory = "";
+	private bool _evalDirty = true;
+	private List<string> _evals = new List<string>();
 	private string _exportName = "";
 	private Vector2 _grammarListScroll;
 	private List<StringGrammarRule> _grammars = new List<StringGrammarRule>();
@@ -21,6 +23,28 @@ public class StringGrammarWindow : EditorWindow
 	private Vector2 _testListScroll;
 	private string _testString = "";
 	private float _textBoxSize = 80;
+
+	public List<StringGrammarRule> Grammars
+	{
+		get => _grammars; set
+		{
+			_evalDirty = true;
+			_grammars = value;
+		}
+	}
+
+	public string TestString
+	{
+		get => _testString; set
+		{
+			if (_testString != value)
+			{
+				_evalDirty = true;
+			}
+
+			_testString = value;
+		}
+	}
 
 	public static void ExportGrammars(string fileDir, ref List<StringGrammarRule> grammars)
 	{
@@ -43,7 +67,7 @@ public class StringGrammarWindow : EditorWindow
 		_directory = "";
 		_exportName = "";
 		_grammarListScroll = new Vector2();
-		_grammars = new List<StringGrammarRule>();
+		Grammars = new List<StringGrammarRule>();
 		_leftHandString = "";
 		_removedEntryIndex = -1;
 		_rightHandString = "";
@@ -54,7 +78,8 @@ public class StringGrammarWindow : EditorWindow
 		EditorGUILayout.LabelField("Add string grammar");
 		if (_removedEntryIndex != -1)
 		{
-			_grammars.RemoveAt(_removedEntryIndex);
+			Grammars.RemoveAt(_removedEntryIndex);
+			_evalDirty = true;
 		}
 		_removedEntryIndex = -1;
 
@@ -66,28 +91,29 @@ public class StringGrammarWindow : EditorWindow
 		_chance = EditorGUILayout.IntField("chance", _chance, GUILayout.Width(_textBoxSize * 2.5f));
 		if (GUILayout.Button("+", GUILayout.Width(_buttonWidth)))
 		{
-			_grammars.Add(new StringGrammarRule()
+			Grammars.Add(new StringGrammarRule()
 			{
 				LeftHand = _leftHandString,
 				RightHand = _rightHandString,
 				Chance = _chance
 			});
-			_grammars.OrderBy(x => x.Chance);
+			Grammars.OrderBy(x => x.Chance);
+			_evalDirty = true;
 		}
 		EditorGUILayout.EndHorizontal();
 	}
 
 	private void GrammarDisplay()
 	{
-		if (_grammars == null)
+		if (Grammars == null)
 		{
 			return;
 		}
 
 		_grammarListScroll = EditorGUILayout.BeginScrollView(_grammarListScroll);
-		for (int i = 0; i < _grammars.Count; i++)
+		for (int i = 0; i < Grammars.Count; i++)
 		{
-			var grammar = _grammars[i];
+			var grammar = Grammars[i];
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField($"{grammar.LeftHand}  →  {grammar.RightHand}");
 			EditorGUILayout.LabelField($"{grammar.Chance}", GUILayout.Width(_buttonWidth));
@@ -105,14 +131,23 @@ public class StringGrammarWindow : EditorWindow
 	{
 		EditorGUILayout.LabelField("Grammar Evaluator");
 
-		_testString = EditorGUILayout.TextField("Test String", _testString);
+		TestString = EditorGUILayout.TextField("Test String", TestString);
 		_testListScroll = EditorGUILayout.BeginScrollView(_testListScroll, GUILayout.Height(_testExamples * _rowSize));
+
+		if (_evalDirty)
+		{
+			_evals = new List<string>();
+			for (int i = 0; i < _testExamples; i++)
+			{
+				_evals.Add(GrammarUtils.ApplyGrammars(ref _grammars, TestString, i) ?? "");
+			}
+			_evalDirty = false;
+		}
 
 		for (int i = 0; i < _testExamples; i++)
 		{
-			var testResult = GrammarUtils.ApplyGrammars(ref _grammars, _testString, i);
 			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField(testResult);
+			EditorGUILayout.LabelField(_evals[i]);
 			EditorGUILayout.LabelField($"seed : {i}", GUILayout.Width(_textBoxSize));
 			EditorGUILayout.EndHorizontal();
 		}
@@ -158,7 +193,7 @@ public class StringGrammarWindow : EditorWindow
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("import"))
 		{
-			_grammars = GrammarUtils.ImportGrammars(_directory + _exportName + ".json") ?? new List<StringGrammarRule>();
+			Grammars = GrammarUtils.ImportGrammars(_directory + _exportName + ".json") ?? new List<StringGrammarRule>();
 		}
 		if (GUILayout.Button("export"))
 		{

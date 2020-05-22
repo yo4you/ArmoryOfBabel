@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class NodeBehaviour
 {
-	public static string[] ValueHoldingNodes = { "VAL", "DMG", "SPD", "TYPE", "COPY", "DT", "SUM", "STAT" };
+	public static string[] ValueHoldingNodes = { "VAL", "DMG", "SPD", "TYPE", "COPY", "DT", "SUM", "STAT", "MULT" };
 	public static Stack<NodeActivationCallBack> Callbacks { get; set; } = new Stack<NodeActivationCallBack>();
 	public static PlayerAttackControl PlayerAttacks { get; internal set; }
 	public static HealthComponent PlayerHealth { get; internal set; }

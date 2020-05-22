@@ -8,6 +8,11 @@ public class StatusEffectManager : MonoBehaviour
 
 	public void ApplyStatus(GameObject target, int ID)
 	{
+		if (ID < 0 || ID > _statuses.Count)
+		{
+			return;
+		}
+
 		StatusEffect container = _statuses[ID];
 		var statusEffect = target.AddComponent(container.GetType()) as StatusEffect;
 		var visual = Instantiate(container.Visual, new Vector3(), new Quaternion(), target.transform);

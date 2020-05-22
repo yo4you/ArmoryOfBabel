@@ -26,6 +26,7 @@
 		new NodeType("MOV",     "knob.png",     "Output/ Movement" ,        NodeBehaviour.SetState_MoveNode),
 		new NodeType("STAT",    "stat.png",     "Output/ Status Effect",    NodeBehaviour.SetState_ValNode),
 		new NodeType("HP",      "hp.png",       "Output/ Hit Points",       NodeBehaviour.SetState_UINode),
+		new NodeType("MULT",    "mult.png",     "Multiplier",               NodeBehaviour.SetState_GenericNode),
 		new NodeType("TRESH",   null,           null,                       NodeBehaviour.SetState_TreshNode),
 	};
 }

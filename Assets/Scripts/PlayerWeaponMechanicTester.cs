@@ -282,7 +282,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 		nodeFunction(lastNode, node, ref _mechanicGraph, state, _restoreState[node]);
 
-		if (node.Active == state)
+		if (node.Active == state && node.Node_text != "MULT")
 		{
 			foreach (var connection in node.ConnectedNodes)
 			{
