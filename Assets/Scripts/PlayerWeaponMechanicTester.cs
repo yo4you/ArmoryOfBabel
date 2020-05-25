@@ -49,16 +49,16 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	[SerializeField]
 	private int _seed = 0;
 
+	private HudSignifierManager _signifierSystem;
+
 	[SerializeField]
 	private string _stringGrammar;
 
 	private List<Node> _timeNodes = new List<Node>();
-	private List<ChargeBarBehaviour> _uiBars = new List<ChargeBarBehaviour>();
 	private Dictionary<Node, Node> _uiNodeCaps;
 	private List<Node> _uiNodes = new List<Node>();
-	private bool movedLastFrame;
 	public float LastAttackDelay { get; set; }
-	public bool MovedLastFrame { get => movedLastFrame; set => movedLastFrame = value; }
+	public bool MovedLastFrame { get; set; }
 
 	internal void CollisionCallback(Node generatingNode)
 	{
@@ -81,9 +81,9 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			{
 				RegisterInput(keycode, node.Value);
 			}
-			if (_inputHoldDefenitions.TryGetValue(nodeText, out string keycode2))
+			if (_inputHoldDefenitions.TryGetValue(nodeText, out string keycodeHeld))
 			{
-				RegisterHeldInput(keycode2, node.Value);
+				RegisterHeldInput(keycodeHeld, node.Value);
 			}
 
 			switch (nodeText)
@@ -120,6 +120,11 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		}
 	}
 
+	private void ApplySignifiers()
+	{
+		_signifierSystem.Init(_mechanicGraph);
+	}
+
 	private void ConnectedValIntoTresh(Node node)
 	{
 		foreach (var connection in node.ConnectedNodes)
@@ -142,11 +147,6 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		_inputNodes = new Dictionary<string, InputNode>();
 		_restoreState = new Dictionary<Node, float>();
 
-		// enable the right visuals
-		foreach (var ui in _uiBars)
-		{
-			ui.gameObject.SetActive(true);
-		}
 		List<NodeGrammar> grammars = new List<NodeGrammar>();
 		foreach (var grammar in _nodeGrammars)
 		{
@@ -160,7 +160,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			Node_text = "S"
 		});
 
-		var seed = _randomString ? Random.Range(0, 1000) : _seed;
+		var seed = _randomString ? UnityEngine.Random.Range(0, 1000) : _seed;
 		var stringgrams = GrammarUtils.ImportGrammars(Application.streamingAssetsPath + "/Grammar/String/" + _stringGrammar + ".json");
 		var inputString = GrammarUtils.ApplyGrammars(ref stringgrams, _inputString, seed);
 		Debug.Log("mechanic generated with input string " + inputString);
@@ -168,11 +168,8 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph, _seed);
 		AnalyseMechanicNodes();
-		// turn off extra visuals, used only when reloading mechanics
-		for (int Index = _uiBars.Count - 1; Index >= _uiNodes.Count; Index--)
-		{
-			_uiBars[Index].gameObject.SetActive(false);
-		}
+
+		ApplySignifiers();
 	}
 
 	private void ProccesInputNode(InputNode input, string button)
@@ -293,17 +290,10 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private void Start()
 	{
+		_signifierSystem = FindObjectOfType<HudSignifierManager>();
 		foreach (var nodeType in NodeTypes.Types)
 		{
 			_nodeFunctions.Add(nodeType.Tag, nodeType.ExecutionFunction);
-		}
-
-		foreach (var chargebar in FindObjectsOfType<ChargeBarBehaviour>())
-		{
-			if (chargebar.UsedForWeaponMechanics)
-			{
-				_uiBars.Add(chargebar);
-			}
 		}
 
 		NodeBehaviour.PlayerAttacks = FindObjectOfType<PlayerAttackControl>();
@@ -408,7 +398,6 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			}
 
 			uiNode.Value = Mathf.Clamp(uiNode.Value, 0f, uicap);
-			_uiBars[i].ProgressPercentage = uiNode.Value * 100f / uicap;
 		}
 		foreach (var uiNode in _healthNodes)
 		{
