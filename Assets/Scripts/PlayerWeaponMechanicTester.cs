@@ -263,9 +263,12 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private void SetNodeActivity(Node lastNode, Node node, bool state, List<Node> visited = default)
 	{
+		bool signifierNode = false;
+
 		if (!_nodeFunctions.TryGetValue(node.Node_text, out NodeType.NodeHandleDelegate nodeFunction))
 		{
 			nodeFunction = NodeBehaviour.SetState_GenericNode;
+			signifierNode = true;
 		}
 		visited = visited ?? new List<Node>();
 		if (visited.Contains(node))
@@ -279,7 +282,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 		nodeFunction(lastNode, node, ref _mechanicGraph, state, _restoreState[node]);
 
-		if (node.Active == state && node.Node_text != "MULT")
+		if (node.Active == state && node.Node_text != "MULT" && !signifierNode)
 		{
 			foreach (var connection in node.ConnectedNodes)
 			{
@@ -312,6 +315,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		}
 
 		UpdateNodegraphState();
+		_signifierSystem.Step();
 		RestoreNodeGraphState();
 	}
 

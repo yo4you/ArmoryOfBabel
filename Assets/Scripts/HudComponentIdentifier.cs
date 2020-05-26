@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class AbilityBaseUIID
 {
-	public GameObject Glow;
+	public GlowingMoveSignifier Glow;
 	public List<GameObject> Icons;
 	public List<GameObject> Statuses;
 

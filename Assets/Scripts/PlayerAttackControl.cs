@@ -22,7 +22,7 @@ public class PlayerAttackControl : MonoBehaviour
 
 	public bool ProccessAttackNode(float speed, float damage, int type, Node node, int status = -1)
 	{
-		Debug.Log("damage:" + damage);
+		Debug.Log($"damage: {damage} status :  {status}");
 		if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Movement") && !CanQueue)
 		{
 			return false;
