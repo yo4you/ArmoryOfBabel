@@ -145,72 +145,8 @@ BlendTree:
     m_DirectBlendParameter: x
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 392f6e8757932fe4093fcae540c8dea0, type: 2}
-    m_Threshold: 0.0625
-    m_Position: {x: 0.148, y: 0.003}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 645e7f5f66d23fb4b951aa85767b9ea6, type: 2}
-    m_Threshold: 0.125
-    m_Position: {x: 0.103, y: 0.118}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: b020f811b81a5ac4e8894e9ca0c22eee, type: 2}
-    m_Threshold: 0.1875
-    m_Position: {x: -0.003, y: 0.168}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 336ac37e58590944fa57dd009c51c727, type: 2}
-    m_Threshold: 0.25
-    m_Position: {x: -0.153, y: 0.003}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 9595967b6acfa404e99ee467103dabe1, type: 2}
-    m_Threshold: 0.3125
-    m_Position: {x: -0.118, y: 0.118}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: a1c03a7018881ef4fb05119f68039656, type: 2}
-    m_Threshold: 0.375
-    m_Position: {x: -0.008, y: -0.158}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 4d025fa0e52383044a44fdb0fbdaab82, type: 2}
-    m_Threshold: 0.4375
-    m_Position: {x: -0.118, y: -0.113}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: a27f13973e5298b43b852bea78a82a27, type: 2}
-    m_Threshold: 0.5
-    m_Position: {x: 0.083, y: -0.118}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 5afcfc4b3f4d0b94597f8959b490c5ec, type: 2}
-    m_Threshold: 0.5625
+    m_Threshold: 0.125
     m_Position: {x: -0.01, y: 0.436}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -218,7 +154,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: dbeb3bc648fc3224b9e907907dffd34f, type: 2}
-    m_Threshold: 0.625
+    m_Threshold: 0.25
     m_Position: {x: 0.308, y: 0.343}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -226,7 +162,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 9800b867a07f0204483fb91683265340, type: 2}
-    m_Threshold: 0.6875
+    m_Threshold: 0.375
     m_Position: {x: 0.398, y: 0.008}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -234,7 +170,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 69cfdd46f52ac3d48a25b809f656c577, type: 2}
-    m_Threshold: 0.75
+    m_Threshold: 0.5
     m_Position: {x: 0.303, y: -0.263}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -242,7 +178,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 4a74803f296de4a438b2d149690ee75d, type: 2}
-    m_Threshold: 0.8125
+    m_Threshold: 0.625
     m_Position: {x: -0.008, y: -0.433}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -250,7 +186,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 23c031e06c7f45b4aaf71e1c15c8b3ee, type: 2}
-    m_Threshold: 0.875
+    m_Threshold: 0.75
     m_Position: {x: -0.293, y: -0.323}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -258,7 +194,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 4589bfcb1a3ea3a499bec89cb624fdc5, type: 2}
-    m_Threshold: 0.9375
+    m_Threshold: 0.875
     m_Position: {x: -0.436, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0

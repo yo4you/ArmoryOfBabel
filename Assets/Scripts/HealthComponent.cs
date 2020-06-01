@@ -90,6 +90,10 @@ public class HealthComponent : MonoBehaviour
 		HP = StartingHP;
 		_uiManager = FindObjectOfType<UIHealthBarManager>();
 		_uiManager.AllocateElement(this);
+		if (!_isPlayer)
+		{
+			OnHit += (float d) => FindObjectOfType<DamageNumberController>().DisplayDamageNumber(transform.position, Invulnearable ? 0 : (int)d * 10);
+		}
 	}
 
 	private IEnumerator StartInvulnearableTimer(float time)

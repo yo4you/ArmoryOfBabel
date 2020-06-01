@@ -116,12 +116,15 @@ public class PlayerAttackControl : MonoBehaviour
 
 	public IEnumerator StartProjectileAttack(ProjectileBehaviour prefab, float speed, float damage, Node node, Vector2 direction, int status)
 	{
+		// todo remove duplication
 		yield return new WaitForFixedUpdate();
 		var projectile = Instantiate(prefab, transform.position, new Quaternion());
 		projectile.Status = status;
 		projectile.MoveDir = direction * _projectileSpeed;
 		projectile.Damage = damage;
 		projectile.PWM_Tester = _pwmTester;
+		projectile.StatusManager = _statusManager;
+
 		projectile.GeneratingNode = node;
 	}
 
