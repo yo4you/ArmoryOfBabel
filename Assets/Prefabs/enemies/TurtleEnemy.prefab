@@ -148,7 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _invulTime: 0.1
   _isPlayer: 0
-  _startingHP: 100
+  _startingHP: 50
 --- !u!114 &4845331926859545116
 MonoBehaviour:
   m_ObjectHideFlags: 0

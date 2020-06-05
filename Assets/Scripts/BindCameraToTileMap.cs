@@ -16,10 +16,12 @@ public class BindCameraToTileMap : MonoBehaviour
 	private float _cameraOrthoSize;
 	private Vector3 _cameraSize;
 
-	// the tilemaps that are currendly being viewed, our camera will be stuck in their bounds
+	// the tilemaps that are currently being viewed, our camera will be stuck in their bounds
 	private IReadOnlyList<Tilemap> _tileMaps = new List<Tilemap>();
 
 	private bool _tileMapsDirty;
+
+	public Vector3 ShakeOffset { get; set; }
 
 	// the subject the camera is following (the player)
 	public Vector3 Target_Position { get; internal set; }
@@ -51,19 +53,19 @@ public class BindCameraToTileMap : MonoBehaviour
 		var cameraMin = Target_Position - _cameraSize;
 		var cameraMax = Target_Position + _cameraSize;
 		// set the future position to the target position then correct if it it's out of bound
-		var future_position = Target_Position;
+		var futurePosition = Target_Position;
 		for (int i = 0; i < 2; i++)
 		{
 			if (cameraMin[i] < _cameraMinBound[i])
 			{
-				future_position[i] = _cameraMinBound[i] + _cameraSize[i];
+				futurePosition[i] = _cameraMinBound[i] + _cameraSize[i];
 			}
 			if (cameraMax[i] > _cameraMaxBound[i])
 			{
-				future_position[i] = _cameraMaxBound[i] - _cameraSize[i];
+				futurePosition[i] = _cameraMaxBound[i] - _cameraSize[i];
 			}
 		}
-		transform.position = future_position;
+		transform.position = futurePosition + ShakeOffset;
 	}
 
 	public void UpdateTileMaps()

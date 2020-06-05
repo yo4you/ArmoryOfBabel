@@ -86,8 +86,8 @@ public static class NodeBehaviour
 		node.Active = state;
 
 		int id = graph.GetIdFromNode(node);
-		var spd = .1f;
-		var dmg = .1f;
+		var spd = .001f;
+		var dmg = .001f;
 		var type = 0f;
 		var status = -1f;
 		foreach (var potentialAffector in graph.NodeDict)

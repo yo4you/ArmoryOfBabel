@@ -60,6 +60,47 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	public float LastAttackDelay { get; set; }
 	public bool MovedLastFrame { get; set; }
 
+	public void LoadMechanicGraph(int inputSeed = -1)
+	{
+		_notNodes = new List<Node>();
+		_timeNodes = new List<Node>();
+		_uiNodes = new List<Node>();
+		_moveNodes = new List<Node>();
+		_healthNodes = new List<Node>();
+		_uiNodeCaps = new Dictionary<Node, Node>();
+		_inputNodes = new Dictionary<string, InputNode>();
+		_restoreState = new Dictionary<Node, float>();
+
+		List<NodeGrammar> grammars = new List<NodeGrammar>();
+		foreach (var grammar in _nodeGrammars)
+		{
+			grammars.AddRange(NodeGrammar.ImportGrammars(Application.streamingAssetsPath + "/Grammar/Node/" + grammar + ".json"));
+		}
+
+		// generate a simple left hand side for now
+		var inputGraph = new NodeGraph();
+		inputGraph.AddNode(new Node()
+		{
+			Node_text = "S"
+		});
+
+		var seed = _randomString ? UnityEngine.Random.Range(0, 1000) : _seed;
+		if (inputSeed != -1)
+		{
+			seed = inputSeed;
+		}
+
+		var stringgrams = GrammarUtils.ImportGrammars(Application.streamingAssetsPath + "/Grammar/String/" + _stringGrammar + ".json");
+		var inputString = GrammarUtils.ApplyGrammars(ref stringgrams, _inputString, seed);
+		Debug.Log("mechanic generated with input string " + inputString);
+		Debug.Log("Seed: " + seed);
+		FindObjectOfType<SeedDisplay>()?.DisplaySeed(seed);
+		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph, seed);
+		AnalyseMechanicNodes();
+
+		ApplySignifiers();
+	}
+
 	internal void CollisionCallback(Node generatingNode)
 	{
 		var list = new List<NodeActivationCallBack>(NodeBehaviour.Callbacks);
@@ -134,42 +175,6 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 				_mechanicGraph.NodeDict[connection].Node_text = "TRESH";
 			}
 		}
-	}
-
-	private void LoadMechanicGraph()
-	{
-		_notNodes = new List<Node>();
-		_timeNodes = new List<Node>();
-		_uiNodes = new List<Node>();
-		_moveNodes = new List<Node>();
-		_healthNodes = new List<Node>();
-		_uiNodeCaps = new Dictionary<Node, Node>();
-		_inputNodes = new Dictionary<string, InputNode>();
-		_restoreState = new Dictionary<Node, float>();
-
-		List<NodeGrammar> grammars = new List<NodeGrammar>();
-		foreach (var grammar in _nodeGrammars)
-		{
-			grammars.AddRange(NodeGrammar.ImportGrammars(Application.streamingAssetsPath + "/Grammar/Node/" + grammar + ".json"));
-		}
-
-		// generate a simple left hand side for now
-		var inputGraph = new NodeGraph();
-		inputGraph.AddNode(new Node()
-		{
-			Node_text = "S"
-		});
-
-		var seed = _randomString ? UnityEngine.Random.Range(0, 1000) : _seed;
-		var stringgrams = GrammarUtils.ImportGrammars(Application.streamingAssetsPath + "/Grammar/String/" + _stringGrammar + ".json");
-		var inputString = GrammarUtils.ApplyGrammars(ref stringgrams, _inputString, seed);
-		Debug.Log("mechanic generated with input string " + inputString);
-		Debug.Log("Seed: " + seed);
-
-		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph, _seed);
-		AnalyseMechanicNodes();
-
-		ApplySignifiers();
 	}
 
 	private void ProccesInputNode(InputNode input, string button)

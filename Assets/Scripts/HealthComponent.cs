@@ -18,7 +18,11 @@ public class HealthComponent : MonoBehaviour
 
 	private UIHealthBarManager _uiManager;
 
+	public delegate void DieEvent();
+
 	public delegate void HitEvent(float damage);
+
+	public event DieEvent OnDie;
 
 	public event HitEvent OnHit;
 
@@ -64,15 +68,8 @@ public class HealthComponent : MonoBehaviour
 
 	private void Die()
 	{
-		if (IsPlayer)
-		{
-			// TODO player death
-			gameObject.SetActive(false);
-		}
-		else
-		{
-			gameObject.SetActive(false);
-		}
+		OnDie?.Invoke();
+		gameObject.SetActive(false);
 	}
 
 	private void OnDestroy()

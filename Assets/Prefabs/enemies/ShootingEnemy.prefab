@@ -148,7 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _invulTime: 0.1
   _isPlayer: 0
-  _startingHP: 50
+  _startingHP: 25
 --- !u!114 &8768977640856843872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7d6ff66f2f473f4aaaddecab929e62b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bulletOffset: 0.2
   _chargeUpTime: 1
   _escapeRange: 0.8
   _projectile: {fileID: 3071996099565537470, guid: ff25e1b2d718645408e4784bb03aa85b,

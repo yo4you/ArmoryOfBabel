@@ -4,6 +4,9 @@ using UnityEngine;
 public class BeeBehaviour : Enemy
 {
 	[SerializeField]
+	private float _bulletOffset = 1f;
+
+	[SerializeField]
 	private float _chargeUpTime;
 
 	private BehaviourState _curState = BehaviourState.CHARGE;
@@ -99,7 +102,7 @@ public class BeeBehaviour : Enemy
 	{
 		var pos = transform.position;
 		var dir = (_target.transform.position - pos).normalized;
-		var projectile = Instantiate(_projectile, pos, Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir)));
+		var projectile = Instantiate(_projectile, pos + dir * _bulletOffset, Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir)));
 		projectile.MoveDir = Vector2.right * _projectileSpeed;
 	}
 
