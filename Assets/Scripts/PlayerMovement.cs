@@ -4,7 +4,7 @@
 /// this class provides the player with the ability to move
 /// </summary>
 [RequireComponent(typeof(Animator))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IPlayerMovement
 {
 	private Animator _animator;
 
@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	public float SpeedMultiplier { get; internal set; } = 1f;
+	public float SpeedMultiplier { get; set; } = 1f;
 
 	public void ResetDashAttack()
 	{

@@ -4,13 +4,15 @@ using UnityEngine;
 /// <summary>
 /// this class provides the player with the ability to execute certain attacks when corresponding keys are pressed
 /// </summary>
-public class PlayerAttackControl : MonoBehaviour
+public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 {
 	private Animator _animator;
 	private int _attackDirToggle = 0;
+
 	private PlayerMovement _movement;
 	[SerializeField] private Vector3 _offset;
 	[SerializeField] private ProjectileBehaviour _projectilePrefab;
+
 	[SerializeField] private float _projectileSpeed;
 	private PlayerWeaponMechanicTester _pwmTester;
 	private ReticalBehaviour _retical;
@@ -19,6 +21,19 @@ public class PlayerAttackControl : MonoBehaviour
 	[SerializeField] private SweepBehaviour _sweepPrefab;
 	public bool CanQueue { get; internal set; }
 	public bool Engaged { get; internal set; }
+
+	#region sounds
+
+	[SerializeField]
+	private ClipCollection _heavyHitSounds;
+
+	[SerializeField]
+	private ClipCollection _lightHitSounds;
+
+	[SerializeField]
+	private ClipCollection _projectileSounds;
+
+	#endregion sounds
 
 	public bool ProccessAttackNode(float speed, float damage, int type, Node node, int status = -1)
 	{
@@ -51,27 +66,35 @@ public class PlayerAttackControl : MonoBehaviour
 		{
 			_movement.ResetDashAttack();
 		}
-		_animator.speed = speed;
+		// TODO remove this if we have a power animation
+		if (type != 0)
+		{
+			_animator.speed = speed;
+		}
+
 		Engaged = true;
 		switch (type)
 		{
 			case 0:
-				// TODO power anim
+				// TODO power animation
 				break;
 
 			case 1:
 				_animator.Play("light_hit" + _attackDirToggle);
+				SoundManagerSingleton.Manager.PlayAudio(_projectileSounds);
 				StartCoroutine(StartAttack(_projectilePrefab, speed, damage, node, direction, status));
 				break;
 
 			case 2:
 				_animator.Play("light_hit" + _attackDirToggle);
+				SoundManagerSingleton.Manager.PlayAudio(_lightHitSounds);
 				StartCoroutine(StartAttack(_slashPrefab, speed, damage, node, direction, status));
 				break;
 
 			case 3:
 				_movement.DashAttack = Vector2.Dot(lastInput, new Vector2(_animator.GetFloat("x"), _animator.GetFloat("y")));
 				_animator.Play("heavy_hit" + _attackDirToggle);
+				SoundManagerSingleton.Manager.PlayAudio(_heavyHitSounds);
 				StartCoroutine(StartAttack(_sweepPrefab, speed, damage, node, direction, status));
 				break;
 

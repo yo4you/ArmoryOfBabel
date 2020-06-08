@@ -34,6 +34,9 @@ public class EyeEnemyBehaviour : Enemy
 	private float _projectileVelocity;
 
 	[SerializeField]
+	private ClipCollection _shotClips;
+
+	[SerializeField]
 	private float _shotTimeInterval;
 
 	private Vector2 _wanderDir;
@@ -129,6 +132,8 @@ public class EyeEnemyBehaviour : Enemy
 			for (int i = 0; i < 4; i++)
 			{
 				var angle = startAngle + i * 90f;
+				SoundManagerSingleton.Manager.PlayAudio(_shotClips);
+
 				var shot = Instantiate(attack ? _prefabColor0 : _prefabColor1, transform.position, Quaternion.Euler(0, 0, angle));
 				shot.MoveDir = Vector2.right * _projectileVelocity;
 			}

@@ -31,6 +31,9 @@ public class WizardBehaviour : Enemy
 	[SerializeField]
 	private float _randomTimeOffsetMax;
 
+	[SerializeField]
+	private AudioClip _warnClip;
+
 	public void WizardLoop()
 	{
 		StartCoroutine(StartWizardLoop());
@@ -78,6 +81,8 @@ public class WizardBehaviour : Enemy
 		_aimSymbol.transform.SetParent(_target.transform, false);
 		yield return new WaitForSeconds(_aimTime);
 		_aimSymbol.transform.parent = null;
+		SoundManagerSingleton.Manager.PlayAudio(_warnClip);
+
 		yield return CoroutineUtils.Interpolate(
 			(time) => _aimSymbol.SetActive((time * _flickerCount % 1f) > 0.5f), _explosionDelay);
 		_aimSymbol.SetActive(false);

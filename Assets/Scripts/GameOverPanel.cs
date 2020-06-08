@@ -5,21 +5,25 @@ using UnityEngine.SceneManagement;
 public class GameOverPanel : MonoBehaviour
 {
 	[SerializeField]
-	private float _delay = 0.5f;
+	private float _delay = .3f;
 
 	[SerializeField]
 	private GameObject _display;
+
+	[SerializeField]
+	private float _inputDelay = 0.5f;
 
 	private bool _inputEnabled;
 
 	private void GameOverPanel_OnDie()
 	{
-		_display.SetActive(true);
 		StartCoroutine(StartAnyButtonDelay());
 
 		IEnumerator StartAnyButtonDelay()
 		{
 			yield return new WaitForSeconds(_delay);
+			_display.SetActive(true);
+			yield return new WaitForSeconds(_inputDelay);
 			_inputEnabled = true;
 		}
 	}

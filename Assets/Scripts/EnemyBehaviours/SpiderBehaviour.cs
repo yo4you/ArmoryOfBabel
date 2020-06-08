@@ -4,6 +4,9 @@ using UnityEngine;
 public class SpiderBehaviour : Enemy
 {
 	[SerializeField]
+	private AudioClip _chargeSound;
+
+	[SerializeField]
 	private float _force;
 
 	[SerializeField]
@@ -24,6 +27,7 @@ public class SpiderBehaviour : Enemy
 		yield return CoroutineUtils.Interpolate((time) => _sprite.color = Color.Lerp(Color.white, Color.red, time), _strikeTime);
 		gameObject.layer = 10;
 		_rb.AddForce(strikeDir * _force);
+		SoundManagerSingleton.Manager.PlayAudio(_chargeSound);
 		yield return CoroutineUtils.Interpolate((time) => _sprite.color = Color.Lerp(Color.red, Color.white, time), _strikeCooldown);
 		gameObject.layer = 9;
 		_striking = false;

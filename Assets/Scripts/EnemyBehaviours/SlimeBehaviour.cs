@@ -12,6 +12,9 @@ public class SlimeBehaviour : Enemy
 	private ProjectileBehaviour _shot;
 
 	[SerializeField]
+	private ClipCollection _shotClips;
+
+	[SerializeField]
 	private float _swirfAmplitude;
 
 	[SerializeField]
@@ -70,6 +73,8 @@ public class SlimeBehaviour : Enemy
 		var pos = transform.position;
 		var dir = (_agent.Target.position - pos).normalized;
 		var projectile = Instantiate(_shot, pos, Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir)));
+		SoundManagerSingleton.Manager.PlayAudio(_shotClips);
+
 		projectile.MoveDir = Vector2.right * _projectileSpeed;
 	}
 }

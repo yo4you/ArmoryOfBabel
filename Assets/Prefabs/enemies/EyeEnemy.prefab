@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1692270455683503157}
   - component: {fileID: 1692270454212616130}
   - component: {fileID: 7146657390035476437}
+  - component: {fileID: 4341438859282846770}
   m_Layer: 9
   m_Name: EyeEnemy
   m_TagString: Untagged
@@ -201,4 +202,35 @@ MonoBehaviour:
   _prefabColor1: {fileID: 589150256722554957, guid: bf898e0a056e144458803e9c4bebffbe,
     type: 3}
   _projectileVelocity: 5
+  _shotClips:
+    Clips:
+    - {fileID: 8300000, guid: 683496b9cd5acd748ac78fd8fc23fd0b, type: 3}
+    - {fileID: 8300000, guid: bbc16e62abc0f0b468e8874b1c65f3af, type: 3}
+    - {fileID: 8300000, guid: c4a5052e15b10b44dbf1104d42e4dae7, type: 3}
+    - {fileID: 8300000, guid: 8e3bbb1dd73a6e04f915b33e4c8e6089, type: 3}
   _shotTimeInterval: 0.6
+--- !u!114 &4341438859282846770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8729444056144674255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1375c2d62b22c41419f8e1dee903de69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DieClips:
+    Clips:
+    - {fileID: 8300000, guid: c6ea303cb015a8949994ca3d5e940b98, type: 3}
+    - {fileID: 8300000, guid: f8ee05592ed495844ae77699d09810f3, type: 3}
+    - {fileID: 8300000, guid: f86619eec89432244bfcaaa8bb34f98e, type: 3}
+    - {fileID: 8300000, guid: 18fd9ae0ac8015b46a7be25f2c9975d8, type: 3}
+  HitClips:
+    Clips:
+    - {fileID: 8300000, guid: 8e678d33a8b52f046a718ced18b2ee0e, type: 3}
+    - {fileID: 8300000, guid: a5d8c3bfc6d7d904386f2eb7c4610a03, type: 3}
+    - {fileID: 8300000, guid: 5929b007e28b87c4d88d61eae320e904, type: 3}
+    - {fileID: 8300000, guid: 9f0c17611a1b00b4b846fcf205e0d8b6, type: 3}
+    - {fileID: 8300000, guid: fe8aab525a52d9348b344cec1447d2b4, type: 3}

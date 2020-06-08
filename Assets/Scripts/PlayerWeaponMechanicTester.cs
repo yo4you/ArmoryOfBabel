@@ -59,6 +59,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	private List<Node> _uiNodes = new List<Node>();
 	public float LastAttackDelay { get; set; }
 	public bool MovedLastFrame { get; set; }
+	public HealthComponent PlayerHealth { get; private set; }
 
 	public void LoadMechanicGraph(int inputSeed = -1)
 	{
@@ -152,7 +153,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 				case "HP":
 					_healthNodes.Add(node.Value);
-					node.Value.Value = NodeBehaviour.PlayerHealth.HP;
+					node.Value.Value = PlayerHealth.HP;
 					ConnectedValIntoTresh(node.Value);
 					break;
 			}
@@ -304,10 +305,9 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			_nodeFunctions.Add(nodeType.Tag, nodeType.ExecutionFunction);
 		}
 
-		NodeBehaviour.PlayerAttacks = FindObjectOfType<PlayerAttackControl>();
-		var player = NodeBehaviour.PlayerAttacks.gameObject;
-		NodeBehaviour.PlayerMovement = player.GetComponent<PlayerMovement>();
-		NodeBehaviour.PlayerHealth = player.GetComponent<HealthComponent>();
+		NodeBehaviour.PlayerAttacks = GetComponent<PlayerAttackControl>();
+		NodeBehaviour.PlayerMovement = GetComponent<PlayerMovement>();
+		PlayerHealth = GetComponent<HealthComponent>();
 		LoadMechanicGraph();
 	}
 
@@ -357,7 +357,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	{
 		foreach (var uiNode in _healthNodes)
 		{
-			uiNode.Value = NodeBehaviour.PlayerHealth.HP;
+			uiNode.Value = PlayerHealth.HP;
 		}
 		// update the delta time nodes in the graph each frame
 		foreach (var dtNode in _timeNodes)
@@ -411,7 +411,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		foreach (var uiNode in _healthNodes)
 		{
 			SetNodeActivity(null, uiNode, true);
-			NodeBehaviour.PlayerHealth.HP = Mathf.Clamp(uiNode.Value, 0, NodeBehaviour.PlayerHealth.StartingHP);
+			PlayerHealth.HP = Mathf.Clamp(uiNode.Value, 0, PlayerHealth.StartingHP);
 		}
 	}
 }

@@ -45,7 +45,8 @@ public class HealthComponent : MonoBehaviour
 	{
 		if (!dot)
 		{
-			OnHit?.Invoke(damage);
+			OnHit?.Invoke(_invulnearable ? 0f : damage);
+
 			if (_invulnearable)
 			{
 				return;
@@ -85,11 +86,13 @@ public class HealthComponent : MonoBehaviour
 	private void Start()
 	{
 		HP = StartingHP;
+		FindObjectOfType<GlobalHealthTracker>().Register(this);
 		_uiManager = FindObjectOfType<UIHealthBarManager>();
 		_uiManager.AllocateElement(this);
+		var damagenums = FindObjectOfType<DamageNumberController>();
 		if (!_isPlayer)
 		{
-			OnHit += (float d) => FindObjectOfType<DamageNumberController>().DisplayDamageNumber(transform.position, Invulnearable ? 0 : (int)d * 10);
+			OnHit += (float d) => damagenums.DisplayDamageNumber(transform.position, Invulnearable ? 0 : (int)d * 10);
 		}
 	}
 

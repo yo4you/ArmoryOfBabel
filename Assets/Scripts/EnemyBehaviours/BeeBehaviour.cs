@@ -21,6 +21,9 @@ public class BeeBehaviour : Enemy
 	private float _projectileSpeed;
 
 	[SerializeField]
+	private ClipCollection _shootClips;
+
+	[SerializeField]
 	private float _shootInterval;
 
 	[SerializeField]
@@ -100,6 +103,8 @@ public class BeeBehaviour : Enemy
 
 	private void Shoot()
 	{
+		SoundManagerSingleton.Manager.PlayAudio(_shootClips);
+
 		var pos = transform.position;
 		var dir = (_target.transform.position - pos).normalized;
 		var projectile = Instantiate(_projectile, pos + dir * _bulletOffset, Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir)));
