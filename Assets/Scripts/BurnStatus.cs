@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Status effect that applies a damage over time effect
+/// </summary>
 public class BurnStatus : StatusEffect
 {
 	[SerializeField]
