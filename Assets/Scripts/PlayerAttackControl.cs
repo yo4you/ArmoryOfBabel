@@ -118,7 +118,6 @@ public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 			speedMult = length / (length - _pwmTester.LastAttackDelay);
 			_pwmTester.LastAttackDelay = 0f;
 		}
-		Debug.Log(speed);
 		_animator.speed *= speedMult;
 
 		var hitbox = Instantiate(prefab, transform.position, new Quaternion());

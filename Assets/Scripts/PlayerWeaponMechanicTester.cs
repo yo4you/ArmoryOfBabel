@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerWeaponMechanicTester : MonoBehaviour
 {
+	[SerializeField]
+	private int _simIterations = 1000;
+
 	private readonly Dictionary<string, string> _inputDefenitions = new Dictionary<string, string>
 	{
 		{"A","Attack 1"},
@@ -57,6 +61,12 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	private List<Node> _timeNodes = new List<Node>();
 	private Dictionary<Node, Node> _uiNodeCaps;
 	private List<Node> _uiNodes = new List<Node>();
+
+	[SerializeField]
+	private float _simTimeStep = 0.1f;
+
+	private PlayerInputSimulator _playerInputSimulator;
+
 	public float LastAttackDelay { get; set; }
 	public bool MovedLastFrame { get; set; }
 	public HealthComponent PlayerHealth { get; private set; }
@@ -98,8 +108,31 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		FindObjectOfType<SeedDisplay>()?.DisplaySeed(seed);
 		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph, seed);
 		AnalyseMechanicNodes();
-
 		ApplySignifiers();
+
+		AdjustBalance();
+
+		NodeBehaviour.Callbacks = new Stack<NodeActivationCallBack>();
+		NodeBehaviour.PlayerAttacks = GetComponent<PlayerAttackControl>();
+		NodeBehaviour.PlayerMovement = GetComponent<PlayerMovement>();
+	}
+
+	private void AdjustBalance()
+	{
+		PlayerAtackInputSimulator playerAttackInputSimulator = new PlayerAtackInputSimulator(this);
+		NodeBehaviour.PlayerAttacks = playerAttackInputSimulator;
+		PlayerMovementSimulator playerMovementSimulator = new PlayerMovementSimulator(this);
+		NodeBehaviour.PlayerMovement = playerMovementSimulator;
+		_playerInputSimulator = new PlayerInputSimulator(this);
+		for (int i = 0; i < _simIterations; i++)
+		{
+			playerAttackInputSimulator.Update(_simTimeStep);
+			playerMovementSimulator.Update(_simTimeStep);
+			_playerInputSimulator.Update(_simTimeStep);
+
+			UpdateNodegraphState(simulate: true);
+			RestoreNodeGraphState();
+		}
 	}
 
 	internal void CollisionCallback(Node generatingNode)
@@ -267,7 +300,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		_callBackNodes = new List<Node>();
 	}
 
-	private void SetNodeActivity(Node lastNode, Node node, bool state, List<Node> visited = default)
+	public void SetNodeActivity(Node lastNode, Node node, bool state, List<Node> visited = default)
 	{
 		bool signifierNode = false;
 
@@ -305,8 +338,6 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			_nodeFunctions.Add(nodeType.Tag, nodeType.ExecutionFunction);
 		}
 
-		NodeBehaviour.PlayerAttacks = GetComponent<PlayerAttackControl>();
-		NodeBehaviour.PlayerMovement = GetComponent<PlayerMovement>();
 		PlayerHealth = GetComponent<HealthComponent>();
 		LoadMechanicGraph();
 	}
@@ -342,7 +373,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			ProccesInputNode(input.Value, input.Key);
 
 			var callback = NodeBehaviour.Callbacks.Peek();
-			// if we hit a hit response node we've new callback
+			// if we hit a hit response node we've triggered a new callback
 			if (callback.Activatee == null || callback.Activator == null)
 			{
 				NodeBehaviour.Callbacks.Pop();
@@ -353,7 +384,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	/// <summary>
 	/// Update the state of the mechanic node graph
 	/// </summary>
-	private void UpdateNodegraphState()
+	private void UpdateNodegraphState(bool simulate = false)
 	{
 		foreach (var uiNode in _healthNodes)
 		{
@@ -362,7 +393,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		// update the delta time nodes in the graph each frame
 		foreach (var dtNode in _timeNodes)
 		{
-			dtNode.Value = Time.deltaTime;
+			dtNode.Value = simulate ? _simTimeStep : Time.deltaTime;
 		}
 
 		// NOT nodes are going to be true by default so they can be flipped when activated
@@ -391,7 +422,40 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		}
 
 		// parse trough the player input
-		UpdateInputNodeState();
+		if (simulate)
+		{
+			UpdateInputNodeStateSim();
+		}
+		else
+		{
+			UpdateInputNodeState();
+		}
+	}
+
+	private void UpdateInputNodeStateSim()
+	{
+		if (MovedLastFrame)
+		{
+			MovedLastFrame = false;
+			foreach (var moveNode in _moveNodes)
+			{
+				SetNodeActivity(null, moveNode, true);
+			}
+		}
+
+		foreach (var input in _inputNodes)
+		{
+			// we push a new callback associated with this input
+			NodeBehaviour.Callbacks.Push(new NodeActivationCallBack(null, null));
+			_playerInputSimulator.ProccesInputNode(input.Value, input.Key);
+
+			var callback = NodeBehaviour.Callbacks.Peek();
+			// if we hit a hit response node we've triggered a new callback
+			if (callback.Activatee == null || callback.Activator == null)
+			{
+				NodeBehaviour.Callbacks.Pop();
+			}
+		}
 	}
 
 	private void UpdateUINodeState()
@@ -413,5 +477,19 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			SetNodeActivity(null, uiNode, true);
 			PlayerHealth.HP = Mathf.Clamp(uiNode.Value, 0, PlayerHealth.StartingHP);
 		}
+	}
+}
+
+internal class A
+{
+	public int var1, var2;
+}
+
+internal class B
+{
+	private void DoThing()
+	{
+		int a = 1;
+		A newA = new A { var1 = a };
 	}
 }

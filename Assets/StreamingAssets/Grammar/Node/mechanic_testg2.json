@@ -1,0 +1,310 @@
+{
+    "Values": [
+        {
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2
+                ],
+                "lastID": 3,
+                "Values": [
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "MULT",
+                        "_pos": {
+                            "x": 119.0,
+                            "y": 140.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "AND|NOT",
+                        "_pos": {
+                            "x": 256.0,
+                            "y": 147.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            0
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 2.0,
+                            "y": 139.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            },
+            "Name": "η",
+            "RightHand": {
+                "Keys": [
+                    1,
+                    2
+                ],
+                "lastID": 3,
+                "Values": [
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 228.0,
+                            "y": 77.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 76.0,
+                            "y": 29.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            }
+        },
+        {
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ],
+                "lastID": 6,
+                "Values": [
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "special",
+                        "_pos": {
+                            "x": 399.0,
+                            "y": 78.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            0
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 270.0,
+                            "y": 81.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 146.0,
+                            "y": 80.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            2
+                        ],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 18.0,
+                            "y": 83.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 405.0,
+                            "y": 189.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 403.0,
+                            "y": 295.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            },
+            "Name": "η",
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ],
+                "lastID": 6,
+                "Values": [
+                    {
+                        "_connectedNodes": [
+                            4,
+                            5
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 275.0,
+                            "y": 148.0
+                        },
+                        "_value": 10.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            0
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 181.0,
+                            "y": 149.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 76.0,
+                            "y": 149.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            2
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": -30.0,
+                            "y": 152.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 460.0,
+                            "y": 102.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 457.0,
+                            "y": 280.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            }
+        },
+        {
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ],
+                "lastID": 6,
+                "Values": [
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "special",
+                        "_pos": {
+                            "x": 399.0,
+                            "y": 78.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            0
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 270.0,
+                            "y": 81.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 146.0,
+                            "y": 80.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            2
+                        ],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 18.0,
+                            "y": 83.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 405.0,
+                            "y": 189.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 403.0,
+                            "y": 295.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            },
+            "Name": "η",
+            "RightHand": {
+                "Keys": [],
+                "lastID": 0,
+                "Values": []
+            }
+        }
+    ]
+}

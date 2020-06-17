@@ -1,0 +1,565 @@
+{
+    "Values": [
+        {
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2
+                ],
+                "lastID": 3,
+                "Values": [
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "MULT",
+                        "_pos": {
+                            "x": 119.0,
+                            "y": 140.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "AND|NOT",
+                        "_pos": {
+                            "x": 256.0,
+                            "y": 147.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            0
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 2.0,
+                            "y": 139.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            },
+            "Name": "η",
+            "RightHand": {
+                "Keys": [
+                    1,
+                    2
+                ],
+                "lastID": 3,
+                "Values": [
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 228.0,
+                            "y": 77.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 76.0,
+                            "y": 29.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            }
+        },
+        {
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ],
+                "lastID": 6,
+                "Values": [
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "special",
+                        "_pos": {
+                            "x": 380.0,
+                            "y": 62.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            0
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 251.0,
+                            "y": 65.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 127.0,
+                            "y": 64.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            2
+                        ],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": -1.0,
+                            "y": 67.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 386.0,
+                            "y": 173.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 384.0,
+                            "y": 279.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            },
+            "Name": "η",
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ],
+                "lastID": 6,
+                "Values": [
+                    {
+                        "_connectedNodes": [
+                            4,
+                            5
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 238.0,
+                            "y": 121.0
+                        },
+                        "_value": 10.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            0
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 144.0,
+                            "y": 122.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 39.0,
+                            "y": 122.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            2
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": -67.0,
+                            "y": 125.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 423.0,
+                            "y": 75.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 420.0,
+                            "y": 253.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            }
+        },
+        {
+            "LeftHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7
+                ],
+                "lastID": 8,
+                "Values": [
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "special",
+                        "_pos": {
+                            "x": 412.0,
+                            "y": 60.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            0
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 283.0,
+                            "y": 63.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 159.0,
+                            "y": 62.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            2
+                        ],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 31.0,
+                            "y": 65.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "OUT",
+                        "_pos": {
+                            "x": 418.0,
+                            "y": 171.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "OUT",
+                        "_pos": {
+                            "x": 416.0,
+                            "y": 277.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            4
+                        ],
+                        "_node_text": "DMG",
+                        "_pos": {
+                            "x": 271.0,
+                            "y": 188.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            5
+                        ],
+                        "_node_text": "DMG",
+                        "_pos": {
+                            "x": 277.0,
+                            "y": 290.0
+                        },
+                        "_value": 0.0
+                    }
+                ]
+            },
+            "Name": "η",
+            "RightHand": {
+                "Keys": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    18,
+                    19
+                ],
+                "lastID": 20,
+                "Values": [
+                    {
+                        "_connectedNodes": [
+                            8
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 284.0,
+                            "y": 198.0
+                        },
+                        "_value": 10.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            0
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 181.0,
+                            "y": 195.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            1
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 67.0,
+                            "y": 193.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            2
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": -63.0,
+                            "y": 192.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "OUT",
+                        "_pos": {
+                            "x": 324.0,
+                            "y": 360.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [],
+                        "_node_text": "OUT",
+                        "_pos": {
+                            "x": 326.0,
+                            "y": 455.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            4
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 210.0,
+                            "y": 369.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            5
+                        ],
+                        "_node_text": "*",
+                        "_pos": {
+                            "x": 197.0,
+                            "y": 461.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            12,
+                            18
+                        ],
+                        "_node_text": "UI",
+                        "_pos": {
+                            "x": 434.0,
+                            "y": 199.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            10
+                        ],
+                        "_node_text": "NOT",
+                        "_pos": {
+                            "x": 74.0,
+                            "y": 20.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            11
+                        ],
+                        "_node_text": "DT",
+                        "_pos": {
+                            "x": 177.0,
+                            "y": 17.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            8
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": 296.0,
+                            "y": 25.0
+                        },
+                        "_value": -1.659999966621399
+                    },
+                    {
+                        "_connectedNodes": [
+                            13,
+                            14,
+                            15,
+                            16
+                        ],
+                        "_node_text": "VAL",
+                        "_pos": {
+                            "x": -189.0,
+                            "y": 357.0
+                        },
+                        "_value": 0.10000000149011612
+                    },
+                    {
+                        "_connectedNodes": [
+                            6
+                        ],
+                        "_node_text": "MULT",
+                        "_pos": {
+                            "x": 9.0,
+                            "y": 355.0
+                        },
+                        "_value": 3.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            7
+                        ],
+                        "_node_text": "MULT",
+                        "_pos": {
+                            "x": 15.0,
+                            "y": 461.0
+                        },
+                        "_value": 3.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            4
+                        ],
+                        "_node_text": "buff_sign",
+                        "_pos": {
+                            "x": 16.0,
+                            "y": 584.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            5
+                        ],
+                        "_node_text": "buff_sign",
+                        "_pos": {
+                            "x": 17.0,
+                            "y": 683.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            4,
+                            5
+                        ],
+                        "_node_text": "reinforce",
+                        "_pos": {
+                            "x": 595.0,
+                            "y": 203.0
+                        },
+                        "_value": 0.0
+                    },
+                    {
+                        "_connectedNodes": [
+                            8
+                        ],
+                        "_node_text": "UIC",
+                        "_pos": {
+                            "x": 431.0,
+                            "y": 103.0
+                        },
+                        "_value": 10.0
+                    }
+                ]
+            }
+        }
+    ]
+}
