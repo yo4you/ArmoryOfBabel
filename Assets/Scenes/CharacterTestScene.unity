@@ -3328,7 +3328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a678e9c36506a449bec83af640ad8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _simIterations: 2000
+  _simIterations: 10000
   _inputString: "S\u03B7\u03B7\u03B7\u03B7\u03B7"
   _minButtonHoldTime: 0.25
   _nodeGrammars:
@@ -3338,7 +3338,8 @@ MonoBehaviour:
   _randomString: 0
   _seed: 1
   _stringGrammar: mechanic_test
-  _simTimeStep: 0.1
+  _simTimeStep: 0.15
+  _averageDamage: 0
 --- !u!114 &698379467
 MonoBehaviour:
   m_ObjectHideFlags: 0

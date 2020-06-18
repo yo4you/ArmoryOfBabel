@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 internal class PlayerAtackInputSimulator : IPlayerAttackControl, IInputSim
 {
@@ -27,7 +26,8 @@ internal class PlayerAtackInputSimulator : IPlayerAttackControl, IInputSim
 			return false;
 
 		_animatingTimer = _animationTimes[type] / spd;
-		Debug.Log($"attack : type.{type} dmg.{dmg} ");
+		//Debug.Log($"attack : type.{type} dmg.{dmg} ");
+		MechanicBalancer.RegisterAttackObservation(node, dmg);
 
 		if (_hitChance[type] > UnityEngine.Random.Range(0f, 1f))
 		{

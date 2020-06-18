@@ -67,6 +67,9 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private PlayerInputSimulator _playerInputSimulator;
 
+	[SerializeField]
+	private float _averageDamage = 5f;
+
 	public float LastAttackDelay { get; set; }
 	public bool MovedLastFrame { get; set; }
 	public HealthComponent PlayerHealth { get; private set; }
@@ -124,6 +127,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		PlayerMovementSimulator playerMovementSimulator = new PlayerMovementSimulator(this);
 		NodeBehaviour.PlayerMovement = playerMovementSimulator;
 		_playerInputSimulator = new PlayerInputSimulator(this);
+		MechanicBalancer.StartAnalyze();
 		for (int i = 0; i < _simIterations; i++)
 		{
 			playerAttackInputSimulator.Update(_simTimeStep);
@@ -133,6 +137,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			UpdateNodegraphState(simulate: true);
 			RestoreNodeGraphState();
 		}
+		MechanicBalancer.EndAnalyze(_mechanicGraph, _averageDamage);
 	}
 
 	internal void CollisionCallback(Node generatingNode)
@@ -477,19 +482,5 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			SetNodeActivity(null, uiNode, true);
 			PlayerHealth.HP = Mathf.Clamp(uiNode.Value, 0, PlayerHealth.StartingHP);
 		}
-	}
-}
-
-internal class A
-{
-	public int var1, var2;
-}
-
-internal class B
-{
-	private void DoThing()
-	{
-		int a = 1;
-		A newA = new A { var1 = a };
 	}
 }
