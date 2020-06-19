@@ -92,7 +92,7 @@ public class HealthComponent : MonoBehaviour
 		var damagenums = FindObjectOfType<DamageNumberController>();
 		if (!_isPlayer)
 		{
-			OnHit += (float d) => damagenums.DisplayDamageNumber(transform.position, Invulnearable ? 0 : (int)d * 10);
+			OnHit += (float d) => damagenums.DisplayDamageNumber(transform.position, Invulnearable ? 0 : (int)(d * 10));
 		}
 	}
 
