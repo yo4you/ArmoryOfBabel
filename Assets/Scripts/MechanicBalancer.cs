@@ -22,7 +22,7 @@ internal static class MechanicBalancer
 		_uiDiff = new Dictionary<Node, Vector2>();
 	}
 
-	public static void EndAnalyze(NodeGraph nodeGraph, float averageDamage)
+	public static void EndAnalyze(ref NodeGraph nodeGraph, float averageDamage)
 	{
 		_ended = true;
 
@@ -42,7 +42,7 @@ internal static class MechanicBalancer
 		if (attacks.Count == 1)
 		{
 			var mult = averageDamage / attacks.First().Value.Average();
-			AdjustOutput(nodeGraph, attacks.First().Key, mult);
+			AdjustOutput(ref nodeGraph, attacks.First().Key, mult);
 		}
 		else
 		{
@@ -72,17 +72,26 @@ internal static class MechanicBalancer
 
 			Debug.Log($"balance {x} / {y}");
 
-			AdjustOutput(nodeGraph, a1.Key, x);
+			AdjustOutput(ref nodeGraph, a1.Key, x);
 			foreach (var attack in attacks)
 			{
-				AdjustOutput(nodeGraph, attack.Key, y);
+				if (attack.Key != a1.Key)
+					AdjustOutput(ref nodeGraph, attack.Key, y);
 			}
 		}
 	}
 
-	private static void AdjustOutput(NodeGraph nodeGraph, Node node, float mult)
+	private static void AdjustOutput(ref NodeGraph nodeGraph, Node node, float mult)
 	{
-		nodeGraph.
+		var id = nodeGraph.GetIdFromNode(node);
+		foreach (var nodeEntry in from nodeEntry in nodeGraph._nodeDict
+								  where nodeEntry.Value.Node_text == "DMG"
+								  where nodeEntry.Value.ConnectedNodes.Contains(id)
+								  select nodeEntry)
+		{
+			nodeEntry.Value.Value *= mult;
+			Debug.Log("ID :" + nodeGraph.GetIdFromNode(nodeEntry.Value));
+		}
 	}
 
 	public static void RegisterAttackObservation(Node node, float damage)

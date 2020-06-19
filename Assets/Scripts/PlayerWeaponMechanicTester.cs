@@ -137,7 +137,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 			UpdateNodegraphState(simulate: true);
 			RestoreNodeGraphState();
 		}
-		MechanicBalancer.EndAnalyze(_mechanicGraph, _averageDamage);
+		MechanicBalancer.EndAnalyze(ref _mechanicGraph, _averageDamage);
 	}
 
 	internal void CollisionCallback(Node generatingNode)

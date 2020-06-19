@@ -3339,7 +3339,7 @@ MonoBehaviour:
   _seed: 1
   _stringGrammar: mechanic_test
   _simTimeStep: 0.15
-  _averageDamage: 0
+  _averageDamage: 5
 --- !u!114 &698379467
 MonoBehaviour:
   m_ObjectHideFlags: 0
