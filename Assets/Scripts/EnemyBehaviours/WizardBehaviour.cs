@@ -4,35 +4,35 @@ using UnityEngine;
 public class WizardBehaviour : Enemy
 {
 	[SerializeField]
-	private GameObject _aimPrefab;
+	private GameObject _aimPrefab = default;
 
 	private GameObject _aimSymbol;
 
 	[SerializeField]
-	private float _aimTime;
+	private float _aimTime = default;
 
 	[SerializeField]
-	private float _cooldown;
+	private float _cooldown = default;
 
 	[SerializeField]
-	private float _explosionDelay;
+	private float _explosionDelay = default;
 
 	[SerializeField]
-	private GameObject _explosionPrefab;
+	private GameObject _explosionPrefab = default;
 
 	[SerializeField]
-	private float _flickerCount;
+	private float _flickerCount = default;
 
 	[SerializeField]
-	private float _idleTime;
+	private float _idleTime = default;
 
-	private Vector3 _nextTeleportPosition;
-
-	[SerializeField]
-	private float _randomTimeOffsetMax;
+	private Vector3 _nextTeleportPosition = default;
 
 	[SerializeField]
-	private AudioClip _warnClip;
+	private float _randomTimeOffsetMax = default;
+
+	[SerializeField]
+	private AudioClip _warnClip = default;
 
 	public void WizardLoop()
 	{

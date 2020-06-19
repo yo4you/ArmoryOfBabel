@@ -3,7 +3,7 @@
 public abstract class HitBoxBehaviour : MonoBehaviour
 {
 	[SerializeField]
-	private bool _persistant;
+	private bool _persistant = default;
 
 	public float Damage { get; internal set; }
 	public Node GeneratingNode { get; internal set; }

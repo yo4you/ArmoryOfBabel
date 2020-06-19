@@ -3,7 +3,7 @@
 public class ProjectileBehaviour : HitBoxBehaviour
 {
 	[SerializeField]
-	private float _damage;
+	private float _damage = default;
 
 	public Vector3 MoveDir { get; set; }
 

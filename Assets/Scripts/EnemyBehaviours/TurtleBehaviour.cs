@@ -6,22 +6,22 @@ public class TurtleBehaviour : Enemy
 	private bool _attackCommited;
 
 	[SerializeField]
-	private float _blinkCount;
+	private float _blinkCount = default;
 
 	[SerializeField]
-	private float _chargeUpTime;
+	private float _chargeUpTime = default;
 
 	[SerializeField]
-	private GameObject _explosionPrefab;
+	private GameObject _explosionPrefab = default;
 
 	[SerializeField]
-	private float _invulIndicatorTime;
+	private float _invulIndicatorTime = default;
 
 	[SerializeField]
-	private float _shakeIntensity;
+	private float _shakeIntensity = default;
 
 	[SerializeField]
-	private float _vulnearableTime;
+	private float _vulnearableTime = default;
 
 	protected override void Start()
 	{

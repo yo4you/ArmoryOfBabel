@@ -5,41 +5,41 @@ using UnityEngine;
 public class EyeEnemyBehaviour : Enemy
 {
 	[SerializeField]
-	private float _attackChargeup;
+	private float _attackChargeup = default;
 
 	[SerializeField]
-	private float _attackDist;
+	private float _attackDist = default;
 
 	[SerializeField]
-	private int _attackSequenceLength;
+	private int _attackSequenceLength = default;
 
 	[SerializeField]
-	private Color _color0;
+	private Color _color0 = default;
 
 	[SerializeField]
-	private Color _color1;
+	private Color _color1 = default;
 
 	private BehaviourState _curState = BehaviourState.THINKING;
 
 	[SerializeField]
-	private float _decisionInterval;
+	private float _decisionInterval = default;
 
 	[SerializeField]
-	private ProjectileBehaviour _prefabColor0;
+	private ProjectileBehaviour _prefabColor0 = default;
 
 	[SerializeField]
-	private ProjectileBehaviour _prefabColor1;
+	private ProjectileBehaviour _prefabColor1 = default;
 
 	[SerializeField]
-	private float _projectileVelocity;
+	private float _projectileVelocity = default;
 
 	[SerializeField]
-	private ClipCollection _shotClips;
+	private ClipCollection _shotClips = default;
 
 	[SerializeField]
-	private float _shotTimeInterval;
+	private float _shotTimeInterval = default;
 
-	private Vector2 _wanderDir;
+	private Vector2 _wanderDir = default;
 
 	private enum BehaviourState
 	{

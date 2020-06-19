@@ -8,7 +8,7 @@ public class GameOverPanel : MonoBehaviour
 	private float _delay = .3f;
 
 	[SerializeField]
-	private GameObject _display;
+	private GameObject _display = default;
 
 	[SerializeField]
 	private float _inputDelay = 0.5f;

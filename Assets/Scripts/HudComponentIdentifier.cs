@@ -27,16 +27,16 @@ public class ChargeBarUIID
 public class HudComponentIdentifier : MonoBehaviour
 {
 	[SerializeField]
-	private List<ChargeBarUIID> _chargebars;
+	private List<ChargeBarUIID> _chargebars = default;
 
 	[SerializeField]
-	private GameObject _optionalAction;
+	private GameObject _optionalAction = default;
 
 	[SerializeField]
-	private PlayerHealthBar _playerHealth;
+	private PlayerHealthBar _playerHealth = default;
 
 	[SerializeField]
-	private List<AbilityBaseUIID> _skills;
+	private List<AbilityBaseUIID> _skills = default;
 
 	public List<ChargeBarUIID> Chargebars => _chargebars;
 	public Vector2 ChargebarsXBounds { get; private set; }

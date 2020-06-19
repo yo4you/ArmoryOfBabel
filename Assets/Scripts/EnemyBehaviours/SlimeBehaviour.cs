@@ -3,22 +3,22 @@
 public class SlimeBehaviour : Enemy
 {
 	[SerializeField]
-	private float _projectileSpeed;
+	private float _projectileSpeed = default;
 
 	[SerializeField]
-	private float _shootInterval;
+	private float _shootInterval = default;
 
 	[SerializeField]
-	private ProjectileBehaviour _shot;
+	private ProjectileBehaviour _shot = default;
 
 	[SerializeField]
-	private ClipCollection _shotClips;
+	private ClipCollection _shotClips = default;
 
 	[SerializeField]
-	private float _swirfAmplitude;
+	private float _swirfAmplitude = default;
 
 	[SerializeField]
-	private float _swirfSpeed;
+	private float _swirfSpeed = default;
 
 	public override void Stun()
 	{

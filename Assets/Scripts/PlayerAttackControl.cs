@@ -10,28 +10,28 @@ public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 	private int _attackDirToggle = 0;
 
 	private PlayerMovement _movement;
-	[SerializeField] private Vector3 _offset;
-	[SerializeField] private ProjectileBehaviour _projectilePrefab;
+	[SerializeField] private Vector3 _offset = default;
+	[SerializeField] private ProjectileBehaviour _projectilePrefab = default;
 
-	[SerializeField] private float _projectileSpeed;
+	[SerializeField] private float _projectileSpeed = default;
 	private PlayerWeaponMechanicTester _pwmTester;
 	private ReticalBehaviour _retical;
-	[SerializeField] private SweepBehaviour _slashPrefab;
+	[SerializeField] private SweepBehaviour _slashPrefab = default;
 	private StatusEffectManager _statusManager;
-	[SerializeField] private SweepBehaviour _sweepPrefab;
+	[SerializeField] private SweepBehaviour _sweepPrefab = default;
 	public bool CanQueue { get; internal set; }
 	public bool Engaged { get; internal set; }
 
 	#region sounds
 
 	[SerializeField]
-	private ClipCollection _heavyHitSounds;
+	private ClipCollection _heavyHitSounds = default;
 
 	[SerializeField]
-	private ClipCollection _lightHitSounds;
+	private ClipCollection _lightHitSounds = default;
 
 	[SerializeField]
-	private ClipCollection _projectileSounds;
+	private ClipCollection _projectileSounds = default;
 
 	#endregion sounds
 

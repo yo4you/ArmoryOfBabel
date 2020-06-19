@@ -7,5 +7,4 @@ public class ClipCollection
 {
 	[SerializeField]
 	public List<AudioClip> Clips;
-
 }

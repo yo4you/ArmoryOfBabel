@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Scripting.APIUpdating;
 
 internal class PlayerMovementSimulator : IPlayerMovement, IInputSim
 {

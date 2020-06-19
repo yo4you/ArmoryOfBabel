@@ -4,10 +4,10 @@
 public class HurtSounds : MonoBehaviour
 {
 	[SerializeField]
-	private ClipCollection DieClips;
+	private ClipCollection DieClips = default;
 
 	[SerializeField]
-	private ClipCollection HitClips;
+	private ClipCollection HitClips = default;
 
 	private void Start()
 	{

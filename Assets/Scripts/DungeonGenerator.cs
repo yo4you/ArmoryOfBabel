@@ -19,10 +19,10 @@ public class DungeonGenerator : MonoBehaviour
 	};
 
 	[SerializeField]
-	private int _enemyMax;
+	private int _enemyMax = default;
 
 	[SerializeField]
-	private GameObject[] _enemyPrefabs;
+	private GameObject[] _enemyPrefabs = default;
 
 	[SerializeField]
 	[Tooltip("the maximum amount of times the prefabs will be spawned")]
@@ -34,19 +34,19 @@ public class DungeonGenerator : MonoBehaviour
 
 	private SAP2DPathfinder _pathFinder;
 
-	[SerializeField] private LayerMask _pathFindingLayerMask;
+	[SerializeField] private LayerMask _pathFindingLayerMask = default;
 
 	private Transform _player;
 
 	[SerializeField]
 	[Tooltip("prefabs we're using to spawn the dungeon out of")]
-	private GameObject[] _prefabs;
+	private GameObject[] _prefabs = default;
 
 	// stores all the rooms we've already spawned
 	private Dictionary<Vector2Int, GameObject> _roomGrid = new Dictionary<Vector2Int, GameObject>();
 
 	[SerializeField]
-	private bool _spawnEnemies;
+	private bool _spawnEnemies = default;
 
 	public IEnumerator StartColliderCalc()
 	{

@@ -3,10 +3,10 @@
 public class SweepBehaviour : HitBoxBehaviour
 {
 	[SerializeField]
-	private float _knockBackForce;
+	private float _knockBackForce = default;
 
 	[SerializeField]
-	private float _stunTime;
+	private float _stunTime = default;
 
 	public override void OnCollisionEnter2D(UnityEngine.Collision2D collision)
 	{

@@ -11,10 +11,10 @@ public class HealthComponent : MonoBehaviour
 	private float _invulTime = 0.1f;
 
 	[SerializeField]
-	private bool _isPlayer;
+	private bool _isPlayer = default;
 
 	[SerializeField]
-	private float _startingHP;
+	private float _startingHP = default;
 
 	private UIHealthBarManager _uiManager;
 

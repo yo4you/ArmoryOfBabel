@@ -7,36 +7,36 @@ public class BeeBehaviour : Enemy
 	private float _bulletOffset = 1f;
 
 	[SerializeField]
-	private float _chargeUpTime;
+	private float _chargeUpTime = default;
 
 	private BehaviourState _curState = BehaviourState.CHARGE;
 
 	[SerializeField]
-	private float _escapeRange;
+	private float _escapeRange = default;
 
 	[SerializeField]
-	private ProjectileBehaviour _projectile;
+	private ProjectileBehaviour _projectile = default;
 
 	[SerializeField]
-	private float _projectileSpeed;
+	private float _projectileSpeed = default;
 
 	[SerializeField]
-	private ClipCollection _shootClips;
+	private ClipCollection _shootClips = default;
 
 	[SerializeField]
-	private float _shootInterval;
+	private float _shootInterval = default;
 
 	[SerializeField]
-	private float _shootRange;
+	private float _shootRange = default;
 
 	[SerializeField]
-	private int _shotCount;
+	private int _shotCount = default;
 
 	[SerializeField]
-	private float _stallTime;
+	private float _stallTime = default;
 
 	[SerializeField]
-	private float _strikeCooldown;
+	private float _strikeCooldown = default;
 
 	private enum BehaviourState
 	{

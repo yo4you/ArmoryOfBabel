@@ -6,11 +6,11 @@ public class FollowPlayerSmoothly : MonoBehaviour
 	private Rigidbody2D _followRb;
 
 	[SerializeField]
-	private Vector3 _offset;
+	private Vector3 _offset = default;
 
 	[Range(0f, 1f)]
 	[SerializeField]
-	private float _smoothing;
+	private float _smoothing = default;
 
 	private GameObject _toFollow;
 

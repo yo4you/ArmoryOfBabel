@@ -9,7 +9,7 @@ public class ReticalBehaviour : MonoBehaviour
 	private SpriteMask _mask;
 
 	[SerializeField]
-	private float _smoothing;
+	private float _smoothing = default;
 
 	public bool ActiveInput => _activeInput = true;
 	public float Angle => _angle;

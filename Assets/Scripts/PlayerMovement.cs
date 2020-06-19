@@ -14,10 +14,8 @@ public class PlayerMovement : MonoBehaviour, IPlayerMovement
 	[Tooltip("the maximum time the player gets after attacking to change the direction")]
 	private float _attackDelay;
 
-	private float _attackDelayTimer = 0f;
-
 	[SerializeField]
-	private float _dashAccelerate;
+	private float _dashAccelerate = default;
 
 	private float _dashAttack;
 	private float _dashAttackResetValue;
@@ -25,13 +23,13 @@ public class PlayerMovement : MonoBehaviour, IPlayerMovement
 
 	[SerializeField]
 	[Tooltip("the speed at which the player dodges")]
-	private float _dodgeSpeed;
+	private float _dodgeSpeed = default;
 
 	private Vector3 _moveOffset = new Vector3();
 
 	[SerializeField]
 	[Tooltip("the speed at which the player moves")]
-	private float _moveSpeed;
+	private float _moveSpeed = default;
 
 	private PlayerWeaponMechanicTester _pwm;
 	private Rigidbody2D _rigidBody;

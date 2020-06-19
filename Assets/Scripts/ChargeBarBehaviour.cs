@@ -11,7 +11,7 @@ public class ChargeBarBehaviour : MonoBehaviour
 	private float _progressPercentage;
 
 	[SerializeField]
-	private bool _usedForWeaponMechanics;
+	private bool _usedForWeaponMechanics = default;
 
 	private enum Axis
 	{

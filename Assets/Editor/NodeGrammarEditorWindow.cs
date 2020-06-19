@@ -20,7 +20,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private List<NodeGrammar> _grammars = new List<NodeGrammar>();
 	private int _grammarSelectedIndex;
 	private NodeEditorWindow[] _nodeEditorWindows = new NodeEditorWindow[] { null, null };
-	private Vector2 _scrollPos;
 	private bool _selected = true;
 
 	private enum HandSide { LEFT, RIGHT }
@@ -249,7 +248,6 @@ public class NodeGrammarEditorWindow : EditorWindow
 	private void Reset()
 	{
 		_grammarSelectedIndex = 0;
-		_scrollPos = new Vector2();
 		_grammars = new List<NodeGrammar>();
 		_exportName = "";
 		ResetGrammars();

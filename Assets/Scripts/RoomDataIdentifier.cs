@@ -8,13 +8,13 @@ public class RoomDataIdentifier : MonoBehaviour
 {
 	[SerializeField]
 	[Tooltip("the parts that are removed when a room is connected, order in N E S W")]
-	private GameObject[] _doorways;
+	private GameObject[] _doorways = default;
 
 	[SerializeField]
 	[Tooltip("the part with the colliders")]
-	private GameObject _walls;
+	private GameObject _walls = default;
 
-	private Tilemap _wallsMap;
+	private Tilemap _wallsMap = default;
 
 	private enum Direction
 	{

@@ -6,13 +6,13 @@ public class ScreenShake : MonoBehaviour
 	private BindCameraToTileMap _binder;
 
 	[SerializeField]
-	private float _playerShakeIntensity;
+	private float _playerShakeIntensity = default;
 
 	[SerializeField]
-	private int _playershakes;
+	private int _playershakes = default;
 
 	[SerializeField]
-	private float _playerShakeTime;
+	private float _playerShakeTime = default;
 
 	public void Shake(float time, float intensity, int shakes)
 	{

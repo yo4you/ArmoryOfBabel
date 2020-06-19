@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-internal class PlayerAtackInputSimulator : IPlayerAttackControl, IInputSim
+﻿internal class PlayerAtackInputSimulator : IPlayerAttackControl, IInputSim
 {
 	private float _animatingTimer = 0f;
 

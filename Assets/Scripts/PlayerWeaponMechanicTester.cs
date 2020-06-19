@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerWeaponMechanicTester : MonoBehaviour
@@ -36,7 +35,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	private NodeGraph _mechanicGraph;
 
 	[SerializeField]
-	private float _minButtonHoldTime;
+	private float _minButtonHoldTime = default;
 
 	private List<Node> _moveNodes = new List<Node>();
 
@@ -56,7 +55,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	private HudSignifierManager _signifierSystem;
 
 	[SerializeField]
-	private string _stringGrammar;
+	private string _stringGrammar = default;
 
 	private List<Node> _timeNodes = new List<Node>();
 	private Dictionary<Node, Node> _uiNodeCaps;

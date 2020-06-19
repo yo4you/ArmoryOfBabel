@@ -4,21 +4,21 @@ using UnityEngine;
 public class SpiderBehaviour : Enemy
 {
 	[SerializeField]
-	private AudioClip _chargeSound;
+	private AudioClip _chargeSound = default;
 
 	[SerializeField]
-	private float _force;
+	private float _force = default;
 
 	[SerializeField]
-	private float _strikeCooldown;
+	private float _strikeCooldown = default;
 
 	[SerializeField]
-	private float _strikeTime;
+	private float _strikeTime = default;
 
 	private bool _striking;
 
 	[SerializeField]
-	private float _strikingDistance;
+	private float _strikingDistance = default;
 
 	public IEnumerator StartStrike(Vector3 strikeDir)
 	{
