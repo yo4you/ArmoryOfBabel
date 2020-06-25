@@ -34,9 +34,13 @@ internal static class MechanicBalancer
 		foreach (var diff in _uiDiff.Values)
 		{
 			Debug.Log(diff);
+			// TODO balance ui
 		}
 
-		var attacks = _attackObservation.OrderByDescending(i => i.Value.Count).ToList();
+		var attacks = _attackObservation.OrderByDescending(i =>
+		{
+			return i.Value.Count - (i.Value.FirstOrDefault() > .1f ? 0 : 999_999_999);
+		}).ToList();
 
 		if (attacks.Count == 1)
 		{
@@ -66,7 +70,7 @@ internal static class MechanicBalancer
 			var a = averageDamage;
 			var T = (p1 + p2) * a;
 
-			float x = Mathf.Lerp(1f, (-k * p2 + T) / (c * p1), .5f + UnityEngine.Random.Range(0f, .5f));
+			float x = Mathf.Lerp(1f, (-k * p2 + T) / (c * p1), .7f + UnityEngine.Random.Range(0f, .3f));
 			float y = -(c * p1 * x - T) / (k * p2);
 
 			Debug.Log($"balance {x} / {y}");
@@ -88,8 +92,8 @@ internal static class MechanicBalancer
 								  where nodeEntry.Value.ConnectedNodes.Contains(id)
 								  select nodeEntry)
 		{
-			nodeEntry.Value.Value *= mult;
-			Debug.Log("ID :" + nodeGraph.GetIdFromNode(nodeEntry.Value));
+			nodeGraph.NodeDict[nodeEntry.Key].Value *= mult;
+
 		}
 	}
 

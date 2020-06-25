@@ -3335,11 +3335,11 @@ MonoBehaviour:
   - mechanic_test
   - mechanic_testf
   - mechanic_testg
-  _randomString: 0
-  _seed: 1
+  _randomString: 1
+  _seed: 0
   _stringGrammar: mechanic_test
   _simTimeStep: 0.15
-  _averageDamage: 5
+  _averageDamage: 3
 --- !u!114 &698379467
 MonoBehaviour:
   m_ObjectHideFlags: 0

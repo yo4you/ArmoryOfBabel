@@ -75,14 +75,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	public void LoadMechanicGraph(int inputSeed = -1)
 	{
-		_notNodes = new List<Node>();
-		_timeNodes = new List<Node>();
-		_uiNodes = new List<Node>();
-		_moveNodes = new List<Node>();
-		_healthNodes = new List<Node>();
-		_uiNodeCaps = new Dictionary<Node, Node>();
-		_inputNodes = new Dictionary<string, InputNode>();
-		_restoreState = new Dictionary<Node, float>();
+
 
 		List<NodeGrammar> grammars = new List<NodeGrammar>();
 		foreach (var grammar in _nodeGrammars)
@@ -113,6 +106,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		ApplySignifiers();
 
 		AdjustBalance();
+		AnalyseMechanicNodes();
 
 		NodeBehaviour.Callbacks = new Stack<NodeActivationCallBack>();
 		NodeBehaviour.PlayerAttacks = GetComponent<PlayerAttackControl>();
@@ -153,6 +147,15 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 	private void AnalyseMechanicNodes()
 	{
+		_inputNodes = new Dictionary<string, InputNode>();
+		_notNodes = new List<Node>();
+		_timeNodes = new List<Node>();
+		_uiNodes = new List<Node>();
+		_moveNodes = new List<Node>();
+		_healthNodes = new List<Node>();
+		_uiNodeCaps = new Dictionary<Node, Node>();
+		_restoreState = new Dictionary<Node, float>();
+
 		foreach (var node in _mechanicGraph.NodeDict)
 		{
 			var nodeText = node.Value.Node_text;

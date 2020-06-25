@@ -24,7 +24,7 @@ internal class PlayerInputSimulator : IInputSim
 		float x = startX;
 		while (true)
 		{
-			// f(x) : sin(x^ (min(.5x % p, -.5x % p) / .5d) function that looks like   - _/ \/\/VWV\/V\W
+			// f(x) : sin(x^ (min(.5x % p, -.5x % p) / .5p) function that looks like   - _/ \/\/VWV\/V\W
 			x += _timeStep;
 
 			yield return Mathf.Sin(Mathf.Pow(x, (Mathf.Min((.5f * x) % period, (-.5f * x) % period + period)) / (.5f * period)));
