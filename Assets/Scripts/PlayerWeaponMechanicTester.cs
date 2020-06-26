@@ -25,7 +25,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		{ "GENERIC",NodeBehaviour.SetState_GenericNode},
 	};
 
-	private List<Node> _callBackNodes = new List<Node>();
+	private List<Node> _callbackNodesActivatedThisframe = new List<Node>();
 	private List<Node> _healthNodes;
 	private Dictionary<string, InputNode> _inputNodes = new Dictionary<string, InputNode>();
 
@@ -129,6 +129,10 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 
 			UpdateNodegraphState(simulate: true);
 			RestoreNodeGraphState();
+			foreach (var node in _uiNodes)
+			{
+				MechanicBalancer.RegisterUIObservation(node);
+			}
 		}
 		MechanicBalancer.EndAnalyze(ref _mechanicGraph, _averageDamage);
 	}
@@ -139,7 +143,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		var callbacknodeIndex = list.FindLastIndex(i => i.Activator == generatingNode);
 		if (callbacknodeIndex != -1)
 		{
-			_callBackNodes.Add(list[callbacknodeIndex].Activatee);
+			_callbackNodesActivatedThisframe.Add(list[callbacknodeIndex].Activatee);
 			list.RemoveAt(callbacknodeIndex);
 		}
 		NodeBehaviour.Callbacks = new Stack<NodeActivationCallBack>(list);
@@ -304,7 +308,6 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 				node.Key.Value = node.Value;
 			}
 		}
-		_callBackNodes = new List<Node>();
 	}
 
 	public void SetNodeActivity(Node lastNode, Node node, bool state, List<Node> visited = default)
@@ -410,9 +413,11 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		}
 
 		// Resolve the callbacks we've had between last update and this
-		foreach (var callbackNodes in _callBackNodes)
+		for (int i = _callbackNodesActivatedThisframe.Count - 1; i >= 0; i--)
 		{
+			Node callbackNodes = _callbackNodesActivatedThisframe[i];
 			SetNodeActivity(null, callbackNodes, true);
+			_callbackNodesActivatedThisframe.RemoveAt(i);
 		}
 
 		// we update the UI nodes first so that the thresholds represent accurate values

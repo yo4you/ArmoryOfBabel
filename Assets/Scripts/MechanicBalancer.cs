@@ -6,8 +6,27 @@ using UnityEngine;
 internal static class MechanicBalancer
 {
 	private static Dictionary<Node, List<float>> _attackObservation = null;
-	private static Dictionary<Node, Vector2> _uiDiff = null;
 	private static bool _ended = true;
+	private static Dictionary<Node, UIObservation> _uiObservations = null;
+
+	private enum ResourceDiffDiagnosis
+	{
+		BALANCED,
+		HIGH_AMPLITUDE,
+		LOW_AMPLITUDE,
+		SURPLUS,
+		SCARCITY,
+		DERANGED
+	}
+
+	// 	private static Dictionary<Vector2, ResourceDiffDiagnosis> _examples = new Dictionary<Vector2, ResourceDiffDiagnosis>
+	// 		{
+	// 			{new Vector2(-1,0).normalized, ResourceDiffDiagnosis.DERANGED },
+	// 			{new Vector2(-1,0.5f).normalized, ResourceDiffDiagnosis.SCARCITY },
+	// 			{new Vector2(-1,1f).normalized, ResourceDiffDiagnosis.BALANCED },
+	// 			{new Vector2(-0.5f,1f).normalized, ResourceDiffDiagnosis.SURPLUS },
+	// 			{new Vector2(-0,1f).normalized, ResourceDiffDiagnosis.DERANGED },
+	// 		};
 
 	public static void StartAnalyze()
 	{
@@ -18,31 +37,71 @@ internal static class MechanicBalancer
 		}
 		_ended = false;
 		_attackObservation = new Dictionary<Node, List<float>>();
-		_uiDiff = new Dictionary<Node, Vector2>();
+		_uiObservations = new Dictionary<Node, UIObservation>();
 	}
 
 	public static void EndAnalyze(ref NodeGraph nodeGraph, float averageDamage)
 	{
 		_ended = true;
 
-		Debug.Log("attack data : \n ============");
-		foreach (var attack in _attackObservation.Values)
-		{
-			Debug.Log($"{ attack.Average()} : {attack.Count}");
-		}
 		Debug.Log("ui data : \n ============");
-		foreach (var diff in _uiDiff.Values)
+		foreach (var observationKV in _uiObservations)
 		{
-			Debug.Log(diff);
-			// TODO balance ui
+			float cap = 0;
+			cap = GetCapacity(nodeGraph, observationKV.Key);
+
+			var observation = observationKV.Value;
+			ResourceDiffDiagnosis diagnosis = DiagnoseNodeDiff(observation.Diff);
+			var average = observation.ValueHistory.Average();
+			var sumOfSquaresOfDifferences = observation.ValueHistory.Select(val => (val - average) * (val - average)).Sum();
+			var standardDeviation = Math.Sqrt(sumOfSquaresOfDifferences / observation.ValueHistory.Count) / cap;
+			var spread = new Vector2(observation.ValueHistory.Min(), observation.ValueHistory.Max()) / cap;
+
+			Debug.Log($"Diff: {observation.Diff / cap} || STD: {standardDeviation}   || State : {diagnosis} || Spread : {spread}");
 		}
 
+		nodeGraph = BalanceDamageValues(nodeGraph, averageDamage);
+	}
+
+	private static float GetCapacity(NodeGraph nodeGraph, Node node)
+	{
+		var id = nodeGraph.GetIdFromNode(node);
+		foreach (var item in nodeGraph.NodeDict)
+		{
+			if (item.Value.Node_text == "UIC" && item.Value.ConnectedNodes.Contains(id))
+			{
+				return item.Value.Value;
+			}
+		}
+		return 10f;
+	}
+
+	private static ResourceDiffDiagnosis DiagnoseNodeDiff(Vector2 diff)
+	{
+		var diagnosis = ResourceDiffDiagnosis.BALANCED;
+		//diagnosis = _examples.OrderByDescending(i => Mathf.Abs(Vector2.Dot(i.Key, diff.normalized))).First().Value;
+
+		if (diagnosis == ResourceDiffDiagnosis.BALANCED)
+		{
+			var magnitude = diff.magnitude;
+			diagnosis = ResourceDiffDiagnosis.LOW_AMPLITUDE;
+			if (magnitude > 200)
+				diagnosis = ResourceDiffDiagnosis.BALANCED;
+			if (magnitude > 2000)
+				diagnosis = ResourceDiffDiagnosis.HIGH_AMPLITUDE;
+		}
+
+		return diagnosis;
+	}
+
+	private static NodeGraph BalanceDamageValues(NodeGraph nodeGraph, float averageDamage)
+	{
 		var attacks = _attackObservation.OrderByDescending(i =>
 		{
 			return i.Value.Count - (i.Value.FirstOrDefault() > .1f ? 0 : 999_999_999);
 		}).ToList();
 
-		if (attacks.Count == 1)
+		if (attacks.Count(i => i.Value.FirstOrDefault() > .1f) == 1)
 		{
 			var mult = averageDamage / attacks.First().Value.Average();
 			AdjustOutput(ref nodeGraph, attacks.First().Key, mult);
@@ -73,19 +132,28 @@ internal static class MechanicBalancer
 			float x = Mathf.Lerp(1f, (-k * p2 + T) / (c * p1), .7f + UnityEngine.Random.Range(0f, .3f));
 			float y = -(c * p1 * x - T) / (k * p2);
 
-			Debug.Log($"balance {x} / {y}");
-
+			// 			Debug.Log($"balance {x} / {y}");
+			// 			Debug.Log("attack data : \n ============");
+			// 			foreach (var attack in _attackObservation.Values)
+			// 			{
+			// 				Debug.Log($"{ attack.Average()} : {attack.Count}");
+			// 			}
 			AdjustOutput(ref nodeGraph, a1.Key, x);
 			foreach (var attack in attacks)
 			{
 				if (attack.Key != a1.Key)
+				{
 					AdjustOutput(ref nodeGraph, attack.Key, y);
+				}
 			}
 		}
+
+		return nodeGraph;
 	}
 
 	private static void AdjustOutput(ref NodeGraph nodeGraph, Node node, float mult)
 	{
+		mult = Mathf.Clamp(mult, 0.25f, 4f);
 		var id = nodeGraph.GetIdFromNode(node);
 		foreach (var nodeEntry in from nodeEntry in nodeGraph._nodeDict
 								  where nodeEntry.Value.Node_text == "DMG"
@@ -93,7 +161,6 @@ internal static class MechanicBalancer
 								  select nodeEntry)
 		{
 			nodeGraph.NodeDict[nodeEntry.Key].Value *= mult;
-
 		}
 	}
 
@@ -114,22 +181,34 @@ internal static class MechanicBalancer
 		}
 	}
 
-	public static void RegisterUIObservation(Node node, float diff)
+	public static void RegisterUIObservation(Node node)
 	{
 		if (_ended)
 		{
 			return;
 		}
-		if (_uiDiff.ContainsKey(node))
+		if (!_uiObservations.ContainsKey(node))
 		{
-			var newdiff = _uiDiff[node];
-			newdiff[(Math.Sign(diff) + 1) / 2] += diff;
-			_uiDiff[node] = newdiff;
+			_uiObservations[node] = new UIObservation();
+			RegisterUIObservation(node);
 		}
 		else
 		{
-			_uiDiff[node] = new Vector2();
-			RegisterUIObservation(node, diff);
+			var observation = _uiObservations[node];
+			var diff = node.Value - observation.LastVal;
+			observation.LastVal = node.Value;
+
+			var newdiff = observation.Diff;
+			newdiff[(Math.Sign(diff) + 1) / 2] += diff;
+			observation.Diff = newdiff;
+			_uiObservations[node] = observation;
 		}
 	}
+}
+
+internal class UIObservation
+{
+	public Vector2 Diff { get; set; } = new Vector2();
+	public float LastVal { get => ValueHistory.LastOrDefault(); set => ValueHistory.Add(value); }
+	public List<float> ValueHistory { get; set; } = new List<float>();
 }

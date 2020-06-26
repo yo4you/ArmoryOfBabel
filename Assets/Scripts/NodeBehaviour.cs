@@ -133,7 +133,6 @@ public static class NodeBehaviour
 		else if (state && prevNode.Node_text == "VAL")
 		{
 			node.Value += prevNode.Value;
-			MechanicBalancer.RegisterUIObservation(node, prevNode.Value);
 		}
 	}
 

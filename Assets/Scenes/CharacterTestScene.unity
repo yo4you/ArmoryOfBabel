@@ -3336,7 +3336,7 @@ MonoBehaviour:
   - mechanic_testf
   - mechanic_testg
   _randomString: 1
-  _seed: 0
+  _seed: 563
   _stringGrammar: mechanic_test
   _simTimeStep: 0.15
   _averageDamage: 3
