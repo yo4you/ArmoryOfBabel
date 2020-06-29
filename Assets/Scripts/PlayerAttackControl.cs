@@ -127,7 +127,7 @@ public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 		}
 		else
 		{
-			float angle = 180f + MathUtils.RoundAngleToDirection(Vector2.SignedAngle(Vector2.right, direction));
+			float angle = 180f + MathUtils.RoundAngleTo8Direction(Vector2.SignedAngle(Vector2.right, direction));
 			hitbox.transform.rotation = Quaternion.Euler(0, 0, angle);
 			var follow = hitbox.GetComponent<FollowPlayer>();
 			follow.Player = gameObject;
@@ -140,7 +140,7 @@ public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 		hitbox.Status = status;
 		hitbox.Damage = damage;
 		hitbox.StatusManager = _statusManager;
-		hitbox.PWM_Tester = _pwmTester;
+		hitbox.WeaponMechanic = _pwmTester;
 		hitbox.GeneratingNode = node;
 	}
 

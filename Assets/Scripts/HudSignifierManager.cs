@@ -2,17 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+/// <summary>
+/// manager class to help the hud system signify the meaning of the generated weapon mechanics
+/// </summary>
 public class HudSignifierManager : MonoBehaviour
 {
-	// this order must match the oder if the buffs in the hud identifier
-	private string[] _buffSignals = { "fire_sign", "buff_sign", "ice_sign" };
-
-	private string[] _buttonSignals = { "a_sign", "b_sign", "x_sign" };
+	// TODO : this can be more elegant...
+	// IMPORTANT : this order must match the oder if the buffs in the hud identifier
+	// these match the strings used in the node grammar labels 
+	private readonly string[] _buffSignals = { "fire_sign", "buff_sign", "ice_sign" };
+	// these match the strings used in the node grammar labels
+	private readonly string[] _buttonSignals = { "a_sign", "b_sign", "x_sign" };
 	private HudComponentIdentifier _hudData;
 	private NodeGraph _mechanicGraph;
 
-	private Dictionary<string, List<Node>> _nodesByType = new Dictionary<string, List<Node>>()
+	// we cache the nodes that matter to the hud here
+	private readonly Dictionary<string, List<Node>> _nodesByType = new Dictionary<string, List<Node>>()
 	{
 		{"UI", null},
 		{"TYPE", null},
@@ -27,7 +32,8 @@ public class HudSignifierManager : MonoBehaviour
 		{"toggle_sign", null },
 	};
 
-	private Func<Node>[] _skillNodeDeterminer;
+	// an array of functions that will return the out node that attaches to the input, thigh might change in realtime depending on the mechanic graph
+	private Func<Node>[] _returnButtonOutNode;
 
 	private List<UIBarData> _uiNodeElements = new List<UIBarData>();
 
@@ -35,20 +41,22 @@ public class HudSignifierManager : MonoBehaviour
 	{
 		A, B, X
 	}
-
+	/// <summary>
+	/// updates the state of the UI at the right moment
+	/// </summary>
 	public void Step()
 	{
 		_uiNodeElements.ForEach(UpdateChargeBars);
-		for (int skillID = 0; skillID < _skillNodeDeterminer.Length; skillID++)
+		for (int skillID = 0; skillID < _returnButtonOutNode.Length; skillID++)
 		{
 			var abilityHudIdentifiers = _hudData.Skills[skillID];
 
-			var determinerFunction = _skillNodeDeterminer[skillID];
-			if (determinerFunction == default)
+			var determineOutNode = _returnButtonOutNode[skillID];
+			if (determineOutNode == default)
 			{
 				continue;
 			}
-			var outNode = determinerFunction();
+			var outNode = determineOutNode();
 			if (outNode.Active)
 			{
 				abilityHudIdentifiers.Glow.Glow();
@@ -66,10 +74,13 @@ public class HudSignifierManager : MonoBehaviour
 				for (int buffTypeID = 0; buffTypeID < _buffSignals.Length; buffTypeID++)
 				{
 					string buffSignal = _buffSignals[buffTypeID];
+					// list of buffs of type buffTypeID applied to this node
 					var buffs = from buff in _nodesByType[buffSignal]
 								where buff.ConnectedNodes.Any((int k) => _mechanicGraph.NodeDict[k] == outNode)
 								select buff;
-					_hudData.Skills[skillID].Statuses[buffTypeID].SetActive(buffs.FirstOrDefault() != default && buffs.First().Active);
+					// if the list isn't empty we display the appropriate effect
+					bool displayState = buffs.FirstOrDefault() != default && buffs.First().Active;
+					_hudData.Skills[skillID].Statuses[buffTypeID].SetActive(displayState);
 				}
 			}
 		};
@@ -93,7 +104,11 @@ public class HudSignifierManager : MonoBehaviour
 		InitChargeBars();
 		InitSkills();
 	}
-
+	/// <summary>
+	/// sets notches on the hud according to where the thresholds are
+	/// </summary>
+	/// <param name="hudElement"></param>
+	/// <param name="uIBarData"></param>
 	private static void SetHudMarkingState(ChargeBarUIID hudElement, UIBarData uIBarData)
 	{
 		for (int markingID = 0; markingID < hudElement.Markings.Count; markingID++)
@@ -139,7 +154,7 @@ public class HudSignifierManager : MonoBehaviour
 
 	private void InitSkills()
 	{
-		_skillNodeDeterminer = new Func<Node>[3];
+		_returnButtonOutNode = new Func<Node>[3];
 
 		for (int skillIndex = 0; skillIndex < 3; skillIndex++)
 		{
@@ -152,12 +167,12 @@ public class HudSignifierManager : MonoBehaviour
 					var toggleSignal = GetConnectionWithLabel(toggleNode, "OUT").FirstOrDefault();
 					if (toggleSignal != default)
 					{
-						_skillNodeDeterminer[skillIndex] = (() => toggleNode.Active ? toggleSignal : outnode);
+						_returnButtonOutNode[skillIndex] = (() => toggleNode.Active ? toggleSignal : outnode);
 					}
 				}
 				else if (outnode != default)
 				{
-					_skillNodeDeterminer[skillIndex] = (() => outnode);
+					_returnButtonOutNode[skillIndex] = (() => outnode);
 				}
 			}
 			var rand = -1;

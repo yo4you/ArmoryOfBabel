@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
-
+/// <summary>
+/// lets an object follow the player, we use this to avoid some jittering and to ensure the scene doesn't have too many confusing parent child relations
+/// </summary>
 public class FollowPlayer : MonoBehaviour
 {
 	[SerializeField]

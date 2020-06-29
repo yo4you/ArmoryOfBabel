@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
-
+/// <summary>
+/// used for entities that need to keep track of hp and die when it's emptied
+/// </summary>
 public class HealthComponent : MonoBehaviour
 {
-	private bool _invulnearable = false;
-
 	private Coroutine _invulRoutine;
 
 	[SerializeField]
@@ -27,13 +27,13 @@ public class HealthComponent : MonoBehaviour
 	public event HitEvent OnHit;
 
 	public float HP { get; set; }
-	public bool Invulnearable { get => _invulnearable; set => _invulnearable = value; }
+	public bool Invulnearable { get; set; } = false;
 	public bool IsPlayer => _isPlayer;
 	public float StartingHP => _startingHP;
 
 	public void InvulnearableTimer(float time)
 	{
-		if (_invulnearable)
+		if (Invulnearable)
 		{
 			StopCoroutine(_invulRoutine);
 		}
@@ -45,9 +45,9 @@ public class HealthComponent : MonoBehaviour
 	{
 		if (!dot)
 		{
-			OnHit?.Invoke(_invulnearable ? 0f : damage);
+			OnHit?.Invoke(Invulnearable ? 0f : damage);
 
-			if (_invulnearable)
+			if (Invulnearable)
 			{
 				return;
 			}
@@ -93,8 +93,8 @@ public class HealthComponent : MonoBehaviour
 
 	private IEnumerator StartInvulnearableTimer(float time)
 	{
-		_invulnearable = true;
+		Invulnearable = true;
 		yield return new WaitForSeconds(time);
-		_invulnearable = false;
+		Invulnearable = false;
 	}
 }

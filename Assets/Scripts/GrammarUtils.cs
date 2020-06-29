@@ -229,7 +229,6 @@ public static class GrammarUtils
 		translationTable = null;
 		var subgraphDict = rule.LeftHand.NodeDict;
 		var firstSubgraphID = subgraphDict.Keys.Min();
-		var firstSubgraphNode = subgraphDict[firstSubgraphID].Node_text;
 		// we brute force check all the nodes in the super graph to see if we can start inserting the subgraph there
 
 		foreach (var superGraphNode in ShuffleDictionary(nodeGraph.NodeDict, seed))

@@ -3,6 +3,7 @@
 public class ChargeBarBehaviour : MonoBehaviour
 {
 	[SerializeField]
+	[Tooltip("if the bar should be vertical or horizontal")]
 	private Axis _axis = Axis.X;
 
 	private RectTransform _bar;
@@ -26,7 +27,7 @@ public class ChargeBarBehaviour : MonoBehaviour
 			{
 				GetProgressElement();
 			}
-
+			// we move the mask and the bar in opposite directions, this is done because unity requires the mask to parent the sprite
 			_progressPercentage = Mathf.Clamp(value, 0f, 100f);
 			var newposMask = _mask.localPosition;
 			newposMask[(int)_axis] = -_bar.rect.width * (100f - _progressPercentage) / 100f;
@@ -34,6 +35,7 @@ public class ChargeBarBehaviour : MonoBehaviour
 			{
 				_mask.localPosition = newposMask;
 			}
+			// we want to move the mask to indicate progress but not the child
 			var newposbar = _bar.localPosition;
 			newposbar[(int)_axis] = _bar.rect.width * (100f - _progressPercentage) / 100f;
 			_bar.localPosition = newposbar;

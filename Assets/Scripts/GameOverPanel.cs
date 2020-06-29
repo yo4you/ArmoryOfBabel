@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+/// <summary>
+/// intended to be shown when the player dies
+/// </summary>
 public class GameOverPanel : MonoBehaviour
 {
 	[SerializeField]

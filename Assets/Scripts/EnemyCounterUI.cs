@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
+/// <summary>
+/// used to display the amount of enemies in the room and the amount the player still needs to kill before clearing the room
+/// </summary>
 public class EnemyCounterUI : MonoBehaviour
 {
 	private Text _prefix;

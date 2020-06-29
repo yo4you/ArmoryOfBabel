@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
-
+/// <summary>
+/// status effect that will slow down the affected
+/// </summary>
 public class IceStatus : StatusEffect
 {
 	[SerializeField]

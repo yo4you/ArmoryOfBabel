@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
-
+/// <summary>
+/// interpolate the position after the player
+/// </summary>
 public class FollowPlayerSmoothly : MonoBehaviour
 {
 	private BindCameraToTileMap _cameraBinder;

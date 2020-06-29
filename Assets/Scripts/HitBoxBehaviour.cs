@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
-
+/// <summary>
+/// general implementation for projectiles or melee hitboxes intended to spawned and deal damage to the things they hit
+/// </summary>
 public abstract class HitBoxBehaviour : MonoBehaviour
 {
 	[SerializeField]
@@ -7,7 +9,7 @@ public abstract class HitBoxBehaviour : MonoBehaviour
 
 	public float Damage { get; internal set; }
 	public Node GeneratingNode { get; internal set; }
-	public PlayerWeaponMechanicTester PWM_Tester { get; set; }
+	public PlayerWeaponMechanicTester WeaponMechanic { get; set; }
 	public int Status { get; set; }
 	public StatusEffectManager StatusManager { get; set; }
 
@@ -22,7 +24,7 @@ public abstract class HitBoxBehaviour : MonoBehaviour
 		{
 			if (GeneratingNode != null)
 			{
-				PWM_Tester.CollisionCallback(GeneratingNode);
+				WeaponMechanic.CollisionCallback(GeneratingNode);
 			}
 			if (Status != -1)
 			{

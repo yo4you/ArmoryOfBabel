@@ -1,6 +1,8 @@
 ﻿using SAP2D;
 using UnityEngine;
-
+/// <summary>
+/// base class for enemies
+/// </summary>
 public class Enemy : MonoBehaviour, IStunnable
 {
 	protected SAP2DAgent _agent;
@@ -45,6 +47,7 @@ public class Enemy : MonoBehaviour, IStunnable
 	protected virtual void Update()
 	{
 		var pos = transform.position;
+		// turns the enemy sprite toward the player
 		_sprite.flipX = pos.x > _agent.Target.position.x;
 	}
 }

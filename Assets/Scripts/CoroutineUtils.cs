@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
-
+/// <summary>
+/// utility class for some coroutine functions often used
+/// </summary>
 public static class CoroutineUtils
 {
 	public delegate void InterpolatableAction(float t);

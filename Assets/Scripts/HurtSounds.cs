@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// used to play sounds when an entity is hurt or dies
+/// </summary>
 [RequireComponent(typeof(HealthComponent))]
 public class HurtSounds : MonoBehaviour
 {

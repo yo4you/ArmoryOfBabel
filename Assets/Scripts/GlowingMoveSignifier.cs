@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
+/// <summary>
+/// part of the signifier system, will display a glowing rectangle around the attack icon the player just used
+/// </summary>
 public class GlowingMoveSignifier : MonoBehaviour
 {
 	[SerializeField]

@@ -1,4 +1,7 @@
-﻿internal class InputNode
+﻿/// <summary>
+/// container class used to control the state of input nodes and encompass for their held varients
+/// </summary>
+internal class InputNode
 {
 	public bool Held = false;
 	private Node _inputHeld;

@@ -1,17 +1,21 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// enemy behaviour, will try to maintain a specific distance to the player then freeze, charge up and fire projectiles
+/// </summary>
 public class BeeBehaviour : Enemy
 {
-	[SerializeField]
+	[SerializeField][Tooltip("distance between the enemy and the fired projectiles")]
 	private float _bulletOffset = 1f;
 
-	[SerializeField]
+	[SerializeField][Tooltip("time between standing still and firing")]
 	private float _chargeUpTime = default;
 
 	private BehaviourState _curState = BehaviourState.CHARGE;
 
-	[SerializeField]
+	
+	[SerializeField][Tooltip("distance between the player and enemy before the enemy runs away")]
 	private float _escapeRange = default;
 
 	[SerializeField]
@@ -20,22 +24,26 @@ public class BeeBehaviour : Enemy
 	[SerializeField]
 	private float _projectileSpeed = default;
 
-	[SerializeField]
+	[SerializeField][Tooltip("sound efects when shooting")]
 	private ClipCollection _shootClips = default;
 
-	[SerializeField]
+	[SerializeField][Tooltip("time between shots")]
 	private float _shootInterval = default;
 
 	[SerializeField]
+	[Tooltip("desired distance from player")]
 	private float _shootRange = default;
 
 	[SerializeField]
+	[Tooltip("amount of shots to fire before regaining mobility")]
 	private int _shotCount = default;
 
 	[SerializeField]
+	[Tooltip("timeframe before starting the shooting sequence")]
 	private float _stallTime = default;
 
 	[SerializeField]
+	[Tooltip("cooldown after shooting")]
 	private float _strikeCooldown = default;
 
 	private enum BehaviourState
@@ -107,6 +115,7 @@ public class BeeBehaviour : Enemy
 
 		var pos = transform.position;
 		var dir = (_target.transform.position - pos).normalized;
+		// point projectiles at player
 		var projectile = Instantiate(_projectile, pos + dir * _bulletOffset, Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir)));
 		projectile.MoveDir = Vector2.right * _projectileSpeed;
 	}
@@ -117,13 +126,17 @@ public class BeeBehaviour : Enemy
 		_curState = BehaviourState.HIT;
 		yield return new WaitForSeconds(_stallTime);
 		_curState = BehaviourState.HITLOCK;
+		// turn red
 		yield return CoroutineUtils.Interpolate(
 			(time) => _sprite.color = Color.Lerp(Color.white, Color.magenta, time), _chargeUpTime);
+		
 		for (int i = 0; i < _shotCount; i++)
 		{
 			Shoot();
 			yield return new WaitForSeconds(_shootInterval);
 		}
+		
+		// regain color and reset
 		yield return CoroutineUtils.Interpolate(
 			(time) => _sprite.color = Color.Lerp(Color.magenta, Color.white, time), _strikeCooldown);
 

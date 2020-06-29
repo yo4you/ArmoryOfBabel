@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
-
+/// <summary>
+/// this is  used to let the player queue attacks after each other with minimal delay
+/// </summary>
 public class InteruptableAnimation : StateMachineBehaviour
 {
 	private readonly Lazy<PlayerAttackControl> _attackControl = new Lazy<PlayerAttackControl>(() => FindObjectOfType<PlayerAttackControl>());

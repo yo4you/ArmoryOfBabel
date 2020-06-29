@@ -32,7 +32,7 @@ internal static class MathUtils
 	public static Vector3 MinBound(Vector3[] vectors)
 	{
 		var outp = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-		// iterate over dimentions
+		// iterate over dimensions
 		for (int i = 0; i < 3; i++)
 		{
 			foreach (var vec in vectors)
@@ -42,8 +42,12 @@ internal static class MathUtils
 		}
 		return outp;
 	}
-
-	public static float RoundAngleToDirection(float angle)
+	/// <summary>
+	/// rounds the input angle to the closest 8 section
+	/// </summary>
+	/// <param name="angle"></param>
+	/// <returns></returns>
+	public static float RoundAngleTo8Direction(float angle)
 	{
 		while (angle < 0f)
 		{

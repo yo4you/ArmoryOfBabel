@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// set of identifiers intended to be set in the editor 
+/// </summary>
 [Serializable]
 public class AbilityBaseUIID
 {
