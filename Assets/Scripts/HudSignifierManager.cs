@@ -211,7 +211,7 @@ public class HudSignifierManager : MonoBehaviour
 		float value = chargebarData.Node.Value;
 		float cap = chargebarData.Capacity.Value;
 		chargebarData.HudData.ChargeBar.ProgressPercentage = value * 100f / cap;
-		for (int i = 0; i < chargebarData.TreshHolds.Count; i++)
+		for (int i = 0; i < Math.Min(3, chargebarData.TreshHolds.Count); i++)
 		{
 			var treshHoldPlacementRatio = chargebarData.TreshHolds[i].Value / cap;
 			GameObject marker = chargebarData.HudData.Markings[i];

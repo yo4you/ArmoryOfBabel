@@ -3329,14 +3329,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _simIterations: 10000
-  _inputString: "S\u03B7\u03B7\u03B7\u03B7\u03B7"
+  _inputString: S
   _minButtonHoldTime: 0.25
   _nodeGrammars:
   - mechanic_test
   - mechanic_testf
   - mechanic_testg
-  _randomString: 1
-  _seed: 563
+  _randomString: 0
+  _seed: 670
   _stringGrammar: mechanic_test
   _simTimeStep: 0.15
   _averageDamage: 3

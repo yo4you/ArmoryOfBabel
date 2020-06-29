@@ -47,9 +47,13 @@ internal static class MechanicBalancer
 		//Debug.Log("ui data : \n ============");
 		foreach (var observationKV in _uiObservations)
 		{
+			
 			Node node = observationKV.Key;
 			float cap = GetCapacity(nodeGraph, node);
-
+			if (IsHeldNode(node, nodeGraph)) 
+			{ 
+				continue; 
+			}
 			var observation = observationKV.Value;
 			// used to calculate the std
 			var average = observation.ValueHistory.Average();
@@ -81,6 +85,12 @@ internal static class MechanicBalancer
 
 		nodeGraph = BalanceDamageValues(nodeGraph, desiredAverage);
 	}
+
+	private static bool IsHeldNode(Node node, NodeGraph nodeGraph)
+	{
+		return nodeGraph.GetAffectors(node, i => i.Node_text == "sign_held").Count() != 0;
+	}
+
 	/// <summary>
 	/// checks if a UI node can be rebalanced by flipping the incoming resources, deletes it otherwise 
 	/// </summary>
@@ -94,7 +104,7 @@ internal static class MechanicBalancer
 				ingoingAffectors.All(i => i.Value > 0f)))
 		{
 			List<Node> affectors = ingoingAffectors.ToList();
-			// flip every other affector value 
+			// flip every other effector value 
 			for (int i = 0; i < affectors.Count; i += 2)
 			{
 				nodeGraph.NodeDict[nodeGraph.GetIdFromNode(affectors[i])].Value *= -1f;
@@ -124,7 +134,7 @@ internal static class MechanicBalancer
 	}
 
 	/// <summary>
-	/// returns the capacity of the UI node in the nodegraph
+	/// returns the capacity of the UI node in the node graph
 	/// </summary>
 	/// <param name="nodeGraph"></param>
 	/// <param name="uiNode"></param>

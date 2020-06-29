@@ -103,7 +103,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		FindObjectOfType<SeedDisplay>()?.DisplaySeed(seed);
 		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph, seed);
 		AnalyseMechanicNodes();
-		
+
 
 		AdjustBalance();
 		AnalyseMechanicNodes();
@@ -314,7 +314,7 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 	public void SetNodeActivity(Node lastNode, Node node, bool state, List<Node> visited = default)
 	{
 		bool signifierNode = false;
-
+		// TODO sometimes has a null reference
 		if (!_nodeFunctions.TryGetValue(node.Node_text, out NodeType.NodeHandleDelegate nodeFunction))
 		{
 			nodeFunction = NodeBehaviour.SetState_GenericNode;
@@ -416,8 +416,12 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		// Resolve the callbacks we've had between last update and this
 		for (int i = _callbackNodesActivatedThisframe.Count - 1; i >= 0; i--)
 		{
+			
 			Node callbackNodes = _callbackNodesActivatedThisframe[i];
-			SetNodeActivity(null, callbackNodes, true);
+			if (callbackNodes!=null)
+			{
+				SetNodeActivity(null, callbackNodes, true);
+			}
 			_callbackNodesActivatedThisframe.RemoveAt(i);
 		}
 

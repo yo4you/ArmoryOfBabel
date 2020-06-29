@@ -136,7 +136,7 @@ public static class NodeBehaviour
 		}
 		// checks if the attack can go trough, if it can't this node won't activate
 		node.Active = PlayerAttacks.ProccessAttackNode(spd, dmg, (int)type, node, (int)status);
-		if (Callbacks.Peek().Activator == null)
+		if (Callbacks.Count != 0 && Callbacks.Peek().Activator == null)
 		{
 			Callbacks.Peek().Activator = node;
 		}

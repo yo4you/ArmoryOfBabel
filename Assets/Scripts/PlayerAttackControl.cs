@@ -51,8 +51,11 @@ public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 				 -Mathf.Cos(_retical.Angle * Mathf.Deg2Rad),
 				 -Mathf.Sin(_retical.Angle * Mathf.Deg2Rad)
 				);
-			_animator.SetFloat("x", direction.x);
-			_animator.SetFloat("y", direction.y);
+			if (type != 0)
+			{
+				_animator.SetFloat("x", direction.x);
+				_animator.SetFloat("y", direction.y);
+			}
 			if (CanQueue)
 			{
 				// a dot product of 0.5 means you're pointing the control stick in the same 90 degree quarter as your movement
@@ -70,9 +73,9 @@ public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 		if (type != 0)
 		{
 			_animator.speed = speed;
+			Engaged = true;
 		}
 
-		Engaged = true;
 		switch (type)
 		{
 			case 0:
