@@ -78,11 +78,6 @@ public class HealthComponent : MonoBehaviour
 		_uiManager?.DeallocateElement(this);
 	}
 
-	private void RenderUIElement()
-	{
-		//TODO
-	}
-
 	private void Start()
 	{
 		HP = StartingHP;
@@ -101,17 +96,5 @@ public class HealthComponent : MonoBehaviour
 		_invulnearable = true;
 		yield return new WaitForSeconds(time);
 		_invulnearable = false;
-	}
-
-	private void Update()
-	{
-		if (IsPlayer)
-		{
-			// TODO refactor player hp
-		}
-		else
-		{
-			RenderUIElement();
-		}
 	}
 }

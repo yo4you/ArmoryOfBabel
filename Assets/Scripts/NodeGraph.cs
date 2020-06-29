@@ -94,6 +94,11 @@ public class NodeGraph : ICloneable
 		Connect(id0, id1);
 	}
 
+	internal void Delete(int connectedID)
+	{
+		Delete(NodeDict[connectedID]);
+	}
+
 	public void Delete(Node node)
 	{
 		Disconnect(node);
@@ -110,6 +115,15 @@ public class NodeGraph : ICloneable
 				node.Value.ConnectedNodes.Remove(id);
 			}
 		}
+	}
+
+	public IEnumerable<Node> GetAffectors(Node node, Predicate<Node> predicate) 
+	{
+		var id = GetIdFromNode(node);
+
+		return from kv in NodeDict 
+			   where predicate(kv.Value) && kv.Value.ConnectedNodes.Contains(id) 
+			   select kv.Value;
 	}
 
 	public int GetIdFromNode(Node node0)

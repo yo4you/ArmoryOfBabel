@@ -7,7 +7,7 @@ internal class PlayerInputSimulator : IInputSim
 	private float _timeStep;
 
 	private PlayerWeaponMechanicTester _playerWeaponMechanicTester;
-	private float _period = 25f;
+	private float _period = 2000F;
 
 	public PlayerInputSimulator(PlayerWeaponMechanicTester playerWeaponMechanicTester)
 	{

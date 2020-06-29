@@ -103,10 +103,11 @@ public class PlayerWeaponMechanicTester : MonoBehaviour
 		FindObjectOfType<SeedDisplay>()?.DisplaySeed(seed);
 		_mechanicGraph = GrammarUtils.ApplyNodeGrammars(inputString, ref grammars, inputGraph, seed);
 		AnalyseMechanicNodes();
-		ApplySignifiers();
+		
 
 		AdjustBalance();
 		AnalyseMechanicNodes();
+		ApplySignifiers();
 
 		NodeBehaviour.Callbacks = new Stack<NodeActivationCallBack>();
 		NodeBehaviour.PlayerAttacks = GetComponent<PlayerAttackControl>();

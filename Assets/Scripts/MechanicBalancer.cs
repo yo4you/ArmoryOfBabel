@@ -1,32 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using UnityEngine;
 
 internal static class MechanicBalancer
 {
+	private const float _lowDeviationTreshold = 0.15f;
 	private static Dictionary<Node, List<float>> _attackObservation = null;
 	private static bool _ended = true;
 	private static Dictionary<Node, UIObservation> _uiObservations = null;
-
-	private enum ResourceDiffDiagnosis
-	{
-		BALANCED,
-		HIGH_AMPLITUDE,
-		LOW_AMPLITUDE,
-		SURPLUS,
-		SCARCITY,
-		DERANGED
-	}
-
-	// 	private static Dictionary<Vector2, ResourceDiffDiagnosis> _examples = new Dictionary<Vector2, ResourceDiffDiagnosis>
-	// 		{
-	// 			{new Vector2(-1,0).normalized, ResourceDiffDiagnosis.DERANGED },
-	// 			{new Vector2(-1,0.5f).normalized, ResourceDiffDiagnosis.SCARCITY },
-	// 			{new Vector2(-1,1f).normalized, ResourceDiffDiagnosis.BALANCED },
-	// 			{new Vector2(-0.5f,1f).normalized, ResourceDiffDiagnosis.SURPLUS },
-	// 			{new Vector2(-0,1f).normalized, ResourceDiffDiagnosis.DERANGED },
-	// 		};
 
 	public static void StartAnalyze()
 	{
@@ -48,50 +31,71 @@ internal static class MechanicBalancer
 		foreach (var observationKV in _uiObservations)
 		{
 			float cap = 0;
-			cap = GetCapacity(nodeGraph, observationKV.Key);
+			Node node = observationKV.Key;
+			cap = GetCapacity(nodeGraph, node);
 
 			var observation = observationKV.Value;
-			ResourceDiffDiagnosis diagnosis = DiagnoseNodeDiff(observation.Diff);
 			var average = observation.ValueHistory.Average();
 			var sumOfSquaresOfDifferences = observation.ValueHistory.Select(val => (val - average) * (val - average)).Sum();
 			var standardDeviation = Math.Sqrt(sumOfSquaresOfDifferences / observation.ValueHistory.Count) / cap;
 			var spread = new Vector2(observation.ValueHistory.Min(), observation.ValueHistory.Max()) / cap;
 
-			Debug.Log($"Diff: {observation.Diff / cap} || STD: {standardDeviation}   || State : {diagnosis} || Spread : {spread}");
+			Debug.Log($"Diff: {observation.Diff.magnitude / cap} || STD: {standardDeviation * _uiObservations.Count}   || Spread : {spread}");
+			if (standardDeviation < .001f) 
+			{
+				DeleteElement(node, ref nodeGraph);
+			}
+			else if (observation.Diff.magnitude < cap || standardDeviation * _uiObservations.Count < _lowDeviationTreshold)
+			{
+				Debug.Log("adjust");
+				RebalanceDisfunctionalResource(node, ref nodeGraph);
+			}
+			else if (observation.Diff.magnitude < cap * 5)
+			{
+				foreach (var thresholdID in node.ConnectedNodes)
+				{
+					nodeGraph.NodeDict[thresholdID].Value *= .5f;
+				}
+			}
 		}
 
 		nodeGraph = BalanceDamageValues(nodeGraph, averageDamage);
 	}
 
-	private static float GetCapacity(NodeGraph nodeGraph, Node node)
+	private static void RebalanceDisfunctionalResource(Node node, ref NodeGraph nodeGraph)
 	{
-		var id = nodeGraph.GetIdFromNode(node);
-		foreach (var item in nodeGraph.NodeDict)
+		var ingoingAffectors = nodeGraph.GetAffectors(node, i => i.Node_text == "VAL");
+		if (ingoingAffectors.Count() > 1 && 
+			(ingoingAffectors.All(i => i.Value <= 0f) ||
+				ingoingAffectors.All(i => i.Value > 0f)))
 		{
-			if (item.Value.Node_text == "UIC" && item.Value.ConnectedNodes.Contains(id))
+			List<Node> affectors = ingoingAffectors.ToList();
+			for (int i = 0; i < affectors.Count; i += 2)
 			{
-				return item.Value.Value;
+				nodeGraph.NodeDict[nodeGraph.GetIdFromNode(affectors[i])].Value *= -1f;
 			}
 		}
-		return 10f;
-	}
-
-	private static ResourceDiffDiagnosis DiagnoseNodeDiff(Vector2 diff)
-	{
-		var diagnosis = ResourceDiffDiagnosis.BALANCED;
-		//diagnosis = _examples.OrderByDescending(i => Mathf.Abs(Vector2.Dot(i.Key, diff.normalized))).First().Value;
-
-		if (diagnosis == ResourceDiffDiagnosis.BALANCED)
+		else
 		{
-			var magnitude = diff.magnitude;
-			diagnosis = ResourceDiffDiagnosis.LOW_AMPLITUDE;
-			if (magnitude > 200)
-				diagnosis = ResourceDiffDiagnosis.BALANCED;
-			if (magnitude > 2000)
-				diagnosis = ResourceDiffDiagnosis.HIGH_AMPLITUDE;
+			DeleteElement(node, ref nodeGraph);
 		}
 
-		return diagnosis;
+	}
+
+	private static void DeleteElement(Node node, ref NodeGraph nodeGraph)
+	{
+		for (int i = node.ConnectedNodes.Count - 1; i >= 0; i--)
+		{
+			int connectedID = node.ConnectedNodes[i];
+			nodeGraph.Delete(connectedID);
+		}
+		nodeGraph.Delete(nodeGraph.GetIdFromNode(node));
+	}
+
+	private static float GetCapacity(NodeGraph nodeGraph, Node node)
+	{
+		var cap = nodeGraph.GetAffectors(node, (i) => i.Node_text == "UIC");
+		return cap.FirstOrDefault().Value;
 	}
 
 	private static NodeGraph BalanceDamageValues(NodeGraph nodeGraph, float averageDamage)
@@ -131,13 +135,13 @@ internal static class MechanicBalancer
 
 			float x = Mathf.Lerp(1f, (-k * p2 + T) / (c * p1), .7f + UnityEngine.Random.Range(0f, .3f));
 			float y = -(c * p1 * x - T) / (k * p2);
-
-			// 			Debug.Log($"balance {x} / {y}");
-			// 			Debug.Log("attack data : \n ============");
-			// 			foreach (var attack in _attackObservation.Values)
-			// 			{
-			// 				Debug.Log($"{ attack.Average()} : {attack.Count}");
-			// 			}
+// 
+// 			Debug.Log($"balance {x} / {y}");
+// 			Debug.Log("attack data : \n ============");
+// 			foreach (var attack in _attackObservation.Values)
+// 			{
+// 				Debug.Log($"{ attack.Average()} : {attack.Count}");
+// 			}
 			AdjustOutput(ref nodeGraph, a1.Key, x);
 			foreach (var attack in attacks)
 			{
