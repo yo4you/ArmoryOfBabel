@@ -100,6 +100,10 @@ public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 				SoundManagerSingleton.Manager.PlayAudio(_heavyHitSounds);
 				StartCoroutine(StartAttack(_sweepPrefab, speed, damage, node, direction, status));
 				break;
+			case 4:
+				SoundManagerSingleton.Manager.PlayAudio(_projectileSounds);
+				StartCoroutine(StartAttack(_projectilePrefab, speed, damage, node, direction, status));
+				break;
 
 			default:
 				break;

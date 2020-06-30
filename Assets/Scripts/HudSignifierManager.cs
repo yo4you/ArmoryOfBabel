@@ -49,6 +49,10 @@ public class HudSignifierManager : MonoBehaviour
 		_uiNodeElements.ForEach(UpdateChargeBars);
 		for (int skillID = 0; skillID < _returnButtonOutNode.Length; skillID++)
 		{
+			if (skillID > 2)
+			{ 
+				return; 
+			}
 			var abilityHudIdentifiers = _hudData.Skills[skillID];
 
 			var determineOutNode = _returnButtonOutNode[skillID];

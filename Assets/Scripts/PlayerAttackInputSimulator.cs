@@ -2,8 +2,8 @@
 {
 	private float _animatingTimer = 0f;
 
-	private float[] _animationTimes = new float[] { 0f, 1.04f, 0.53f, 0.71f };
-	private float[] _hitChance = new float[] { 0f, .9f, .9f, 0.7f };
+	private float[] _animationTimes = new float[] { 0f, 1.04f, 0.53f, 0.71f,0F };
+	private float[] _hitChance = new float[] { 0f, .9f, .9f, 0.7f, 0.7f };
 	private Node _hitLastFrame = null;
 	private PlayerWeaponMechanicTester _playerWeaponMechanicTester;
 
@@ -21,7 +21,9 @@
 		}
 
 		if (_animatingTimer > 0f)
+		{
 			return false;
+		}
 
 		_animatingTimer = _animationTimes[type] / spd;
 		//Debug.Log($"attack : type.{type} dmg.{dmg} ");
