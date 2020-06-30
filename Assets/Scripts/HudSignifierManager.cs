@@ -10,7 +10,7 @@ public class HudSignifierManager : MonoBehaviour
 	// TODO : this can be more elegant...
 	// IMPORTANT : this order must match the oder if the buffs in the hud identifier
 	// these match the strings used in the node grammar labels 
-	private readonly string[] _buffSignals = { "fire_sign", "buff_sign", "ice_sign" };
+	private readonly string[] _buffSignals = { "fire_sign", "buff_sign", "ice_sign", "extra_sign", "hold_sign" };
 	// these match the strings used in the node grammar labels
 	private readonly string[] _buttonSignals = { "a_sign", "b_sign", "x_sign" };
 	private HudComponentIdentifier _hudData;
@@ -29,6 +29,8 @@ public class HudSignifierManager : MonoBehaviour
 		{"buff_sign", null },
 		{"fire_sign", null },
 		{"ice_sign", null },
+		{"extra_sign", null },
+		{"hold_sign", null },
 		{"toggle_sign", null },
 	};
 
@@ -130,7 +132,9 @@ public class HudSignifierManager : MonoBehaviour
 			   where _mechanicGraph.NodeDict[id].Node_text == label
 			   select _mechanicGraph.NodeDict[id];
 	}
-
+	/// <summary>
+	/// initialized the ui elements, making them assign the threshold marking and capacity data accordingly 
+	/// </summary>
 	private void InitChargeBars()
 	{
 		_uiNodeElements = new List<UIBarData>();
