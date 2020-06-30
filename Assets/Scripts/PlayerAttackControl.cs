@@ -74,6 +74,7 @@ public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 		{
 			_animator.speed = speed;
 			Engaged = true;
+
 		}
 
 		switch (type)
@@ -101,6 +102,8 @@ public class PlayerAttackControl : MonoBehaviour, IPlayerAttackControl
 				StartCoroutine(StartAttack(_sweepPrefab, speed, damage, node, direction, status));
 				break;
 			case 4:
+				// we add an extra toggle here so the attacks still alternate when a special attack is dealt
+				_attackDirToggle = 1 - _attackDirToggle;
 				SoundManagerSingleton.Manager.PlayAudio(_projectileSounds);
 				StartCoroutine(StartAttack(_projectilePrefab, speed, damage, node, direction, status));
 				break;

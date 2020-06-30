@@ -12,6 +12,8 @@ public class DamageNumberController : MonoBehaviour
 
 	public void DisplayDamageNumber(Vector3 worldPos, int num)
 	{
+		if (num == 0) 
+			return;
 		_lastPopped = (_lastPopped + 1) % _animators.Length;
 		_animators[_lastPopped].transform.position = _camera.WorldToScreenPoint(worldPos);
 		_animators[_lastPopped].GetComponent<Text>().text = num.ToString();
